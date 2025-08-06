@@ -1,5 +1,5 @@
 {
-  "name": "angular-starter",
+  "name": "routeready",
   "private": true,
   "scripts": {
     "ng": "ng",
@@ -7,6 +7,7 @@
     "build": "ng build"
   },
   "dependencies": {
+    "@angular-devkit/build-angular": "^20.1.4",
     "@angular/animations": "^20.0.0",
     "@angular/common": "^20.0.0",
     "@angular/compiler": "^20.0.0",
