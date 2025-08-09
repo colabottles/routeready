@@ -1,0 +1,89 @@
+:root {
+  --background-color: #fffafa;
+  --card-background-color: #abd1c6;
+  --text-color: #312f2c;
+  --button-color: #312f2c;
+  --button-hover-color: #242220;
+  --error-color: #e53935;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  font-family: Arial, sans-serif;
+  color: var(--text-color);
+}
+
+.login-card {
+  padding: 2.5rem;
+  border-radius: 10px;
+  background-color: var(--card-background-color);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-title {
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--text-color);
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #555;
+  box-shadow: 0 0 0 2px rgba(49, 47, 44, 0.2);
+}
+
+.login-button {
+  padding: 0.75rem;
+  margin-top: 1rem;
+  border: none;
+  border-radius: 5px;
+  background-color: var(--button-color);
+  color: var(--background-color);
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+  background-color: var(--button-hover-color);
+}
+
+.error-message {
+  color: var(--error-color);
+  margin-top: 1rem;
+  font-weight: 500;
+}
