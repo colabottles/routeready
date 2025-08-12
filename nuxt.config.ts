@@ -3,13 +3,13 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
 
-  app: {
-    head: {
-      meta: [
-        // <meta name="viewport" content="width=device-width, initial-scale=1">
-        { name: 'viewport', content: 'width=device-width, initial-scale=1' }
-      ]
-    }
-  }
-
+  modules: [
+    '@nuxt/content',
+    '@nuxt/eslint',
+    '@nuxt/fonts',
+    '@nuxt/icon',
+    '@nuxt/image',
+    '@nuxt/scripts',
+    '@nuxt/test-utils'
+  ]
 })
