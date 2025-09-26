@@ -367,15 +367,6 @@ import { Driver, DriverSchedule } from '../../models/driver.model';
       }
     }
   `]
-    @media (prefers-reduced-motion: reduce) {
-      .driver-card {
-        transition: none;
-      }
-      
-      .btn {
-        transition: none;
-      }
-    }
 })
 export class DriversComponent implements OnInit {
   drivers: Driver[] = [];

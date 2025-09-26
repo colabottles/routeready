@@ -306,11 +306,6 @@ import { ActivityLog } from '../../models/log.model';
       }
     }
   `]
-    @media (prefers-reduced-motion: reduce) {
-      .metric-card {
-        transition: none;
-      }
-    }
 })
 export class DashboardComponent implements OnInit {
   analytics: AnalyticsData = {
