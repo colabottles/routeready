@@ -24,7 +24,7 @@ import { Driver, DriverSchedule } from '../../models/driver.model';
           <div class="driver-header">
             <h3>{{ driver.name }}</h3>
             <span class="status-badge" [class]="'status-' + driver.status"
-                  aria-label="Driver status: {{ driver.status }}">
+                  [attr.aria-label]="'Driver status: ' + driver.status">
               {{ driver.status | titlecase }}
             </span>
           </div>
@@ -58,11 +58,11 @@ import { Driver, DriverSchedule } from '../../models/driver.model';
 
           <div class="driver-actions">
             <button class="btn btn-secondary" (click)="editDriver(driver)"
-                    aria-label="Edit driver {{ driver.name }}">
+                    [attr.aria-label]="'Edit driver ' + driver.name">
               Edit
             </button>
             <button class="btn btn-primary" (click)="viewSchedule(driver)"
-                    aria-label="View schedule for {{ driver.name }}">
+                    [attr.aria-label]="'View schedule for ' + driver.name">
               Schedule
             </button>
           </div>
@@ -123,7 +123,7 @@ import { Driver, DriverSchedule } from '../../models/driver.model';
             <div class="schedule-header">
               <h3>{{ schedule.date | date:'mediumDate' }}</h3>
               <span class="status-badge" [class]="'status-' + schedule.status"
-                    aria-label="Schedule status: {{ schedule.status }}">
+                    [attr.aria-label]="'Schedule status: ' + schedule.status">
                 {{ schedule.status | titlecase }}
               </span>
             </div>

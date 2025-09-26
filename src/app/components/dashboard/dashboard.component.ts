@@ -25,7 +25,7 @@ import { ActivityLog } from '../../models/log.model';
           <div class="metric-icon">👥</div>
           <div class="metric-content">
             <h3>Active Drivers</h3>
-            <div class="metric-value" aria-label="Active drivers: {{ analytics.activeDrivers }} out of {{ analytics.totalDrivers }} total">
+            <div class="metric-value" [attr.aria-label]="'Active drivers: ' + analytics.activeDrivers + ' out of ' + analytics.totalDrivers + ' total'">
               {{ analytics.activeDrivers }}/{{ analytics.totalDrivers }}
             </div>
           </div>
@@ -35,7 +35,7 @@ import { ActivityLog } from '../../models/log.model';
           <div class="metric-icon">🏢</div>
           <div class="metric-content">
             <h3>Properties</h3>
-            <div class="metric-value" aria-label="Total properties: {{ analytics.totalProperties }}">
+            <div class="metric-value" [attr.aria-label]="'Total properties: ' + analytics.totalProperties">
               {{ analytics.totalProperties }}
             </div>
           </div>
@@ -45,7 +45,7 @@ import { ActivityLog } from '../../models/log.model';
           <div class="metric-icon">✅</div>
           <div class="metric-content">
             <h3>Completed Today</h3>
-            <div class="metric-value" aria-label="Tasks completed today: {{ analytics.completedToday }}">
+            <div class="metric-value" [attr.aria-label]="'Tasks completed today: ' + analytics.completedToday">
               {{ analytics.completedToday }}
             </div>
           </div>
@@ -55,7 +55,7 @@ import { ActivityLog } from '../../models/log.model';
           <div class="metric-icon">🚗</div>
           <div class="metric-content">
             <h3>Total Mileage</h3>
-            <div class="metric-value" aria-label="Total mileage: {{ analytics.totalMileage | number }} miles">
+            <div class="metric-value" [attr.aria-label]="'Total mileage: ' + (analytics.totalMileage | number) + ' miles'">
               {{ analytics.totalMileage | number }}
             </div>
           </div>
@@ -65,7 +65,7 @@ import { ActivityLog } from '../../models/log.model';
           <div class="metric-icon">⛽</div>
           <div class="metric-content">
             <h3>Fuel Efficiency</h3>
-            <div class="metric-value" aria-label="Fuel efficiency: {{ analytics.fuelEfficiency }} percent">
+            <div class="metric-value" [attr.aria-label]="'Fuel efficiency: ' + analytics.fuelEfficiency + ' percent'">
               {{ analytics.fuelEfficiency }}%
             </div>
           </div>
@@ -75,7 +75,7 @@ import { ActivityLog } from '../../models/log.model';
           <div class="metric-icon">📊</div>
           <div class="metric-content">
             <h3>Route Optimization</h3>
-            <div class="metric-value" aria-label="Route optimization: {{ analytics.routeOptimization }} percent">
+            <div class="metric-value" [attr.aria-label]="'Route optimization: ' + analytics.routeOptimization + ' percent'">
               {{ analytics.routeOptimization }}%
             </div>
           </div>
@@ -91,12 +91,12 @@ import { ActivityLog } from '../../models/log.model';
                 <h3>{{ driver.name }}</h3>
                 <p>{{ driver.currentLocation }}</p>
                 <span class="status-badge" [class]="'status-' + driver.status" 
-                      aria-label="Driver status: {{ driver.status }}">
+                      [attr.aria-label]="'Driver status: ' + driver.status">
                   {{ driver.status | titlecase }}
                 </span>
               </div>
               <div class="driver-stats">
-                <span aria-label="Total mileage: {{ driver.totalMileage | number }} miles">
+                <span [attr.aria-label]="'Total mileage: ' + (driver.totalMileage | number) + ' miles'">
                   {{ driver.totalMileage | number }} miles
                 </span>
               </div>
@@ -111,7 +111,7 @@ import { ActivityLog } from '../../models/log.model';
               <div class="activity-time">{{ log.timestamp | date:'short' }}</div>
               <div class="activity-details">
                 <strong>{{ getDriverName(log.driverId) }}</strong>
-                <span class="activity-type" aria-label="Activity type: {{ log.activity | titlecase }}">
+                <span class="activity-type" [attr.aria-label]="'Activity type: ' + (log.activity | titlecase)">
                   {{ log.activity | titlecase }}
                 </span>
                 <span class="activity-location">{{ log.location }}</span>
