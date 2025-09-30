@@ -1,0 +1,282 @@
+<template>
+  <NuxtLayout>
+  <div>
+    <div class="page-header">
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-subtitle">Overview of
+        your route management system</p>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="grid grid-cols-4 mb-8">
+      <div class="card">
+        <div class="card-content">
+          <div
+            class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600">Active
+                Drivers</p>
+              <p
+                class="text-3xl font-bold text-primary-600">
+                {{ metrics.activeDrivers }}
+              </p>
+            </div>
+            <span class="text-4xl">👥</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <div
+            class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600">
+                Properties</p>
+              <p
+                class="text-3xl font-bold text-secondary-600">
+                {{ metrics.totalProperties }}
+              </p>
+            </div>
+            <span class="text-4xl">🏢</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <div
+            class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600">
+                Today's Routes</p>
+              <p
+                class="text-3xl font-bold text-accent-600">
+                {{ metrics.todayRoutes }}</p>
+            </div>
+            <span class="text-4xl">🗺️</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-content">
+          <div
+            class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600">
+                Efficiency</p>
+              <p
+                class="text-3xl font-bold text-success-600">
+                {{ metrics.efficiency }}%</p>
+            </div>
+            <span class="text-4xl">⚡</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Routes -->
+    <div class="grid grid-cols-2 gap-6">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Active
+            Routes Today</h2>
+          <p class="card-subtitle">Current
+            driver assignments</p>
+        </div>
+        <div class="card-content">
+          <div
+            v-if="activeRoutes.length === 0"
+            class="text-center text-gray-500 py-8">
+            No active routes today
+          </div>
+          <div v-else class="space-y-4">
+            <div
+              v-for="route in activeRoutes"
+              :key="route.id"
+              class="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+              <div>
+                <h3 class="font-semibold">{{
+                  route.driverName }}</h3>
+                <p
+                  class="text-sm text-gray-600">
+                  {{ route.propertyCount }}
+                  properties</p>
+                <p
+                  class="text-xs text-gray-500">
+                  Started: {{ route.startTime
+                  }}</p>
+              </div>
+              <div class="text-right">
+                <span
+                  :class="getStatusClass(route.status)">{{
+                    route.status }}</span>
+                <p
+                  class="text-sm text-gray-600 mt-1">
+                  ETA: {{ route.eta }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Recent
+            Activity</h2>
+          <p class="card-subtitle">Latest
+            system events</p>
+        </div>
+        <div class="card-content">
+          <div class="space-y-3">
+            <div
+              v-for="activity in recentActivity"
+              :key="activity.id"
+              class="flex items-start gap-3">
+              <span class="text-lg">{{
+                activity.icon }}</span>
+              <div>
+                <p
+                  class="text-sm font-medium">
+                  {{ activity.title }}</p>
+                <p
+                  class="text-xs text-gray-600">
+                  {{ activity.description }}
+                </p>
+                <p
+                  class="text-xs text-gray-500 mt-1">
+                  {{ activity.time }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card mt-8">
+      <div class="card-header">
+        <h2 class="card-title">Quick Actions
+        </h2>
+        <p class="card-subtitle">Common tasks
+          and shortcuts</p>
+      </div>
+      <div class="card-content">
+        <div class="flex gap-4 flex-wrap">
+          <NuxtLink to="/routes/new"
+            class="btn btn-primary">
+            <span class="mr-2">➕</span>
+            Create New Route
+          </NuxtLink>
+          <NuxtLink to="/drivers/new"
+            class="btn btn-secondary">
+            <span class="mr-2">👤</span>
+            Add Driver
+          </NuxtLink>
+          <NuxtLink to="/properties/new"
+            class="btn btn-secondary">
+            <span class="mr-2">🏢</span>
+            Add Property
+          </NuxtLink>
+          <NuxtLink to="/analytics"
+            class="btn btn-secondary">
+            <span class="mr-2">📊</span>
+            View Analytics
+          </NuxtLink>
+        </div>
+      </div>
+    </div>
+  </div>
+  </NuxtLayout>
+</template>
+
+<script setup>
+// Sample data - in a real app, this would come from an API
+const metrics = reactive({
+  activeDrivers: 12,
+  totalProperties: 145,
+  todayRoutes: 8,
+  efficiency: 94
+})
+
+const activeRoutes = reactive([
+  {
+    id: 1,
+    driverName: 'John Smith',
+    propertyCount: 6,
+    startTime: '8:30 AM',
+    status: 'In Progress',
+    eta: '2:15 PM'
+  },
+  {
+    id: 2,
+    driverName: 'Sarah Johnson',
+    propertyCount: 4,
+    startTime: '9:00 AM',
+    status: 'Completed',
+    eta: '1:45 PM'
+  },
+  {
+    id: 3,
+    driverName: 'Mike Davis',
+    propertyCount: 8,
+    startTime: '8:00 AM',
+    status: 'In Progress',
+    eta: '3:30 PM'
+  }
+])
+
+const recentActivity = reactive([
+  {
+    id: 1,
+    icon: '✅',
+    title: 'Route completed',
+    description: 'Sarah Johnson completed Downtown Route',
+    time: '15 minutes ago'
+  },
+  {
+    id: 2,
+    icon: '🚗',
+    title: 'Driver checked out',
+    description: 'Mike Davis started Industrial Route',
+    time: '1 hour ago'
+  },
+  {
+    id: 3,
+    icon: '📋',
+    title: 'Schedule updated',
+    description: 'Tomorrow\'s routes have been optimized',
+    time: '2 hours ago'
+  },
+  {
+    id: 4,
+    icon: '🏢',
+    title: 'New property added',
+    description: 'Westfield Shopping Center added to system',
+    time: '3 hours ago'
+  }
+])
+
+function getStatusClass(status) {
+  switch (status) {
+    case 'Completed':
+      return 'status status-active'
+    case 'In Progress':
+      return 'status status-pending'
+    case 'Delayed':
+      return 'status status-error'
+    default:
+      return 'status status-inactive'
+  }
+}
+
+// Set page title and meta
+useHead({
+  title: 'Dashboard - RouteFlow',
+  meta: [
+    { name: 'description', content: 'Route management dashboard overview' }
+  ]
+})
+</script>

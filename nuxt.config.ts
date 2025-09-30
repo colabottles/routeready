@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
+  pages: false,
 
   modules: [
     '@nuxt/content',
@@ -11,5 +12,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxt/scripts',
     '@nuxt/test-utils'
-  ]
+  ],
+
+  css: ['~/assets/css/main.css']
 })
