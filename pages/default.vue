@@ -76,5 +76,5 @@
       class="main-content" role="main">
       <slot />
     </main>
-  </div>
+  </div>                                                                                                                                                                                                                                  
 </template>

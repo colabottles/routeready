@@ -10,6 +10,9 @@ export default defineNuxtConfig({
   imports: {
     autoImport: true
   },
+  content: {
+    
+  },
   modules: [
     '@nuxt/content',
     '@nuxt/eslint',
