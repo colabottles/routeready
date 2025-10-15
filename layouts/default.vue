@@ -1,5 +1,5 @@
 <template>
-  <div class="login-layout">
+  <div class="loginPage">
     <slot />
   </div>
 </template>
