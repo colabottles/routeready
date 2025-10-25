@@ -15,7 +15,7 @@ class="sidebar" role="navigation"
         </div>
 
         <ul class="nav-menu">
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <NuxtLink
 to="/" class="nav-link"
               :class="{ active: $route.path === '/' }">
@@ -23,7 +23,7 @@ to="/" class="nav-link"
                 class="nav-icon">📊</span>
               Dashboard
             </NuxtLink>
-          </li>
+          </li> -->
           <li class="nav-item">
             <NuxtLink
 to="/drivers"

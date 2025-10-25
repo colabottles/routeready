@@ -1,3 +1,45 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useNuxtApp } from 'nuxt/app'
+
+const nuxtApp = useNuxtApp()
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const $authClient = nuxtApp.$authClient as any
+const router = useRouter()
+
+const email = ref('')
+const password = ref('')
+const isLoading = ref(false)
+const errorMessage = ref('')
+
+const handleLogin = async () => {
+  isLoading.value = true
+  errorMessage.value = ''
+
+  try {
+    const result = await $authClient.signIn.email({
+      email: email.value,
+      password: password.value,
+    })
+
+    if (result?.error) {
+      errorMessage.value = result.error.message || 'Login failed'
+      return
+    }
+
+    // Successfully logged in
+    await router.push('./dashboard/index.vue')
+  } catch (err) {
+    const error = err as Error
+    errorMessage.value = error?.message || 'An unexpected error occurred'
+    console.error('Login error:', err)
+  } finally {
+    isLoading.value = false
+  }
+}
+</script>
+
 <template>
   <div class="login-container">
     <div class="login-column login-left">
@@ -54,48 +96,6 @@ type="submit"
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useNuxtApp } from 'nuxt/app'
-
-const nuxtApp = useNuxtApp()
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const $authClient = nuxtApp.$authClient as any
-const router = useRouter()
-
-const email = ref('')
-const password = ref('')
-const isLoading = ref(false)
-const errorMessage = ref('')
-
-const handleLogin = async () => {
-  isLoading.value = true
-  errorMessage.value = ''
-
-  try {
-    const result = await $authClient.signIn.email({
-      email: email.value,
-      password: password.value,
-    })
-
-    if (result?.error) {
-      errorMessage.value = result.error.message || 'Login failed'
-      return
-    }
-
-    // Successfully logged in
-    await router.push('/dashboard')
-  } catch (err) {
-    const error = err as Error
-    errorMessage.value = error?.message || 'An unexpected error occurred'
-    console.error('Login error:', err)
-  } finally {
-    isLoading.value = false
-  }
-}
-</script>
 
 <style scoped>
 .error-message {
