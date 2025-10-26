@@ -18,7 +18,7 @@ class="sidebar" role="navigation"
           <!-- <li class="nav-item">
             <NuxtLink
 to="/" class="nav-link"
-              :class="{ active: $route.path === '/' }">
+              :class="{ active: $route.path === '/dashboard' }">
               <span
                 class="nav-icon">📊</span>
               Dashboard
