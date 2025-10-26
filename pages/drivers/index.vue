@@ -9,7 +9,8 @@
             your driver team and assignments
           </p>
         </div>
-        <NuxtLink to="/drivers/new"
+        <NuxtLink
+          to="/drivers/new"
           class="btn btn-primary">
           <span class="mr-2">➕</span>
           Add New Driver
@@ -57,14 +58,16 @@
         <h2 class="card-title">Driver List
         </h2>
         <div class="flex gap-4">
-          <input v-model="searchTerm"
+          <input
+            v-model="searchTerm"
             type="text"
             placeholder="Search drivers..."
             class="form-input w-64"
             @input="filterDrivers">
-          <select v-model="statusFilter"
-            @change="filterDrivers"
-            class="form-select">
+          <select
+            v-model="statusFilter"
+            class="form-select"
+            @change="filterDrivers">
             <option value="">All Status
             </option>
             <option value="active">Active
@@ -127,7 +130,8 @@
                     v-if="driver.currentRoute">{{
                       driver.currentRoute
                     }}</span>
-                  <span v-else
+                  <span
+                    v-else
                     class="text-gray-400">None</span>
                 </td>
                 <td>
@@ -152,9 +156,9 @@
                       Edit
                     </NuxtLink>
                     <button
-                      @click="toggleDriverStatus(driver)"
                       :class="driver.status === 'active' ? 'btn-warning' : 'btn-success'"
-                      class="btn text-xs">
+                      class="btn text-xs"
+                      @click="toggleDriverStatus(driver)">
                       {{ driver.status ===
                         'active' ? 'Deactivate'
                         : 'Activate' }}
@@ -171,6 +175,7 @@
 </template>
 
 <script setup>
+
 const searchTerm = ref('')
 const statusFilter = ref('')
 
@@ -270,7 +275,7 @@ function toggleDriverStatus(driver) {
 
 // Set page title
 useHead({
-  title: 'Drivers - RouteFlow',
+  title: 'Drivers - RouteReady',
   meta: [
     { name: 'description', content: 'Manage drivers and assignments' }
   ]

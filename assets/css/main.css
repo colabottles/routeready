@@ -99,9 +99,8 @@
 
 :root {
   --left-bg-color: #795695;
-  --right-bg-color: #fff
+  --right-bg-color: #fff;
     /* #2d1c7f */
-  ;
   --primary-color: #643b9f;
   --text-color: #eae6e0;
   --border-color: #c8a4d4;
@@ -368,7 +367,7 @@ body {
 /* Navigation */
 .sidebar {
   background: white;
-  border-right: 1px solid var(--gray-200);
+  /* border-right: 1px solid var(--gray-200); */
   padding: var(--space-6) 0;
   height: 100vh;
   width: 15vw;
