@@ -151,6 +151,7 @@
 
 .nav-icon {
   font-size: 1.25rem;
+  line-height: 0.95;
 }
 
 .sidebar-footer {
