@@ -1,5 +1,4 @@
 <template>
-  <dashboardPage>
     <div>
       <div class="page-header">
         <div
@@ -173,7 +172,6 @@
         </div>
       </div>
     </div>
-  </dashboardPage>
 </template>
 
 <script setup>
