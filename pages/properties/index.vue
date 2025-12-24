@@ -11,7 +11,8 @@
             maintenance locations and
             schedules</p>
         </div>
-        <NuxtLink to="/properties/new"
+        <NuxtLink
+to="/properties/new"
           class="btn btn-primary">
           <span class="mr-2">➕</span>
           Add New Property
@@ -68,14 +69,16 @@
       <div class="card-content">
         <div
           class="flex gap-4 items-center flex-wrap">
-          <input v-model="searchTerm"
+          <input
+v-model="searchTerm"
             type="text"
             placeholder="Search properties..."
             class="form-input w-64"
             @input="filterProperties">
-          <select v-model="typeFilter"
-            @change="filterProperties"
-            class="form-select">
+          <select
+v-model="typeFilter"
+            class="form-select"
+            @change="filterProperties">
             <option value="">All Types
             </option>
             <option value="commercial">
@@ -85,9 +88,10 @@
             <option value="industrial">
               Industrial</option>
           </select>
-          <select v-model="statusFilter"
-            @change="filterProperties"
-            class="form-select">
+          <select
+v-model="statusFilter"
+            class="form-select"
+            @change="filterProperties">
             <option value="">All Status
             </option>
             <option value="active">Active
@@ -97,8 +101,9 @@
             <option value="maintenance">
               Maintenance</option>
           </select>
-          <button @click="exportProperties"
-            class="btn btn-secondary">
+          <button
+class="btn btn-secondary"
+            @click="exportProperties">
             <span class="mr-2">📁</span>
             Export
           </button>
@@ -197,8 +202,8 @@
                 Edit
               </NuxtLink>
               <button
-                @click="scheduleService(property)"
-                class="btn btn-primary text-xs">
+                class="btn btn-primary text-xs"
+                @click="scheduleService(property)">
                 Schedule
               </button>
             </div>
@@ -221,7 +226,8 @@
           {{ searchTerm || typeFilter ||
             statusFilter ? 'Try adjusting your filters' : 'Get started by adding your first property' }}
         </p>
-        <NuxtLink to="/properties/new"
+        <NuxtLink
+to="/properties/new"
           class="btn btn-primary">
           Add First Property
         </NuxtLink>
@@ -235,6 +241,10 @@
 const searchTerm = ref('')
 const typeFilter = ref('')
 const statusFilter = ref('')
+
+definePageMeta({
+  layout: 'dashboard',
+})
 
 const stats = reactive({
   total: 145,
@@ -349,7 +359,7 @@ function exportProperties() {
 
 // Set page title
 useHead({
-  title: 'Properties - RouteFlow',
+  title: 'Properties - RouteReady',
   meta: [
     { name: 'description', content: 'Manage maintenance properties and schedules' }
   ]

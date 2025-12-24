@@ -1,109 +1,127 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useNuxtApp } from 'nuxt/app'
-
-const nuxtApp = useNuxtApp()
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const $authClient = nuxtApp.$authClient as any
-const router = useRouter()
-
-const email = ref('')
-const password = ref('')
-const isLoading = ref(false)
-const errorMessage = ref('')
-
-const handleLogin = async () => {
-  isLoading.value = true
-  errorMessage.value = ''
-
-  try {
-    const result = await $authClient.signIn.email({
-      email: email.value,
-      password: password.value,
-    })
-
-    if (result?.error) {
-      errorMessage.value = result.error.message || 'Login failed'
-      return
-    }
-
-    // Successfully logged in
-    await router.push('./dashboard/index.vue')
-  } catch (err) {
-    const error = err as Error
-    errorMessage.value = error?.message || 'An unexpected error occurred'
-    console.error('Login error:', err)
-  } finally {
-    isLoading.value = false
-  }
-}
-</script>
-
 <template>
-  <div class="login-container">
-    <div class="login-column login-left">
-      <div class="login-content">
-        <img
-src="/assets/images/logo.png"
-          alt="Company Logo" class="logo">
+  <div class="home-container">
+    <div class="home-column home-left">
+      <div class="home-content">
         <h1 class="title">RouteReady</h1>
+        <p class="subtitle">Your complete route management solution</p>
       </div>
     </div>
 
-    <div class="login-column login-right">
-      <form
-class="login-form"
-        @submit.prevent="handleLogin">
-        <h2 class="form-title">Log In</h2>
+    <div class="home-column home-right">
+      <div class="home-panel">
+        <h2 class="panel-title">Welcome</h2>
+        <p class="panel-description">Get started with RouteReady today</p>
 
-        <div
-v-if="errorMessage"
-          class="error-message">
-          {{ errorMessage }}
+        <div class="button-group">
+          <NuxtLink to="/login" class="home-button primary">
+            Login
+          </NuxtLink>
+          <NuxtLink to="/signup" class="home-button secondary">
+            Sign Up
+          </NuxtLink>
         </div>
-
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input
-id="email" v-model="email"
-            type="email" required
-            aria-describedby="email-help">
-          <small id="email-help">Your work
-            email address</small>
-        </div>
-
-        <div class="form-group">
-          <label
-            for="password">Password</label>
-          <input
-id="password"
-            v-model="password"
-            type="password" required
-            aria-describedby="password-help">
-          <small id="password-help">Must be
-            at least 8-16 characters</small>
-        </div>
-
-        <button
-type="submit"
-          class="login-button"
-          :disabled="isLoading">
-          {{ isLoading ? 'Signing In...' :
-          'Sign In' }}
-        </button>
-      </form>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.error-message {
-  padding: 0.75rem;
+.home-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.home-column {
+  flex: 1;
+}
+
+.home-left {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.home-content {
+  text-align: center;
+  padding: 2rem;
+}
+
+.title {
+  font-size: 3.5rem;
+  font-weight: bold;
   margin-bottom: 1rem;
-  background-color: #fee;
-  border: 1px solid #fcc;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  opacity: 0.9;
+}
+
+.home-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+}
+
+.home-panel {
+  width: 100%;
+  max-width: 400px;
+  padding: 3rem 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.panel-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.panel-description {
+  font-size: 1.125rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.home-button {
+  padding: 1rem 2rem;
   border-radius: 4px;
-  color: #c33;
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.home-button.primary {
+  background: #667eea;
+  color: white;
+}
+
+.home-button.primary:hover {
+  background: #5568d3;
+}
+
+.home-button.secondary {
+  background: transparent;
+  color: #667eea;
+  border: 2px solid #667eea;
+}
+
+.home-button.secondary:hover {
+  background: #667eea;
+  color: white;
 }
 </style>

@@ -1,5 +1,4 @@
 <template>
-  <NuxtLayout>
   <div>
     <div class="page-header">
       <div
@@ -10,12 +9,14 @@
             and manage maintenance routes</p>
         </div>
         <div class="flex gap-3">
-          <button @click="optimizeAllRoutes"
-            class="btn btn-secondary">
+          <button
+class="btn btn-secondary"
+            @click="optimizeAllRoutes">
             <span class="mr-2">⚡</span>
             Optimize Routes
           </button>
-          <NuxtLink to="/routes/new"
+          <NuxtLink
+to="/routes/new"
             class="btn btn-primary">
             <span class="mr-2">➕</span>
             Create Route
@@ -74,11 +75,12 @@
         <h2 class="card-title">Route Overview
         </h2>
         <div class="flex gap-2">
-          <button v-for="view in mapViews"
+          <button
+v-for="view in mapViews"
             :key="view"
-            @click="currentMapView = view"
             :class="currentMapView === view ? 'btn-primary' : 'btn-secondary'"
-            class="btn text-xs">
+            class="btn text-xs"
+            @click="currentMapView = view">
             {{ view }}
           </button>
         </div>
@@ -109,9 +111,10 @@
         <h2 class="card-title">Route
           Management</h2>
         <div class="flex gap-4">
-          <select v-model="filterStatus"
-            @change="filterRoutes"
-            class="form-select">
+          <select
+v-model="filterStatus"
+            class="form-select"
+            @change="filterRoutes">
             <option value="">All Routes
             </option>
             <option value="active">Active
@@ -121,9 +124,10 @@
             <option value="planned">Planned
             </option>
           </select>
-          <select v-model="filterDriver"
-            @change="filterRoutes"
-            class="form-select">
+          <select
+v-model="filterDriver"
+            class="form-select"
+            @change="filterRoutes">
             <option value="">All Drivers
             </option>
             <option value="john-smith">John
@@ -225,14 +229,14 @@
 
               <div class="flex gap-2 ml-4">
                 <button
-                  @click="viewRoute(route)"
-                  class="btn btn-secondary text-xs">
+                  class="btn btn-secondary text-xs"
+                  @click="viewRoute(route)">
                   View Map
                 </button>
                 <button
-                  @click="optimizeRoute(route)"
                   class="btn btn-accent text-xs"
-                  :disabled="route.status === 'active'">
+                  :disabled="route.status === 'active'"
+                  @click="optimizeRoute(route)">
                   Optimize
                 </button>
                 <NuxtLink
@@ -247,13 +251,16 @@
       </div>
     </div>
   </div>
-  </NuxtLayout>
 </template>
 
 <script setup>
 const currentMapView = ref('All Routes')
 const filterStatus = ref('')
 const filterDriver = ref('')
+
+definePageMeta({
+  layout: 'dashboard',
+})
 
 const mapViews = ['All Routes', 'Today', 'Tomorrow', 'This Week']
 
@@ -389,7 +396,7 @@ function optimizeAllRoutes() {
 
 // Set page title
 useHead({
-  title: 'Routes - RouteFlow',
+  title: 'Routes - RouteReady',
   meta: [
     { name: 'description', content: 'Manage and optimize maintenance routes' }
   ]

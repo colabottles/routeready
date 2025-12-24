@@ -10,11 +10,7 @@ export default defineNuxtConfig({
   imports: {
     autoImport: true
   },
-  content: {
-    
-  },
   modules: [
-    '@nuxt/content',
     '@nuxt/eslint',
     '@nuxt/fonts',
     '@nuxt/icon',
@@ -23,5 +19,12 @@ export default defineNuxtConfig({
     '@nuxt/test-utils'
   ],
 
-  css: ['~/assets/css/main.css']
+  css: ['~/assets/css/main.css'],
+
+  // Make sure you have this if using Better Auth
+  nitro: {
+    experimental: {
+      openAPI: true
+    }
+  }
 })

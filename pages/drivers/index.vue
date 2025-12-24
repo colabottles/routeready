@@ -102,9 +102,11 @@
                     class="flex items-center gap-3">
                     <div
                       class="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center font-semibold text-primary-700">
-                      {{
-                        driver.name.charAt(0)
-                      }}
+                      <Avatar
+                        :src="driver.avatarUrl"
+                        :alt="driver.name"
+                        :fallback="driver.name.charAt(0)"
+                      />
                     </div>
                     <div>
                       <p
@@ -178,6 +180,10 @@
 
 const searchTerm = ref('')
 const statusFilter = ref('')
+
+definePageMeta({
+  layout: 'dashboard',
+})
 
 const stats = reactive({
   active: 8,
