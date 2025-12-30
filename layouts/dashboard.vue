@@ -1,6 +1,7 @@
 <!-- layouts/dashboard.vue -->
 <template>
   <div class="dashboard-layout">
+    <ThemeToggle />
     <!-- Header -->
     <header class="top-bar">
       <p>Header</p>
@@ -73,23 +74,23 @@
 <style scoped>
 .dashboard-layout {
   min-height: 100vh;
-  background-color: #f5f5f5;
+  background-color: var(--bg-secondary);
 }
 
 .top-bar {
-  color: white;
+  color: var(--text-on-gradient);
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   height: 60px;
   min-width: 100vw;
-  background-color: #2d1c7f;
+  background: linear-gradient(90deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
 }
 
 .sidebar {
   width: 260px;
-  background: linear-gradient(180deg, #2d1c7f 0%, #643b9f 100%);
+  background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
   color: white;
   display: flex;
   flex-direction: column;
@@ -145,7 +146,7 @@
 .nav-item.active {
   background-color: rgba(255, 255, 255, 0.15);
   color: white;
-  border-left: 4px solid #60a5fa;
+  border-left: 4px solid var(--button-primary);
 }
 
 .nav-icon {
@@ -183,6 +184,7 @@
   margin-left: 260px;
   padding: 2rem;
   overflow-y: auto;
+  background-color: var(--bg-secondary);
 }
 
 /* Global styles for pages using this layout */
@@ -193,25 +195,25 @@
 :global(.page-title) {
   font-size: 2rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary);
   margin: 0 0 0.5rem 0;
 }
 
 :global(.page-subtitle) {
-  color: #64748b;
+  color: var(--text-secondary);
   margin: 0;
 }
 
 :global(.card) {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 0.75rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
   margin-bottom: 1.5rem;
 }
 
 :global(.card-header) {
   padding: 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid var(--input-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -220,12 +222,13 @@
 :global(.card-title) {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
   margin: 0;
 }
 
 :global(.card-content) {
   padding: 1.5rem;
+  color: var(--text-primary);
 }
 
 :global(.btn) {
@@ -240,21 +243,22 @@
 }
 
 :global(.btn-primary) {
-  background: #2563eb;
+  background: var(--button-primary);
   color: white;
 }
 
 :global(.btn-primary:hover) {
-  background: #1d4ed8;
+  background: var(--button-primary-hover);
 }
 
 :global(.btn-secondary) {
-  background: #f1f5f9;
-  color: #475569;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--input-border);
 }
 
 :global(.btn-secondary:hover) {
-  background: #e2e8f0;
+  background: var(--input-border);
 }
 
 :global(.btn-success) {
@@ -270,7 +274,9 @@
 :global(.form-input),
 :global(.form-select) {
   padding: 0.625rem 0.875rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text-primary);
   border-radius: 0.5rem;
   font-size: 0.875rem;
 }
@@ -287,39 +293,41 @@
 :global(.table th) {
   text-align: left;
   padding: 0.75rem;
-  background: #f8fafc;
+  background: var(--bg-secondary);
   font-weight: 600;
-  color: #475569;
+  color: var(--text-secondary);
   font-size: 0.875rem;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--input-border);
 }
 
 :global(.table td) {
   padding: 1rem 0.75rem;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--input-border);
+  color: var(--text-primary);
 }
 
 :global(.status) {
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.025em;
 }
 
 :global(.status-active) {
-  background: #dcfce7;
-  color: #166534;
+  background: #10b981;
+  color: #ffffff;
 }
 
 :global(.status-pending) {
-  background: #fef3c7;
-  color: #92400e;
+  background: #f59e0b;
+  color: #000000;
 }
 
 :global(.status-inactive) {
-  background: #f1f5f9;
-  color: #475569;
+  background: #6b7280;
+  color: #ffffff;
 }
 
 :global(.grid) {

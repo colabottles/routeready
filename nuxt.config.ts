@@ -19,7 +19,10 @@ export default defineNuxtConfig({
     '@nuxt/test-utils'
   ],
 
-  css: ['~/assets/css/main.css'],
+  css: [
+    '~/assets/css/main.css',
+    '~/assets/css/theme.css',
+  ],
 
   // Make sure you have this if using Better Auth
   nitro: {

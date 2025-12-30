@@ -41,6 +41,8 @@ const handleLogin = async () => {
 
 <template>
   <div class="login-container">
+    <ThemeToggle />
+
     <div class="login-column login-left">
       <div class="login-content">
         <h1 class="title">RouteReady</h1>
@@ -97,10 +99,10 @@ const handleLogin = async () => {
 .error-message {
   padding: 0.75rem;
   margin-bottom: 1rem;
-  background-color: #fee;
-  border: 1px solid #fcc;
+  background-color: var(--error-bg);
+  border: 1px solid var(--error-border);
   border-radius: 4px;
-  color: #c33;
+  color: var(--error-text);
 }
 
 .login-container {
@@ -113,11 +115,11 @@ const handleLogin = async () => {
 }
 
 .login-left {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--text-on-gradient);
 }
 
 .login-content {
@@ -133,21 +135,21 @@ const handleLogin = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f5f5f5;
+  background: var(--bg-secondary);
 }
 
 .login-form {
   width: 100%;
   max-width: 400px;
   padding: 2rem;
-  background: white;
+  background: var(--bg-primary);
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow);
 }
 
 .form-title {
   margin-bottom: 1.5rem;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .form-group {
@@ -157,29 +159,36 @@ const handleLogin = async () => {
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #555;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
 .form-group input {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #ddd;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text-primary);
   border-radius: 4px;
   font-size: 1rem;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--input-focus);
 }
 
 .form-group small {
   display: block;
   margin-top: 0.25rem;
-  color: #888;
+  color: var(--text-muted);
   font-size: 0.875rem;
 }
 
 .login-button {
   width: 100%;
   padding: 0.75rem;
-  background: #667eea;
+  background: var(--button-primary);
   color: white;
   border: none;
   border-radius: 4px;
@@ -190,7 +199,7 @@ const handleLogin = async () => {
 }
 
 .login-button:hover:not(:disabled) {
-  background: #5568d3;
+  background: var(--button-primary-hover);
 }
 
 .login-button:disabled {

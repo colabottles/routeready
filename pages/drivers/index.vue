@@ -1,17 +1,12 @@
 <template>
   <div>
     <div class="page-header">
-      <div
-        class="flex items-center justify-between">
+      <div class="header-content">
         <div>
           <h1 class="page-title">Drivers</h1>
-          <p class="page-subtitle">Manage
-            your driver team and assignments
-          </p>
+          <p class="page-subtitle">Manage your driver team and assignments</p>
         </div>
-        <NuxtLink
-          to="/drivers/new"
-          class="btn btn-primary">
+        <NuxtLink to="/drivers/new" class="btn btn-primary">
           <span class="mr-2">➕</span>
           Add New Driver
         </NuxtLink>
@@ -19,35 +14,23 @@
     </div>
 
     <!-- Driver Stats -->
-    <div class="grid grid-cols-3 mb-8">
+    <div class="stats-grid">
       <div class="card">
-        <div
-          class="card-content text-center">
-          <p
-            class="text-2xl font-bold text-success-600">
-            {{ stats.active }}</p>
-          <p class="text-sm text-gray-600">
-            Active Today</p>
+        <div class="card-content stat-content">
+          <p class="stat-value stat-success">{{ stats.active }}</p>
+          <p class="stat-label">Active Today</p>
         </div>
       </div>
       <div class="card">
-        <div
-          class="card-content text-center">
-          <p
-            class="text-2xl font-bold text-gray-600">
-            {{ stats.total }}</p>
-          <p class="text-sm text-gray-600">
-            Total Drivers</p>
+        <div class="card-content stat-content">
+          <p class="stat-value">{{ stats.total }}</p>
+          <p class="stat-label">Total Drivers</p>
         </div>
       </div>
       <div class="card">
-        <div
-          class="card-content text-center">
-          <p
-            class="text-2xl font-bold text-accent-600">
-            {{ stats.avgRating }}</p>
-          <p class="text-sm text-gray-600">
-            Avg Performance</p>
+        <div class="card-content stat-content">
+          <p class="stat-value stat-accent">{{ stats.avgRating }}</p>
+          <p class="stat-label">Avg Performance</p>
         </div>
       </div>
     </div>
@@ -55,27 +38,24 @@
     <!-- Drivers Table -->
     <div class="card">
       <div class="card-header">
-        <h2 class="card-title">Driver List
-        </h2>
-        <div class="flex gap-4">
+        <h2 class="card-title">Driver List</h2>
+        <div class="filters">
           <input
             v-model="searchTerm"
             type="text"
             placeholder="Search drivers..."
-            class="form-input w-64"
-            @input="filterDrivers">
+            class="form-input"
+            @input="filterDrivers"
+          >
           <select
             v-model="statusFilter"
             class="form-select"
-            @change="filterDrivers">
-            <option value="">All Status
-            </option>
-            <option value="active">Active
-            </option>
-            <option value="inactive">Inactive
-            </option>
-            <option value="on-route">On Route
-            </option>
+            @change="filterDrivers"
+          >
+            <option value="">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="on-route">On Route</option>
           </select>
         </div>
       </div>
@@ -94,76 +74,52 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="driver in filteredDrivers"
-                :key="driver.id">
+              <tr v-for="driver in filteredDrivers" :key="driver.id">
                 <td>
-                  <div
-                    class="flex items-center gap-3">
-                    <div
-                      class="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center font-semibold text-primary-700">
+                  <div class="driver-info">
+                    <div class="avatar-wrapper">
                       <Avatar
                         :src="driver.avatarUrl"
                         :alt="driver.name"
                         :fallback="driver.name.charAt(0)"
                       />
                     </div>
-                    <div>
-                      <p
-                        class="font-semibold">
-                        {{ driver.name }}</p>
-                      <p
-                        class="text-sm text-gray-600">
-                        {{ driver.email }}
-                      </p>
+                    <div class="driver-details">
+                      <p class="driver-name">{{ driver.name }}</p>
+                      <p class="driver-email">{{ driver.email }}</p>
                     </div>
                   </div>
                 </td>
                 <td>{{ driver.license }}</td>
                 <td>{{ driver.phone }}</td>
                 <td>
-                  <span
-                    :class="getStatusClass(driver.status)">
+                  <span :class="getStatusClass(driver.status)">
                     {{ driver.status }}
                   </span>
                 </td>
                 <td>
-                  <span
-                    v-if="driver.currentRoute">{{
-                      driver.currentRoute
-                    }}</span>
-                  <span
-                    v-else
-                    class="text-gray-400">None</span>
+                  <span v-if="driver.currentRoute">{{ driver.currentRoute }}</span>
+                  <span v-else class="no-route">None</span>
                 </td>
                 <td>
-                  <div
-                    class="flex items-center gap-1">
-                    <span
-                      class="text-yellow-500">⭐</span>
-                    <span>{{ driver.rating
-                    }}/5</span>
+                  <div class="rating">
+                    <span class="star">⭐</span>
+                    <span>{{ driver.rating }}/5</span>
                   </div>
                 </td>
                 <td>
-                  <div class="flex gap-2">
-                    <NuxtLink
-                      :to="`/drivers/${driver.id}`"
-                      class="btn btn-secondary text-xs">
+                  <div class="actions">
+                    <NuxtLink :to="`/drivers/${driver.id}`" class="btn btn-secondary btn-small">
                       View
                     </NuxtLink>
-                    <NuxtLink
-                      :to="`/drivers/${driver.id}/edit`"
-                      class="btn btn-secondary text-xs">
+                    <NuxtLink :to="`/drivers/${driver.id}/edit`" class="btn btn-secondary btn-small">
                       Edit
                     </NuxtLink>
                     <button
-                      :class="driver.status === 'active' ? 'btn-warning' : 'btn-success'"
-                      class="btn text-xs"
-                      @click="toggleDriverStatus(driver)">
-                      {{ driver.status ===
-                        'active' ? 'Deactivate'
-                        : 'Activate' }}
+                      :class="['btn', 'btn-small', driver.status === 'active' ? 'btn-warning' : 'btn-success']"
+                      @click="toggleDriverStatus(driver)"
+                    >
+                      {{ driver.status === 'active' ? 'Deactivate' : 'Activate' }}
                     </button>
                   </div>
                 </td>
@@ -177,7 +133,6 @@
 </template>
 
 <script setup>
-
 const searchTerm = ref('')
 const statusFilter = ref('')
 
@@ -279,7 +234,6 @@ function toggleDriverStatus(driver) {
   }
 }
 
-// Set page title
 useHead({
   title: 'Drivers - RouteReady',
   meta: [
@@ -287,3 +241,204 @@ useHead({
   ]
 })
 </script>
+
+<style scoped>
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-content {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.stat-value.stat-success {
+  color: #10b981;
+}
+
+.stat-value.stat-accent {
+  color: var(--button-primary);
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Filters */
+.filters {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-input {
+  width: 16rem;
+}
+
+/* Driver Info */
+.driver-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar-wrapper {
+  width: 2rem;
+  height: 2rem;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: var(--button-primary);
+}
+
+.driver-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.driver-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.driver-email {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.no-route {
+  color: var(--text-muted);
+}
+
+/* Rating */
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--text-primary);
+}
+
+.star {
+  color: #eab308;
+}
+
+/* Actions */
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-small {
+  font-size: 0.75rem;
+  padding: 0.375rem 0.75rem;
+}
+
+.btn-warning {
+  background: #f59e0b;
+  color: black !important; /* TODO Don't rely on !important */
+}
+
+.btn-warning:hover {
+  background: #d97706;
+}
+
+.btn-success {
+  background: #10b981;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #059669;
+}
+
+/* Responsive */
+@media (max-width: 968px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .filters {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .form-input {
+    width: 100%;
+  }
+}
+
+/* Status badges with better contrast */
+.status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.status-active {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.status-pending {
+  background: #f59e0b;
+  color: #000000 !important; /* TODO Do not rely on !important */
+}
+
+.status-inactive {
+  background: #6b7280;
+  color: #ffffff;
+}
+</style>
+

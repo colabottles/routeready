@@ -1,5 +1,7 @@
 <template>
   <div class="home-container">
+    <ThemeToggle />
+
     <div class="home-column home-left">
       <div class="home-content">
         <h1 class="title">RouteReady</h1>
@@ -36,11 +38,11 @@
 }
 
 .home-left {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--text-on-gradient);
 }
 
 .home-content {
@@ -63,28 +65,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f5f5f5;
+  background: var(--bg-secondary);
 }
 
 .home-panel {
   width: 100%;
   max-width: 400px;
   padding: 3rem 2rem;
-  background: white;
+  background: var(--bg-primary);
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow);
   text-align: center;
 }
 
 .panel-title {
   font-size: 2rem;
   margin-bottom: 1rem;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .panel-description {
   font-size: 1.125rem;
-  color: #666;
+  color: var(--text-secondary);
   margin-bottom: 2rem;
 }
 
@@ -106,22 +108,22 @@
 }
 
 .home-button.primary {
-  background: #667eea;
+  background: var(--button-primary);
   color: white;
 }
 
 .home-button.primary:hover {
-  background: #5568d3;
+  background: var(--button-primary-hover);
 }
 
 .home-button.secondary {
   background: transparent;
-  color: #667eea;
-  border: 2px solid #667eea;
+  color: var(--button-primary);
+  border: 2px solid var(--button-primary);
 }
 
 .home-button.secondary:hover {
-  background: #667eea;
+  background: var(--button-primary);
   color: white;
 }
 </style>
