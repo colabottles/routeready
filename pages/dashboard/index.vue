@@ -1,287 +1,459 @@
 <template>
-  <div>
-    <div class="page-header">
-      <div
-        class="flex items-center justify-between">
-        <div>
-          <h1 class="page-title">Drivers</h1>
-          <p class="page-subtitle">Manage
-            your driver team and assignments
-          </p>
+  <div class="dashboard-layout">
+    <ThemeToggle />
+
+    <!-- Header -->
+    <header class="top-bar">
+      <div class="header-content">
+        <div class="user-info">
+          <div class="user-avatar">
+            <Avatar
+              v-if="session"
+              :src="session.user?.image"
+              :alt="session.user?.name || 'User'"
+              :fallback="session.user?.name?.charAt(0) || 'U'"
+            />
+          </div>
+          <h2 class="user-greeting">
+            Hello, <span class="user-name">{{ session?.user?.name || 'User' }}</span>!
+          </h2>
         </div>
-        <NuxtLink
-          to="/drivers/new"
-          class="btn btn-primary">
-          <span class="mr-2">➕</span>
-          Add New Driver
+      </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-placeholder">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+        </div>
+        <h2 class="sidebar-title">RouteReady</h2>
+      </div>
+
+      <nav class="sidebar-nav">
+        <NuxtLink to="/drivers" class="nav-item" active-class="active">
+          <span class="nav-icon">👥</span>
+          <span>Drivers</span>
         </NuxtLink>
-      </div>
-    </div>
 
-    <!-- Driver Stats -->
-    <div class="grid grid-cols-3 mb-8">
-      <div class="card">
-        <div
-          class="card-content text-center">
-          <p
-            class="text-2xl font-bold text-success-600">
-            {{ stats.active }}</p>
-          <p class="text-sm text-gray-600">
-            Active Today</p>
-        </div>
-      </div>
-      <div class="card">
-        <div
-          class="card-content text-center">
-          <p
-            class="text-2xl font-bold text-gray-600">
-            {{ stats.total }}</p>
-          <p class="text-sm text-gray-600">
-            Total Drivers</p>
-        </div>
-      </div>
-      <div class="card">
-        <div
-          class="card-content text-center">
-          <p
-            class="text-2xl font-bold text-accent-600">
-            {{ stats.avgRating }}</p>
-          <p class="text-sm text-gray-600">
-            Avg Performance</p>
-        </div>
-      </div>
-    </div>
+        <NuxtLink to="/routes" class="nav-item" active-class="active">
+          <span class="nav-icon">🗺️</span>
+          <span>Routes</span>
+        </NuxtLink>
 
-    <!-- Drivers Table -->
-    <div class="card">
-      <div class="card-header">
-        <h2 class="card-title">Driver List
-        </h2>
-        <div class="flex gap-4">
-          <input
-            v-model="searchTerm"
-            type="text"
-            placeholder="Search drivers..."
-            class="form-input w-64"
-            @input="filterDrivers">
-          <select
-            v-model="statusFilter"
-            class="form-select"
-            @change="filterDrivers">
-            <option value="">All Status
-            </option>
-            <option value="active">Active
-            </option>
-            <option value="inactive">Inactive
-            </option>
-            <option value="on-route">On Route
-            </option>
-          </select>
+        <NuxtLink to="/vehicles" class="nav-item" active-class="active">
+          <span class="nav-icon">🚚</span>
+          <span>Vehicles</span>
+        </NuxtLink>
+
+        <NuxtLink to="/schedule" class="nav-item" active-class="active">
+          <span class="nav-icon">📅</span>
+          <span>Schedule</span>
+        </NuxtLink>
+
+        <NuxtLink to="/reports" class="nav-item" active-class="active">
+          <span class="nav-icon">📈</span>
+          <span>Reports</span>
+        </NuxtLink>
+      </nav>
+
+      <div class="sidebar-footer">
+        <button class="logout-btn" @click="handleLogout">
+          <span class="nav-icon">🚪</span>
+          <span>Logout</span>
+        </button>
+        <div class="copyright">
+          RouteReady ©️ 2025
         </div>
       </div>
-      <div class="card-content">
-        <div class="table-container">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>License #</th>
-                <th>Phone</th>
-                <th>Status</th>
-                <th>Current Route</th>
-                <th>Performance</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="driver in filteredDrivers"
-                :key="driver.id">
-                <td>
-                  <div
-                    class="flex items-center gap-3">
-                    <div
-                      class="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center font-semibold text-primary-700">
-                      {{
-                        driver.name.charAt(0)
-                      }}
-                    </div>
-                    <div>
-                      <p
-                        class="font-semibold">
-                        {{ driver.name }}</p>
-                      <p
-                        class="text-sm text-gray-600">
-                        {{ driver.email }}
-                      </p>
-                    </div>
-                  </div>
-                </td>
-                <td>{{ driver.license }}</td>
-                <td>{{ driver.phone }}</td>
-                <td>
-                  <span
-                    :class="getStatusClass(driver.status)">
-                    {{ driver.status }}
-                  </span>
-                </td>
-                <td>
-                  <span
-                    v-if="driver.currentRoute">{{
-                      driver.currentRoute
-                    }}</span>
-                  <span
-                    v-else
-                    class="text-gray-400">None</span>
-                </td>
-                <td>
-                  <div
-                    class="flex items-center gap-1">
-                    <span
-                      class="text-yellow-500">⭐</span>
-                    <span>{{ driver.rating
-                    }}/5</span>
-                  </div>
-                </td>
-                <td>
-                  <div class="flex gap-2">
-                    <NuxtLink
-                      :to="`/drivers/${driver.id}`"
-                      class="btn btn-secondary text-xs">
-                      View
-                    </NuxtLink>
-                    <NuxtLink
-                      :to="`/drivers/${driver.id}/edit`"
-                      class="btn btn-secondary text-xs">
-                      Edit
-                    </NuxtLink>
-                    <button
-                      :class="driver.status === 'active' ? 'btn-warning' : 'btn-success'"
-                      class="btn text-xs"
-                      @click="toggleDriverStatus(driver)">
-                      {{ driver.status ===
-                        'active' ? 'Deactivate'
-                        : 'Activate' }}
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <slot />
+    </main>
   </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useNuxtApp } from 'nuxt/app'
 
-// Set page title
-useHead({
-  title: 'Drivers - RouteReady',
-  meta: [
-    { name: 'description', content: 'Manage drivers and assignments' }
-  ]
-})
+const router = useRouter()
+const nuxtApp = useNuxtApp()
+const $authClient = nuxtApp.$authClient
 
-definePageMeta({
-  layout: 'dashboard',
-})
+const session = ref(null)
 
-const searchTerm = ref('')
-const statusFilter = ref('')
-
-const stats = reactive({
-  active: 8,
-  total: 12,
-  avgRating: 4.6
-})
-
-const drivers = reactive([
-  {
-    id: 1,
-    name: 'John Smith',
-    email: 'john.smith@company.com',
-    license: 'CDL-123456',
-    phone: '(555) 123-4567',
-    status: 'on-route',
-    currentRoute: 'Downtown Route',
-    rating: 4.8
-  },
-  {
-    id: 2,
-    name: 'Sarah Johnson',
-    email: 'sarah.j@company.com',
-    license: 'CDL-234567',
-    phone: '(555) 234-5678',
-    status: 'active',
-    currentRoute: null,
-    rating: 4.9
-  },
-  {
-    id: 3,
-    name: 'Mike Davis',
-    email: 'mike.davis@company.com',
-    license: 'CDL-345678',
-    phone: '(555) 345-6789',
-    status: 'on-route',
-    currentRoute: 'Industrial Route',
-    rating: 4.5
-  },
-  {
-    id: 4,
-    name: 'Lisa Chen',
-    email: 'lisa.chen@company.com',
-    license: 'CDL-456789',
-    phone: '(555) 456-7890',
-    status: 'active',
-    currentRoute: null,
-    rating: 4.7
-  },
-  {
-    id: 5,
-    name: 'Robert Wilson',
-    email: 'robert.w@company.com',
-    license: 'CDL-567890',
-    phone: '(555) 567-8901',
-    status: 'inactive',
-    currentRoute: null,
-    rating: 4.3
+onMounted(async () => {
+  if ($authClient) {
+    const result = await $authClient.getSession()
+    session.value = result?.data
   }
-])
+})
 
-const filteredDrivers = ref([...drivers])
-
-function filterDrivers() {
-  filteredDrivers.value = drivers.filter(driver => {
-    const matchesSearch = driver.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-      driver.email.toLowerCase().includes(searchTerm.value.toLowerCase())
-    const matchesStatus = !statusFilter.value || driver.status === statusFilter.value
-
-    return matchesSearch && matchesStatus
-  })
-}
-
-function getStatusClass(status) {
-  switch (status) {
-    case 'active':
-      return 'status status-active'
-    case 'on-route':
-      return 'status status-pending'
-    case 'inactive':
-      return 'status status-inactive'
-    default:
-      return 'status status-inactive'
-  }
-}
-
-function toggleDriverStatus(driver) {
-  if (driver.status === 'active') {
-    driver.status = 'inactive'
-    stats.active--
-  } else if (driver.status === 'inactive') {
-    driver.status = 'active'
-    stats.active++
+const handleLogout = async () => {
+  try {
+    if ($authClient) {
+      await $authClient.signOut()
+    }
+    await router.push('/login')
+  } catch (err) {
+    console.error('Logout error:', err)
   }
 }
 </script>
+
+<style scoped>
+.dashboard-layout {
+  min-height: 100vh;
+  background-color: var(--bg-secondary);
+}
+
+.top-bar {
+  color: var(--text-on-gradient);
+  display: flex;
+  align-items: center;
+  height: 70px;
+  width: 100%;
+  background: linear-gradient(90deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  padding: 0 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  width: 100%;
+  max-width: 100%;
+  margin-left: 260px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+
+.user-greeting {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: white;
+}
+
+.user-name {
+  font-weight: 700;
+}
+
+.sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  z-index: 101;
+}
+
+.sidebar-header {
+  padding: 2rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-placeholder {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  backdrop-filter: blur(10px);
+}
+
+.logo-placeholder svg {
+  opacity: 0.9;
+}
+
+.sidebar-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 1rem 0;
+  overflow-y: auto;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.nav-item.active {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-left: 4px solid var(--button-primary);
+}
+
+.nav-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.sidebar-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.875rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.5rem;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 1rem;
+}
+
+.logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.copyright {
+  text-align: center;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 0.5rem 0;
+}
+
+.main-content {
+  margin-left: 260px;
+  margin-top: 70px;
+  padding: 2rem;
+  min-height: calc(100vh - 70px);
+  background-color: var(--bg-secondary);
+}
+
+/* Global styles for pages using this layout */
+:global(.page-header) {
+  margin-bottom: 2rem;
+}
+
+:global(.page-title) {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+:global(.page-subtitle) {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+:global(.card) {
+  background: var(--bg-primary) !important;
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+}
+
+:global(.card-header) {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--input-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+:global(.card-title) {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary) !important;
+  margin: 0;
+}
+
+:global(.card-content) {
+  padding: 1.5rem;
+  color: var(--text-primary);
+}
+
+:global(.btn) {
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  text-decoration: none;
+  display: inline-block;
+}
+
+:global(.btn-primary) {
+  background: var(--button-primary);
+  color: white;
+}
+
+:global(.btn-primary:hover) {
+  background: var(--button-primary-hover);
+}
+
+:global(.btn-secondary) {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--input-border);
+}
+
+:global(.btn-secondary:hover) {
+  background: var(--input-border);
+}
+
+:global(.btn-success) {
+  background: #10b981;
+  color: white;
+}
+
+:global(.btn-warning) {
+  background: #f59e0b;
+  color: white;
+}
+
+:global(.form-input),
+:global(.form-select) {
+  padding: 0.625rem 0.875rem;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text-primary) !important;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+}
+
+:global(.table-container) {
+  overflow-x: auto;
+}
+
+:global(.table) {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+:global(.table th) {
+  text-align: left;
+  padding: 0.75rem;
+  background: var(--bg-secondary) !important;
+  font-weight: 600;
+  color: var(--text-primary) !important;
+  font-size: 0.875rem;
+  border-bottom: 2px solid var(--input-border);
+}
+
+:global(.table td) {
+  padding: 1rem 0.75rem;
+  border-bottom: 1px solid var(--input-border);
+  color: var(--text-primary) !important;
+}
+
+:global(.table tbody tr) {
+  background: var(--bg-primary) !important;
+}
+
+:global(.status) {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+:global(.status-active) {
+  background: #10b981 !important;
+  color: #ffffff !important;
+}
+
+:global(.status-pending) {
+  background: #f59e0b !important;
+  color: #000000 !important;
+}
+
+:global(.status-inactive) {
+  background: #6b7280 !important;
+  color: #ffffff !important;
+}
+
+:global(.grid) {
+  display: grid;
+  gap: 1.5rem;
+}
+
+:global(.grid-cols-3) {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+
+  .header-content {
+    margin-left: 200px;
+  }
+
+  .main-content {
+    margin-left: 200px;
+  }
+
+  :global(.grid-cols-3) {
+    grid-template-columns: 1fr;
+  }
+}
+</style>

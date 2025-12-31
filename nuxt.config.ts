@@ -10,6 +10,19 @@ export default defineNuxtConfig({
   imports: {
     autoImport: true
   },
+  app: {
+    head: {
+      htmlAttrs: {
+        lang: 'en'
+      },
+      title: 'RouteReady',
+      meta: [
+        { charset: 'utf-8' },
+        { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+        { name: 'description', content: 'RouteReady - Route management and delivery optimization platform' }
+      ]
+    }
+  },
   modules: [
     '@nuxt/eslint',
     '@nuxt/fonts',
@@ -18,12 +31,10 @@ export default defineNuxtConfig({
     '@nuxt/scripts',
     '@nuxt/test-utils'
   ],
-
   css: [
     '~/assets/css/main.css',
     '~/assets/css/theme.css',
   ],
-
   // Make sure you have this if using Better Auth
   nitro: {
     experimental: {

@@ -7,8 +7,8 @@
           <p class="page-subtitle">Manage your driver team and assignments</p>
         </div>
         <NuxtLink to="/drivers/new" class="btn btn-primary">
-          <span class="mr-2">➕</span>
-          Add New Driver
+          <PlusIcon :size="18" />
+          <span>Add New Driver</span>
         </NuxtLink>
       </div>
     </div>

@@ -14,8 +14,8 @@
         <NuxtLink
 to="/properties/new"
           class="btn btn-primary">
-          <span class="mr-2">➕</span>
-          Add New Property
+          <PlusIcon :size="18" />
+          Add Schedule
         </NuxtLink>
       </div>
     </div>

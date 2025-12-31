@@ -1,252 +1,112 @@
 <template>
-  <div>
+  <div class="routes-page">
     <div class="page-header">
-      <div
-        class="flex items-center justify-between">
+      <div class="header-top">
         <div>
           <h1 class="page-title">Routes</h1>
-          <p class="page-subtitle">Optimize
-            and manage maintenance routes</p>
+          <p class="page-subtitle">Manage delivery routes and assignments</p>
         </div>
-        <div class="flex gap-3">
-          <button
-class="btn btn-secondary"
-            @click="optimizeAllRoutes">
-            <span class="mr-2">⚡</span>
-            Optimize Routes
-          </button>
-          <NuxtLink
-to="/routes/new"
-            class="btn btn-primary">
-            <span class="mr-2">➕</span>
-            Create Route
+        <NuxtLink to="/routes/new" class="btn btn-primary">
+          <PlusIcon :size="18" />
+          <span>Create Route</span>
+        </NuxtLink>
+      </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-section">
+      <div class="filters-group">
+        <select v-model="statusFilter" class="form-select" @change="filterRoutes">
+          <option value="">All Routes</option>
+          <option value="active">Active</option>
+          <option value="completed">Completed</option>
+          <option value="planned">Planned</option>
+        </select>
+        <select v-model="driverFilter" class="form-select" @change="filterRoutes">
+          <option value="">All Drivers</option>
+          <option value="assigned">Assigned</option>
+          <option value="unassigned">Unassigned</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Routes Grid -->
+    <div class="routes-grid">
+      <div v-for="route in filteredRoutes" :key="route.id" class="route-card">
+        <div class="route-header">
+          <div class="route-title-section">
+            <h3 class="route-name">{{ route.name }}</h3>
+            <span :class="['route-status', `status-${route.status}`]">
+              {{ route.status }}
+            </span>
+          </div>
+          <div class="route-id">{{ route.code }}</div>
+        </div>
+
+        <p class="route-description">{{ route.description }}</p>
+
+        <div class="route-details">
+          <div class="detail-row">
+            <span class="detail-label">Driver:</span>
+            <span class="detail-value">{{ route.driver || 'Unassigned' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Properties:</span>
+            <span class="detail-value">{{ route.properties }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Distance:</span>
+            <span class="detail-value">{{ route.distance }} miles</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Duration:</span>
+            <span class="detail-value">{{ route.duration }} hrs</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Efficiency:</span>
+            <span class="detail-value">{{ route.efficiency }}%</span>
+          </div>
+        </div>
+
+        <div class="route-timeline">
+          <div class="timeline-item">
+            <span class="timeline-icon">📍</span>
+            <span class="timeline-text">{{ route.start }}</span>
+          </div>
+          <div class="timeline-divider" />
+          <div class="timeline-item">
+            <span class="timeline-icon">🏁</span>
+            <span class="timeline-text">{{ route.end }}</span>
+          </div>
+          <div class="timeline-time">
+            <span class="timeline-icon">🕐</span>
+            <span class="timeline-text">{{ route.startTime }}</span>
+          </div>
+        </div>
+
+        <div class="route-actions">
+          <NuxtLink :to="`/routes/${route.id}`" class="btn btn-secondary btn-small">
+            View Details
           </NuxtLink>
-        </div>
-      </div>
-    </div>
-
-    <!-- Route Stats -->
-    <div class="grid grid-cols-4 mb-8">
-      <div class="card">
-        <div
-          class="card-content text-center">
-          <p
-            class="text-2xl font-bold text-primary-600">
-            {{ stats.total }}</p>
-          <p class="text-sm text-gray-600">
-            Total Routes</p>
-        </div>
-      </div>
-      <div class="card">
-        <div
-          class="card-content text-center">
-          <p
-            class="text-2xl font-bold text-success-600">
-            {{ stats.active }}</p>
-          <p class="text-sm text-gray-600">
-            Active Today</p>
-        </div>
-      </div>
-      <div class="card">
-        <div
-          class="card-content text-center">
-          <p
-            class="text-2xl font-bold text-accent-600">
-            {{ stats.avgDistance }}</p>
-          <p class="text-sm text-gray-600">
-            Avg Distance</p>
-        </div>
-      </div>
-      <div class="card">
-        <div
-          class="card-content text-center">
-          <p
-            class="text-2xl font-bold text-warning-600">
-            {{ stats.efficiency }}%</p>
-          <p class="text-sm text-gray-600">
-            Efficiency</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Route Map Placeholder -->
-    <div class="card mb-6">
-      <div class="card-header">
-        <h2 class="card-title">Route Overview
-        </h2>
-        <div class="flex gap-2">
-          <button
-v-for="view in mapViews"
-            :key="view"
-            :class="currentMapView === view ? 'btn-primary' : 'btn-secondary'"
-            class="btn text-xs"
-            @click="currentMapView = view">
-            {{ view }}
+          <NuxtLink :to="`/routes/${route.id}/edit`" class="btn btn-secondary btn-small">
+            Edit
+          </NuxtLink>
+          <button class="btn btn-secondary btn-small">
+            View Map
           </button>
-        </div>
-      </div>
-      <div class="card-content">
-        <div
-          class="bg-gray-100 rounded-lg p-8 text-center min-h-80 flex items-center justify-center">
-          <div>
-            <div class="text-6xl mb-4">🗺️
-            </div>
-            <p
-              class="text-lg font-semibold mb-2">
-              Interactive Route Map</p>
-            <p class="text-gray-600">
-              Map integration would display
-              {{ currentMapView.toLowerCase()
-              }} routes with real-time
-              tracking
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Routes List -->
-    <div class="card">
-      <div class="card-header">
-        <h2 class="card-title">Route
-          Management</h2>
-        <div class="flex gap-4">
-          <select
-v-model="filterStatus"
-            class="form-select"
-            @change="filterRoutes">
-            <option value="">All Routes
-            </option>
-            <option value="active">Active
-            </option>
-            <option value="completed">
-              Completed</option>
-            <option value="planned">Planned
-            </option>
-          </select>
-          <select
-v-model="filterDriver"
-            class="form-select"
-            @change="filterRoutes">
-            <option value="">All Drivers
-            </option>
-            <option value="john-smith">John
-              Smith</option>
-            <option value="sarah-johnson">
-              Sarah Johnson</option>
-            <option value="mike-davis">Mike
-              Davis</option>
-          </select>
-        </div>
-      </div>
-      <div class="card-content">
-        <div class="space-y-4">
-          <div
-            v-for="route in filteredRoutes"
-            :key="route.id"
-            class="border border-gray-200 rounded-lg p-4">
-            <div
-              class="flex items-start justify-between">
-              <div class="flex-1">
-                <div
-                  class="flex items-center gap-3 mb-3">
-                  <div
-                    class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center font-semibold text-primary-700">
-                    R{{ route.id }}
-                  </div>
-                  <div>
-                    <h3
-                      class="font-semibold text-lg">
-                      {{ route.name }}</h3>
-                    <p
-                      class="text-sm text-gray-600">
-                      {{ route.description }}
-                    </p>
-                  </div>
-                  <span
-                    :class="getStatusClass(route.status)">{{
-                      route.status }}</span>
-                </div>
-
-                <div
-                  class="grid grid-cols-5 gap-4 mb-4">
-                  <div>
-                    <p
-                      class="text-xs text-gray-500">
-                      Driver</p>
-                    <p class="font-semibold">
-                      {{ route.driver }}</p>
-                  </div>
-                  <div>
-                    <p
-                      class="text-xs text-gray-500">
-                      Properties</p>
-                    <p class="font-semibold">
-                      {{ route.propertyCount
-                      }}</p>
-                  </div>
-                  <div>
-                    <p
-                      class="text-xs text-gray-500">
-                      Distance</p>
-                    <p class="font-semibold">
-                      {{ route.distance }}
-                    </p>
-                  </div>
-                  <div>
-                    <p
-                      class="text-xs text-gray-500">
-                      Duration</p>
-                    <p class="font-semibold">
-                      {{ route.estimatedTime
-                      }}</p>
-                  </div>
-                  <div>
-                    <p
-                      class="text-xs text-gray-500">
-                      Efficiency</p>
-                    <p
-                      class="font-semibold text-success-600">
-                      {{ route.efficiency }}%
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  class="flex items-center gap-4 text-sm text-gray-600">
-                  <span>📍 Start: {{
-                    route.startLocation
-                  }}</span>
-                  <span>🏁 End: {{
-                    route.endLocation
-                  }}</span>
-                  <span
-                    v-if="route.startTime">⏰
-                    {{ route.startTime
-                    }}</span>
-                </div>
-              </div>
-
-              <div class="flex gap-2 ml-4">
-                <button
-                  class="btn btn-secondary text-xs"
-                  @click="viewRoute(route)">
-                  View Map
-                </button>
-                <button
-                  class="btn btn-accent text-xs"
-                  :disabled="route.status === 'active'"
-                  @click="optimizeRoute(route)">
-                  Optimize
-                </button>
-                <NuxtLink
-                  :to="`/routes/${route.id}/edit`"
-                  class="btn btn-secondary text-xs">
-                  Edit
-                </NuxtLink>
-              </div>
-            </div>
-          </div>
+          <button
+            v-if="route.status === 'planned'"
+            class="btn btn-success btn-small"
+            @click="activateRoute(route)"
+          >
+            Start Route
+          </button>
+          <button
+            v-if="route.status === 'active'"
+            class="btn btn-primary btn-small"
+          >
+            Optimize
+          </button>
         </div>
       </div>
     </div>
@@ -254,93 +114,58 @@ v-model="filterDriver"
 </template>
 
 <script setup>
-const currentMapView = ref('All Routes')
-const filterStatus = ref('')
-const filterDriver = ref('')
-
 definePageMeta({
   layout: 'dashboard',
 })
 
-const mapViews = ['All Routes', 'Today', 'Tomorrow', 'This Week']
-
-const stats = reactive({
-  total: 24,
-  active: 8,
-  avgDistance: '45 mi',
-  efficiency: 94
-})
+const statusFilter = ref('')
+const driverFilter = ref('')
 
 const routes = reactive([
   {
     id: 1,
+    code: 'R1',
     name: 'Downtown Commercial Route',
     description: 'Shopping centers and office buildings',
     driver: 'John Smith',
-    status: 'active',
-    propertyCount: 6,
-    distance: '32 miles',
-    estimatedTime: '4.5 hrs',
+    properties: 6,
+    distance: 32,
+    duration: 4.5,
     efficiency: 96,
-    startLocation: 'Main Office',
-    endLocation: 'Downtown Depot',
-    startTime: '8:30 AM'
+    start: 'Main Office',
+    end: 'Downtown Depot',
+    startTime: '8:30 AM',
+    status: 'active'
   },
   {
     id: 2,
+    code: 'R2',
     name: 'Residential District A',
     description: 'Apartment complexes and condos',
     driver: 'Sarah Johnson',
-    status: 'completed',
-    propertyCount: 8,
-    distance: '28 miles',
-    estimatedTime: '3.5 hrs',
-    efficiency: 98,
-    startLocation: 'Main Office',
-    endLocation: 'North Station',
-    startTime: '9:00 AM'
+    properties: 8,
+    distance: 28,
+    duration: 3.5,
+    efficiency: 92,
+    start: 'Main Office',
+    end: 'North Hub',
+    startTime: '9:00 AM',
+    status: 'completed'
   },
   {
     id: 3,
-    name: 'Industrial Zone Route',
-    description: 'Warehouses and manufacturing facilities',
-    driver: 'Mike Davis',
-    status: 'active',
-    propertyCount: 5,
-    distance: '55 miles',
-    estimatedTime: '6 hrs',
-    efficiency: 92,
-    startLocation: 'Main Office',
-    endLocation: 'Industrial Park',
-    startTime: '8:00 AM'
-  },
-  {
-    id: 4,
-    name: 'Medical Center Circuit',
-    description: 'Hospitals and medical facilities',
-    driver: 'Lisa Chen',
-    status: 'planned',
-    propertyCount: 4,
-    distance: '22 miles',
-    estimatedTime: '3 hrs',
-    efficiency: 94,
-    startLocation: 'Main Office',
-    endLocation: 'Medical District',
-    startTime: null
-  },
-  {
-    id: 5,
-    name: 'Shopping Mall Route',
-    description: 'Large retail complexes',
-    driver: 'Robert Wilson',
-    status: 'planned',
-    propertyCount: 3,
-    distance: '38 miles',
-    estimatedTime: '5 hrs',
-    efficiency: 89,
-    startLocation: 'Main Office',
-    endLocation: 'West Mall',
-    startTime: null
+    code: 'R3',
+    name: 'Industrial Park Route',
+    description: 'Warehouses and distribution centers',
+    driver: null,
+    properties: 5,
+    distance: 45,
+    duration: 5.0,
+    efficiency: 88,
+    start: 'South Depot',
+    end: 'Industrial Park',
+    startTime: '7:00 AM',
+    status: 'planned'
   }
 ])
 
@@ -348,57 +173,274 @@ const filteredRoutes = ref([...routes])
 
 function filterRoutes() {
   filteredRoutes.value = routes.filter(route => {
-    const matchesStatus = !filterStatus.value || route.status === filterStatus.value
-    const matchesDriver = !filterDriver.value ||
-      route.driver.toLowerCase().replace(' ', '-') === filterDriver.value
+    const matchesStatus = !statusFilter.value || route.status === statusFilter.value
+    const matchesDriver = !driverFilter.value ||
+      (driverFilter.value === 'assigned' && route.driver) ||
+      (driverFilter.value === 'unassigned' && !route.driver)
 
     return matchesStatus && matchesDriver
   })
 }
 
-function getStatusClass(status) {
-  switch (status) {
-    case 'active':
-      return 'status status-pending'
-    case 'completed':
-      return 'status status-active'
-    case 'planned':
-      return 'status status-inactive'
-    default:
-      return 'status status-inactive'
-  }
+function activateRoute(route) {
+  route.status = 'active'
+  console.log('Activating route:', route.name)
 }
 
-function viewRoute(route) {
-  // In a real app, this would show the route on the map
-  alert(`Viewing route: ${route.name}`)
-}
-
-function optimizeRoute(route) {
-  if (route.status === 'active') return
-
-  // Simulate route optimization
-  const oldEfficiency = route.efficiency
-  route.efficiency = Math.min(100, route.efficiency + Math.floor(Math.random() * 5) + 1)
-
-  alert(`Route optimized! Efficiency improved from ${oldEfficiency}% to ${route.efficiency}%`)
-}
-
-function optimizeAllRoutes() {
-  routes.forEach(route => {
-    if (route.status !== 'active') {
-      route.efficiency = Math.min(100, route.efficiency + Math.floor(Math.random() * 3) + 1)
-    }
-  })
-
-  alert('All non-active routes have been optimized!')
-}
-
-// Set page title
 useHead({
   title: 'Routes - RouteReady',
   meta: [
-    { name: 'description', content: 'Manage and optimize maintenance routes' }
+    { name: 'description', content: 'Manage delivery routes' }
   ]
 })
 </script>
+
+<style scoped>
+.routes-page {
+  width: 100%;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 1rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+/* Filters */
+.filters-section {
+  background: var(--bg-primary);
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  margin-bottom: 2rem;
+}
+
+.filters-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-select {
+  min-width: 200px;
+}
+
+/* Routes Grid */
+.routes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+.route-card {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.route-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--button-primary);
+}
+
+.route-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--input-border);
+}
+
+.route-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.route-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.route-id {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+}
+
+.route-status {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.status-active {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.status-completed {
+  background: #3b82f6;
+  color: #ffffff;
+}
+
+.status-planned {
+  background: #f59e0b;
+  color: #000000;
+}
+
+.route-description {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  margin: 0 0 1.25rem 0;
+  line-height: 1.5;
+}
+
+.route-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.detail-value {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.route-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.timeline-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.timeline-text {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.timeline-divider {
+  height: 1px;
+  background: var(--input-border);
+  margin: 0.25rem 0 0.25rem 1.5rem;
+}
+
+.timeline-time {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--input-border);
+}
+
+.route-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.btn-small {
+  font-size: 0.8125rem;
+  padding: 0.5rem 0.875rem;
+}
+
+@media (max-width: 1200px) {
+  .routes-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .routes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-top {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .filters-group {
+    flex-direction: column;
+  }
+
+  .form-select {
+    width: 100%;
+  }
+}
+</style>
