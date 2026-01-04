@@ -8,102 +8,92 @@
       <p class="page-subtitle">Create a new driver profile</p>
     </header>
 
-    <section class="form-container">
-      <article class="card">
-        <form class="card-content" aria-label="New driver form" @submit.prevent="handleSubmit">
-          <fieldset class="form-grid">
-            <legend class="visually-hidden">Driver Information</legend>
+    <article class="card">
+      <form @submit.prevent="handleSubmit">
+        <fieldset class="form-grid">
+          <legend class="visually-hidden">Driver Information</legend>
 
-            <div class="form-group">
-              <label for="name">Full Name <span aria-label="required">*</span></label>
-              <input
-                id="name"
-                v-model="formData.name"
-                type="text"
-                class="form-input"
-                required
-                autocomplete="name"
-              >
-            </div>
+          <label>
+            Full Name <span aria-label="required">*</span>
+            <input
+              v-model="formData.name"
+              type="text"
+              class="form-input"
+              required
+              autocomplete="name"
+            >
+          </label>
 
-            <div class="form-group">
-              <label for="email">Email Address <span aria-label="required">*</span></label>
-              <input
-                id="email"
-                v-model="formData.email"
-                type="email"
-                class="form-input"
-                required
-                autocomplete="email"
-              >
-            </div>
+          <label>
+            Email Address <span aria-label="required">*</span>
+            <input
+              v-model="formData.email"
+              type="email"
+              class="form-input"
+              required
+              autocomplete="email"
+            >
+          </label>
 
-            <div class="form-group">
-              <label for="phone">Phone Number <span aria-label="required">*</span></label>
-              <input
-                id="phone"
-                v-model="formData.phone"
-                type="tel"
-                class="form-input"
-                required
-                autocomplete="tel"
-              >
-            </div>
+          <label>
+            Phone Number <span aria-label="required">*</span>
+            <input
+              v-model="formData.phone"
+              type="tel"
+              class="form-input"
+              required
+              autocomplete="tel"
+            >
+          </label>
 
-            <div class="form-group">
-              <label for="license">License Number <span aria-label="required">*</span></label>
-              <input
-                id="license"
-                v-model="formData.license"
-                type="text"
-                class="form-input"
-                required
-              >
-            </div>
+          <label>
+            License Number <span aria-label="required">*</span>
+            <input
+              v-model="formData.license"
+              type="text"
+              class="form-input"
+              required
+            >
+          </label>
 
-            <div class="form-group">
-              <label for="status">Status</label>
-              <select
-                id="status"
-                v-model="formData.status"
-                class="form-select"
-              >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-            </div>
+          <label>
+            Status
+            <select
+              v-model="formData.status"
+              class="form-select"
+            >
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </label>
 
-            <div class="form-group">
-              <label for="current-route">Current Route</label>
-              <select
-                id="current-route"
-                v-model="formData.currentRoute"
-                class="form-select"
-              >
-                <option value="">None</option>
-                <option value="Downtown Route">Downtown Route</option>
-                <option value="Commercial District">Commercial District</option>
-                <option value="Industrial Park">Industrial Park</option>
-                <option value="Residential A">Residential A</option>
-              </select>
-            </div>
-          </fieldset>
+          <label>
+            Current Route
+            <select
+              v-model="formData.currentRoute"
+              class="form-select"
+            >
+              <option value="">None</option>
+              <option value="Downtown Route">Downtown Route</option>
+              <option value="Commercial District">Commercial District</option>
+              <option value="Industrial Park">Industrial Park</option>
+              <option value="Residential A">Residential A</option>
+            </select>
+          </label>
+        </fieldset>
 
-          <div v-if="error" class="error-message" role="alert">
-            {{ error }}
-          </div>
+        <p v-if="error" class="error-message">{{ error }}</p>
 
-          <nav class="form-actions" aria-label="Form actions">
-            <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
-              {{ isSubmitting ? 'Creating...' : 'Create Driver' }}
-            </button>
-            <NuxtLink to="/drivers" class="btn btn-secondary">
-              Cancel
-            </NuxtLink>
-          </nav>
-        </form>
-      </article>
-    </section>
+        <nav class="form-actions">
+          <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
+            {{ isSubmitting ? 'Creating...' : 'Create Driver' }}
+          </button>
+          <NuxtLink to="/drivers" class="btn btn-secondary">
+            Cancel
+          </NuxtLink>
+        </nav>
+      </form>
+    </article>
   </main>
 </template>
 
@@ -204,14 +194,6 @@ useHead({
   border-width: 0;
 }
 
-.form-container {
-  width: 100%;
-}
-
-.card-content {
-  display: block;
-}
-
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -221,13 +203,10 @@ useHead({
   border: none;
 }
 
-.form-group {
+.form-grid label {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
-
-.form-group label {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
@@ -257,7 +236,7 @@ useHead({
   color: var(--error-text);
   padding: 1rem;
   border-radius: 8px;
-  margin-bottom: 1.5rem;
+  margin: 0 0 1.5rem 0;
   font-size: 0.9375rem;
   font-weight: 600;
 }

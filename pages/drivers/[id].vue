@@ -2,13 +2,13 @@
   <main class="driver-detail-page">
     <!-- Loading State -->
     <section v-if="pending" class="loading-state" aria-live="polite">
-      <div class="loading-spinner" aria-hidden="true">⏳</div>
+      <span class="loading-spinner" aria-hidden="true">⏳</span>
       <p>Loading driver details...</p>
     </section>
 
     <!-- Error State -->
-    <section v-else-if="error" class="error-state" role="alert">
-      <div class="error-icon" aria-hidden="true">⚠️</div>
+    <section v-else-if="error" class="error-state">
+      <span class="error-icon" aria-hidden="true">⚠️</span>
       <h2 class="error-title">Failed to load driver</h2>
       <p class="error-message">{{ error.message }}</p>
       <NuxtLink to="/drivers" class="btn btn-primary">Back to Drivers</NuxtLink>
@@ -17,89 +17,66 @@
     <!-- Driver Content -->
     <template v-else-if="driver">
       <header class="page-header">
-        <div class="header-top">
-          <div>
-            <NuxtLink to="/drivers" class="back-link">
-              ← Back to Drivers
-            </NuxtLink>
-            <h1 class="page-title">{{ driver.name }}</h1>
-            <p class="page-subtitle">Driver Details</p>
-          </div>
-          <nav class="header-actions" aria-label="Driver actions">
-            <NuxtLink :to="`/drivers/edit-${driver.id}`" class="btn btn-secondary">
-              Edit Driver
-            </NuxtLink>
-            <button
-              :class="['btn', driver.status === 'active' ? 'btn-warning' : 'btn-success']"
-              @click="toggleStatus"
-            >
-              {{ driver.status === 'active' ? 'Deactivate' : 'Activate' }}
-            </button>
-          </nav>
-        </div>
+        <NuxtLink to="/drivers" class="back-link">
+          ← Back to Drivers
+        </NuxtLink>
+        <h1 class="page-title">{{ driver.name }}</h1>
+        <p class="page-subtitle">Driver Details</p>
+        <nav class="header-actions">
+          <NuxtLink :to="`/drivers/edit-${driver.id}`" class="btn btn-secondary">
+            Edit Driver
+          </NuxtLink>
+          <button
+            :class="['btn', driver.status === 'active' ? 'btn-warning' : 'btn-success']"
+            @click="toggleStatus"
+          >
+            {{ driver.status === 'active' ? 'Deactivate' : 'Activate' }}
+          </button>
+        </nav>
       </header>
 
-      <div class="detail-grid">
+      <section class="detail-grid">
         <!-- Driver Info Card -->
         <article class="card">
           <header class="card-header">
             <h2 class="card-title">Driver Information</h2>
           </header>
-          <div class="card-content">
-            <div class="driver-avatar-section">
-              <div class="driver-avatar-large" aria-hidden="true">
-                {{ driver.name.charAt(0) }}
-              </div>
-              <div class="status-badge-large" :class="`status-${driver.status}`" role="status">
-                {{ driver.status }}
-              </div>
-            </div>
 
-            <dl class="info-grid">
-              <div class="info-item">
-                <dt class="info-label">Full Name</dt>
-                <dd class="info-value">{{ driver.name }}</dd>
-              </div>
+          <span class="driver-avatar-large" aria-hidden="true">
+            {{ driver.name.charAt(0) }}
+          </span>
+          <span class="status-badge-large" :class="`status-${driver.status}`">
+            {{ driver.status }}
+          </span>
 
-              <div class="info-item">
-                <dt class="info-label">Email</dt>
-                <dd class="info-value">{{ driver.email }}</dd>
-              </div>
+          <dl class="info-grid">
+            <dt>Full Name</dt>
+            <dd>{{ driver.name }}</dd>
 
-              <div class="info-item">
-                <dt class="info-label">License Number</dt>
-                <dd class="info-value">{{ driver.license }}</dd>
-              </div>
+            <dt>Email</dt>
+            <dd>{{ driver.email }}</dd>
 
-              <div class="info-item">
-                <dt class="info-label">Phone Number</dt>
-                <dd class="info-value">{{ driver.phone }}</dd>
-              </div>
+            <dt>License Number</dt>
+            <dd>{{ driver.license }}</dd>
 
-              <div class="info-item">
-                <dt class="info-label">Current Route</dt>
-                <dd class="info-value">{{ driver.current_route || 'Not assigned' }}</dd>
-              </div>
+            <dt>Phone Number</dt>
+            <dd>{{ driver.phone }}</dd>
 
-              <div class="info-item">
-                <dt class="info-label">Performance Rating</dt>
-                <dd class="info-value">
-                  <span class="star" aria-hidden="true">⭐</span>
-                  {{ Number(driver.rating).toFixed(1) }}/5
-                </dd>
-              </div>
+            <dt>Current Route</dt>
+            <dd>{{ driver.current_route || 'Not assigned' }}</dd>
 
-              <div class="info-item">
-                <dt class="info-label">Joined</dt>
-                <dd class="info-value">{{ formatDate(driver.created_at) }}</dd>
-              </div>
+            <dt>Performance Rating</dt>
+            <dd>
+              <span aria-hidden="true">⭐</span>
+              {{ Number(driver.rating).toFixed(1) }}/5
+            </dd>
 
-              <div class="info-item">
-                <dt class="info-label">Last Updated</dt>
-                <dd class="info-value">{{ formatDate(driver.updated_at) }}</dd>
-              </div>
-            </dl>
-          </div>
+            <dt>Joined</dt>
+            <dd>{{ formatDate(driver.created_at) }}</dd>
+
+            <dt>Last Updated</dt>
+            <dd>{{ formatDate(driver.updated_at) }}</dd>
+          </dl>
         </article>
 
         <!-- Recent Activity Placeholder -->
@@ -107,13 +84,9 @@
           <header class="card-header">
             <h2 class="card-title">Recent Activity</h2>
           </header>
-          <div class="card-content">
-            <div class="empty-state-small">
-              <p>Activity tracking coming soon</p>
-            </div>
-          </div>
+          <p class="empty-state-small">Activity tracking coming soon</p>
         </article>
-      </div>
+      </section>
     </template>
   </main>
 </template>
@@ -126,7 +99,6 @@ definePageMeta({
 const route = useRoute()
 const driverId = parseInt(route.params.id)
 
-// Fetch driver from API
 const { data: driverData, pending, error, refresh } = await useFetch(`/api/drivers/${driverId}`, {
   transform: (response) => response.data
 })
@@ -148,7 +120,6 @@ const toggleStatus = async () => {
     })
 
     if (data) {
-      // Refresh to get updated data
       await refresh()
     }
   } catch (err) {
@@ -182,23 +153,21 @@ useHead({
 
 .page-header {
   margin-bottom: 2rem;
-}
-
-.header-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: start;
 }
 
 .back-link {
+  grid-column: 1 / -1;
   display: inline-flex;
   align-items: center;
   color: var(--button-primary);
   text-decoration: none;
   font-weight: 600;
   font-size: 0.9375rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .back-link:hover {
@@ -213,12 +182,15 @@ useHead({
 }
 
 .page-subtitle {
+  grid-column: 1;
   color: var(--text-secondary);
   margin: 0;
   font-size: 1rem;
 }
 
 .header-actions {
+  grid-column: 2;
+  grid-row: 2 / 4;
   display: flex;
   gap: 0.75rem;
   flex-shrink: 0;
@@ -248,17 +220,13 @@ useHead({
   gap: 1.5rem;
 }
 
-.driver-avatar-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--input-border);
+.card {
+  display: grid;
+  gap: 1.5rem;
 }
 
 .driver-avatar-large {
+  justify-self: center;
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -272,6 +240,7 @@ useHead({
 }
 
 .status-badge-large {
+  justify-self: center;
   padding: 0.5rem 1.5rem;
   border-radius: 9999px;
   font-size: 0.875rem;
@@ -302,60 +271,31 @@ useHead({
   margin: 0;
 }
 
-.info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin: 0;
-}
-
-.info-label {
+.info-grid dt {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin: 0;
+  margin: 0 0 0.5rem 0;
 }
 
-.info-value {
+.info-grid dd {
   font-size: 1.125rem;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
 }
 
-.star {
-  color: #fbbf24;
-}
-
 .empty-state-small {
   text-align: center;
   padding: 2rem;
   color: var(--text-secondary);
+  margin: 0;
 }
 
-/* Loading State */
-.loading-state {
-  text-align: center;
-  padding: 4rem 2rem;
-  background: var(--bg-primary);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-}
-
-.loading-spinner {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Error State */
+/* Loading/Error States */
+.loading-state,
 .error-state {
   text-align: center;
   padding: 4rem 2rem;
@@ -364,9 +304,23 @@ useHead({
   box-shadow: var(--shadow);
 }
 
+.loading-spinner,
 .error-icon {
   font-size: 4rem;
   margin-bottom: 1rem;
+  display: block;
+}
+
+.loading-spinner {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.error-icon {
   opacity: 0.5;
 }
 
@@ -384,12 +338,13 @@ useHead({
 }
 
 @media (max-width: 768px) {
-  .header-top {
-    flex-direction: column;
-    gap: 1rem;
+  .page-header {
+    grid-template-columns: 1fr;
   }
 
   .header-actions {
+    grid-column: 1;
+    grid-row: auto;
     width: 100%;
     flex-direction: column;
   }

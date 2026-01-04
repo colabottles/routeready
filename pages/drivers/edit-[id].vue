@@ -2,13 +2,13 @@
   <main class="edit-driver-page">
     <!-- Loading State -->
     <section v-if="pending" class="loading-state" aria-live="polite">
-      <div class="loading-spinner" aria-hidden="true">⏳</div>
+      <span class="loading-spinner" aria-hidden="true">⏳</span>
       <p>Loading driver...</p>
     </section>
 
     <!-- Error State -->
-    <section v-else-if="error" class="error-state" role="alert">
-      <div class="error-icon" aria-hidden="true">⚠️</div>
+    <section v-else-if="error" class="error-state">
+      <span class="error-icon" aria-hidden="true">⚠️</span>
       <h2 class="error-title">Failed to load driver</h2>
       <p class="error-message">{{ error.message }}</p>
       <NuxtLink to="/drivers" class="btn btn-primary">Back to Drivers</NuxtLink>
@@ -24,128 +24,114 @@
         <p class="page-subtitle">Update driver information</p>
       </header>
 
-      <section class="form-container">
-        <article class="card">
-          <form class="card-content" aria-label="Edit driver form" @submit.prevent="handleSubmit">
-            <fieldset class="form-grid">
-              <legend class="visually-hidden">Driver Information</legend>
+      <article class="card">
+        <form @submit.prevent="handleSubmit">
+          <fieldset class="form-grid">
+            <legend class="visually-hidden">Driver Information</legend>
 
-              <div class="form-group">
-                <label for="name">Full Name <span aria-label="required">*</span></label>
-                <input
-                  id="name"
-                  v-model="formData.name"
-                  type="text"
-                  class="form-input"
-                  required
-                  autocomplete="name"
-                >
-              </div>
-
-              <div class="form-group">
-                <label for="email">Email Address <span aria-label="required">*</span></label>
-                <input
-                  id="email"
-                  v-model="formData.email"
-                  type="email"
-                  class="form-input"
-                  required
-                  autocomplete="email"
-                >
-              </div>
-
-              <div class="form-group">
-                <label for="phone">Phone Number <span aria-label="required">*</span></label>
-                <input
-                  id="phone"
-                  v-model="formData.phone"
-                  type="tel"
-                  class="form-input"
-                  required
-                  autocomplete="tel"
-                >
-              </div>
-
-              <div class="form-group">
-                <label for="license">License Number <span aria-label="required">*</span></label>
-                <input
-                  id="license"
-                  v-model="formData.license"
-                  type="text"
-                  class="form-input"
-                  required
-                >
-              </div>
-
-              <div class="form-group">
-                <label for="status">Status</label>
-                <select
-                  id="status"
-                  v-model="formData.status"
-                  class="form-select"
-                >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                  <option value="on-route">On Route</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="current-route">Current Route</label>
-                <select
-                  id="current-route"
-                  v-model="formData.current_route"
-                  class="form-select"
-                >
-                  <option value="">None</option>
-                  <option value="Downtown Route">Downtown Route</option>
-                  <option value="Commercial District">Commercial District</option>
-                  <option value="Industrial Park">Industrial Park</option>
-                  <option value="Residential A">Residential A</option>
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label for="rating">Performance Rating (0-5)</label>
-                <input
-                  id="rating"
-                  v-model.number="formData.rating"
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  max="5"
-                  class="form-input"
-                >
-              </div>
-            </fieldset>
-
-            <div v-if="submitError" class="error-message" role="alert">
-              {{ submitError }}
-            </div>
-
-            <div v-if="success" class="success-message" role="status">
-              {{ success }}
-            </div>
-
-            <nav class="form-actions" aria-label="Form actions">
-              <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
-                {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
-              </button>
-              <NuxtLink :to="`/drivers/${driverId}`" class="btn btn-secondary">
-                Cancel
-              </NuxtLink>
-              <button
-                type="button"
-                class="btn btn-danger"
-                aria-label="Delete this driver permanently"
-                @click="handleDelete"
+            <label>
+              Full Name <span aria-label="required">*</span>
+              <input
+                v-model="formData.name"
+                type="text"
+                class="form-input"
+                required
+                autocomplete="name"
               >
-                Delete Driver
-              </button>
-            </nav>
-          </form>
-        </article>
-      </section>
+            </label>
+
+            <label>
+              Email Address <span aria-label="required">*</span>
+              <input
+                v-model="formData.email"
+                type="email"
+                class="form-input"
+                required
+                autocomplete="email"
+              >
+            </label>
+
+            <label>
+              Phone Number <span aria-label="required">*</span>
+              <input
+                v-model="formData.phone"
+                type="tel"
+                class="form-input"
+                required
+                autocomplete="tel"
+              >
+            </label>
+
+            <label>
+              License Number <span aria-label="required">*</span>
+              <input
+                v-model="formData.license"
+                type="text"
+                class="form-input"
+                required
+              >
+            </label>
+
+            <label>
+              Status
+              <select
+                v-model="formData.status"
+                class="form-select"
+              >
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="on-route">On Route</option>
+              </select>
+            </label>
+
+            <label>
+              Current Route
+              <select
+                v-model="formData.current_route"
+                class="form-select"
+              >
+                <option value="">None</option>
+                <option value="Downtown Route">Downtown Route</option>
+                <option value="Commercial District">Commercial District</option>
+                <option value="Industrial Park">Industrial Park</option>
+                <option value="Residential A">Residential A</option>
+              </select>
+            </label>
+
+            <label>
+              Performance Rating (0-5)
+              <input
+                v-model.number="formData.rating"
+                type="number"
+                step="0.1"
+                min="0"
+                max="5"
+                class="form-input"
+              >
+            </label>
+          </fieldset>
+
+          <p v-if="submitError" class="error-message">{{ submitError }}</p>
+          <p v-if="success" class="success-message">{{ success }}</p>
+
+          <nav class="form-actions">
+            <button type="submit" class="btn btn-primary" :disabled="isSubmitting">
+              {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
+            </button>
+            <NuxtLink :to="`/drivers/${driverId}`" class="btn btn-secondary">
+              Cancel
+            </NuxtLink>
+            <button
+              type="button"
+              class="btn btn-danger"
+              :aria-label="`Delete ${formData.name} permanently`"
+              @click="handleDelete"
+            >
+              Delete Driver
+            </button>
+          </nav>
+        </form>
+      </article>
     </template>
   </main>
 </template>
@@ -159,12 +145,10 @@ const route = useRoute()
 const router = useRouter()
 const driverId = parseInt(route.params.id)
 
-// Fetch driver from API
 const { data: driverData, pending, error } = await useFetch(`/api/drivers/${driverId}`, {
   transform: (response) => response.data
 })
 
-// Form data - make it reactive, not computed
 const formData = reactive({
   name: '',
   email: '',
@@ -179,7 +163,6 @@ const submitError = ref('')
 const success = ref('')
 const isSubmitting = ref(false)
 
-// Watch for driver data and populate form
 watch(driverData, (newData) => {
   if (newData) {
     formData.name = newData.name
@@ -197,16 +180,11 @@ const handleSubmit = async () => {
   success.value = ''
   isSubmitting.value = true
 
-  console.log('Submitting form data:', formData)
-  console.log('Driver ID:', driverId)
-
   try {
     const { data } = await $fetch(`/api/drivers/${driverId}`, {
       method: 'PUT',
       body: formData
     })
-
-    console.log('Response from API:', data)
 
     if (data) {
       success.value = 'Driver updated successfully!'
@@ -216,7 +194,6 @@ const handleSubmit = async () => {
       }, 1500)
     }
   } catch (err) {
-    console.error('Full error:', err)
     submitError.value = err?.data?.message || err?.message || 'Failed to update driver. Please try again.'
     console.error('Error updating driver:', err)
   } finally {
@@ -225,7 +202,7 @@ const handleSubmit = async () => {
 }
 
 const handleDelete = async () => {
-  if (!confirm('Are you sure you want to delete this driver? This action cannot be undone.')) {
+  if (!confirm(`Are you sure you want to delete ${formData.name}? This action cannot be undone.`)) {
     return
   }
 
@@ -298,14 +275,6 @@ useHead({
   border-width: 0;
 }
 
-.form-container {
-  width: 100%;
-}
-
-.card-content {
-  display: block;
-}
-
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -315,13 +284,10 @@ useHead({
   border: none;
 }
 
-.form-group {
+.form-grid label {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-}
-
-.form-group label {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
@@ -351,7 +317,7 @@ useHead({
   color: var(--error-text);
   padding: 1rem;
   border-radius: 8px;
-  margin-bottom: 1.5rem;
+  margin: 0 0 1.5rem 0;
   font-size: 0.9375rem;
   font-weight: 600;
 }
@@ -362,7 +328,7 @@ useHead({
   color: var(--success-text);
   padding: 1rem;
   border-radius: 8px;
-  margin-bottom: 1.5rem;
+  margin: 0 0 1.5rem 0;
   font-size: 0.9375rem;
   font-weight: 600;
 }
@@ -384,27 +350,8 @@ useHead({
   background: #dc2626;
 }
 
-/* Loading State */
-.loading-state {
-  text-align: center;
-  padding: 4rem 2rem;
-  background: var(--bg-primary);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-}
-
-.loading-spinner {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Error State */
+/* Loading/Error States */
+.loading-state,
 .error-state {
   text-align: center;
   padding: 4rem 2rem;
@@ -413,9 +360,23 @@ useHead({
   box-shadow: var(--shadow);
 }
 
+.loading-spinner,
 .error-icon {
   font-size: 4rem;
   margin-bottom: 1rem;
+  display: block;
+}
+
+.loading-spinner {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.error-icon {
   opacity: 0.5;
 }
 

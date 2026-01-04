@@ -1,148 +1,132 @@
 <template>
-  <div class="vehicles-page">
-    <div class="page-header">
-      <div class="header-top">
-        <div>
-          <h1 class="page-title">Vehicles</h1>
-          <p class="page-subtitle">Manage fleet vehicles and maintenance</p>
-        </div>
-        <NuxtLink to="/vehicles/new" class="btn btn-primary">
-          <PlusIcon :size="18" />
-          <span>Add Vehicle</span>
-        </NuxtLink>
-      </div>
-    </div>
+  <main class="vehicles-page">
+    <header class="page-header">
+      <h1 class="page-title">Vehicles</h1>
+      <p class="page-subtitle">Manage your fleet and maintenance schedules</p>
+      <NuxtLink to="/vehicles/new" class="btn btn-primary">
+        <PlusIcon :size="18" />
+        <span>Add Vehicle</span>
+      </NuxtLink>
+    </header>
 
-    <!-- Stats -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon">🚚</div>
-        <div class="stat-details">
-          <div class="stat-value">{{ stats.total }}</div>
-          <div class="stat-label">Total Vehicles</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">✅</div>
-        <div class="stat-details">
-          <div class="stat-value">{{ stats.active }}</div>
-          <div class="stat-label">Active</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🔧</div>
-        <div class="stat-details">
-          <div class="stat-value">{{ stats.maintenance }}</div>
-          <div class="stat-label">In Maintenance</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">⚠️</div>
-        <div class="stat-details">
-          <div class="stat-value">{{ stats.needsService }}</div>
-          <div class="stat-label">Needs Service</div>
-        </div>
-      </div>
-    </div>
+    <!-- Loading State -->
+    <section v-if="pending" class="loading-state" aria-live="polite">
+      <span class="loading-spinner" aria-hidden="true">⏳</span>
+      <p>Loading vehicles...</p>
+    </section>
 
-    <!-- Filters -->
-    <div class="filters-section">
-      <div class="filters-group">
+    <!-- Error State -->
+    <section v-else-if="error" class="error-state">
+      <span class="error-icon" aria-hidden="true">⚠️</span>
+      <h2 class="error-title">Failed to load vehicles</h2>
+      <p class="error-message">{{ error.message }}</p>
+      <button class="btn btn-primary" @click="refresh()">Try Again</button>
+    </section>
+
+    <!-- Vehicles Content -->
+    <template v-else>
+      <!-- Stats Grid -->
+      <section class="stats-grid">
+        <article class="stat-card">
+          <span class="stat-icon" aria-hidden="true">🚚</span>
+          <strong class="stat-value">{{ stats.total }}</strong>
+          <span class="stat-label">Total Vehicles</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon" aria-hidden="true">✅</span>
+          <strong class="stat-value">{{ stats.active }}</strong>
+          <span class="stat-label">Active</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon" aria-hidden="true">🔧</span>
+          <strong class="stat-value">{{ stats.maintenance }}</strong>
+          <span class="stat-label">In Maintenance</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon" aria-hidden="true">⚠️</span>
+          <strong class="stat-value">{{ stats.needsService }}</strong>
+          <span class="stat-label">Needs Service</span>
+        </article>
+      </section>
+
+      <!-- Filters -->
+      <form class="filters-section" @submit.prevent>
         <input
+          id="search-vehicles"
           v-model="searchTerm"
-          type="text"
-          placeholder="Search vehicles..."
+          type="search"
           class="form-input search-input"
+          placeholder="Search vehicles..."
+          aria-label="Search vehicles by name or license plate"
           @input="filterVehicles"
         >
-        <select v-model="statusFilter" class="form-select" @change="filterVehicles">
+        <select id="filter-status" v-model="statusFilter" class="form-select" aria-label="Filter by status" @change="filterVehicles">
           <option value="">All Status</option>
           <option value="active">Active</option>
-          <option value="maintenance">Maintenance</option>
           <option value="inactive">Inactive</option>
+          <option value="maintenance">Maintenance</option>
         </select>
-        <select v-model="typeFilter" class="form-select" @change="filterVehicles">
+        <select id="filter-type" v-model="typeFilter" class="form-select" aria-label="Filter by type" @change="filterVehicles">
           <option value="">All Types</option>
-          <option value="truck">Truck</option>
-          <option value="van">Van</option>
-          <option value="car">Car</option>
+          <option value="Truck">Truck</option>
+          <option value="Van">Van</option>
+          <option value="Car">Car</option>
         </select>
-      </div>
-    </div>
+      </form>
 
-    <!-- Vehicles Grid -->
-    <div class="vehicles-grid">
-      <div v-for="vehicle in filteredVehicles" :key="vehicle.id" class="vehicle-card">
-        <div class="vehicle-header">
-          <div class="vehicle-title-section">
-            <h3 class="vehicle-name">{{ vehicle.name }}</h3>
-            <span :class="['vehicle-status', `status-${vehicle.status}`]">
+      <!-- Vehicles Grid -->
+      <section class="vehicles-grid">
+        <article v-for="vehicle in filteredVehicles" :key="vehicle.id" class="vehicle-card">
+          <header class="vehicle-header">
+            <span class="vehicle-icon" aria-hidden="true">{{ vehicle.icon }}</span>
+            <h2 class="vehicle-name">{{ vehicle.name }}</h2>
+            <p class="vehicle-plate">{{ vehicle.license_plate }}</p>
+            <span class="vehicle-status" :class="`status-${vehicle.status}`">
               {{ vehicle.status }}
             </span>
-          </div>
-          <div class="vehicle-type">{{ vehicle.type }}</div>
-        </div>
+          </header>
 
-        <div class="vehicle-image">
-          <span class="vehicle-icon">{{ getVehicleIcon(vehicle.type) }}</span>
-        </div>
+          <dl class="vehicle-details">
+            <dt>Type:</dt>
+            <dd>{{ vehicle.type }}</dd>
 
-        <div class="vehicle-details">
-          <div class="detail-row">
-            <span class="detail-label">License Plate:</span>
-            <span class="detail-value">{{ vehicle.licensePlate }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Make/Model:</span>
-            <span class="detail-value">{{ vehicle.make }} {{ vehicle.model }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Year:</span>
-            <span class="detail-value">{{ vehicle.year }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Mileage:</span>
-            <span class="detail-value">{{ vehicle.mileage.toLocaleString() }} mi</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Assigned Driver:</span>
-            <span class="detail-value">{{ vehicle.assignedDriver || 'Unassigned' }}</span>
-          </div>
-        </div>
+            <dt>Make/Model:</dt>
+            <dd>{{ vehicle.make }} {{ vehicle.model }}</dd>
 
-        <div class="maintenance-info">
-          <div class="maintenance-row">
-            <span class="maintenance-label">Last Service:</span>
-            <span class="maintenance-value">{{ vehicle.lastService }}</span>
-          </div>
-          <div class="maintenance-row">
-            <span class="maintenance-label">Next Service:</span>
-            <span :class="['maintenance-value', vehicle.serviceDue ? 'service-due' : '']">
-              {{ vehicle.nextService }}
-            </span>
-          </div>
-        </div>
+            <dt>Year:</dt>
+            <dd>{{ vehicle.year }}</dd>
 
-        <div class="vehicle-actions">
-          <NuxtLink :to="`/vehicles/${vehicle.id}`" class="btn btn-secondary btn-small">
-            View Details
-          </NuxtLink>
-          <NuxtLink :to="`/vehicles/${vehicle.id}/edit`" class="btn btn-secondary btn-small">
-            Edit
-          </NuxtLink>
-          <button class="btn btn-secondary btn-small">
-            Service Log
-          </button>
-          <button
-            v-if="vehicle.serviceDue"
-            class="btn btn-warning btn-small"
-          >
-            Schedule Service
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+            <dt>Mileage:</dt>
+            <dd>{{ vehicle.mileage.toLocaleString() }} mi</dd>
+
+            <dt>Driver:</dt>
+            <dd>{{ vehicle.assigned_driver || 'Unassigned' }}</dd>
+
+            <dt>Next Service:</dt>
+            <dd :class="{ 'service-due': vehicle.service_due }">
+              {{ vehicle.next_service || 'Not scheduled' }}
+            </dd>
+          </dl>
+
+          <nav class="vehicle-actions">
+            <NuxtLink :to="`/vehicles/${vehicle.id}`" class="btn btn-secondary btn-small">
+              View Details
+            </NuxtLink>
+            <NuxtLink :to="`/vehicles/service?id=${vehicle.id}`" class="btn btn-primary btn-small">
+              Schedule Service
+            </NuxtLink>
+          </nav>
+        </article>
+      </section>
+
+      <!-- Empty State -->
+      <section v-if="filteredVehicles.length === 0" class="empty-state" aria-live="polite">
+        <span class="empty-icon" aria-hidden="true">🚚</span>
+        <h2 class="empty-title">No vehicles found</h2>
+        <p class="empty-description">Try adjusting your search or filters</p>
+      </section>
+    </template>
+  </main>
 </template>
 
 <script setup>
@@ -154,97 +138,42 @@ const searchTerm = ref('')
 const statusFilter = ref('')
 const typeFilter = ref('')
 
-const stats = reactive({
-  total: 15,
-  active: 12,
-  maintenance: 2,
-  needsService: 3
+const { data: vehiclesData, pending, error, refresh } = await useFetch('/api/vehicles', {
+  transform: (response) => response.data || []
 })
 
-const vehicles = reactive([
-  {
-    id: 1,
-    name: 'Delivery Truck #1',
-    type: 'truck',
-    status: 'active',
-    licensePlate: 'TRK-2024',
-    make: 'Ford',
-    model: 'F-450',
-    year: 2022,
-    mileage: 45230,
-    assignedDriver: 'John Smith',
-    lastService: '10/15/2024',
-    nextService: '01/15/2025',
-    serviceDue: false
-  },
-  {
-    id: 2,
-    name: 'Cargo Van #3',
-    type: 'van',
-    status: 'active',
-    licensePlate: 'VAN-3305',
-    make: 'Mercedes',
-    model: 'Sprinter',
-    year: 2023,
-    mileage: 28450,
-    assignedDriver: 'Sarah Johnson',
-    lastService: '11/20/2024',
-    nextService: '02/20/2025',
-    serviceDue: false
-  },
-  {
-    id: 3,
-    name: 'Delivery Truck #5',
-    type: 'truck',
-    status: 'maintenance',
-    licensePlate: 'TRK-5019',
-    make: 'Isuzu',
-    model: 'NPR',
-    year: 2021,
-    mileage: 67890,
-    assignedDriver: null,
-    lastService: '08/10/2024',
-    nextService: '12/28/2024',
-    serviceDue: true
-  },
-  {
-    id: 4,
-    name: 'Compact Car #2',
-    type: 'car',
-    status: 'active',
-    licensePlate: 'CAR-2417',
-    make: 'Toyota',
-    model: 'Corolla',
-    year: 2023,
-    mileage: 15670,
-    assignedDriver: 'Mike Davis',
-    lastService: '12/01/2024',
-    nextService: '03/01/2025',
-    serviceDue: false
-  },
-  {
-    id: 5,
-    name: 'Box Truck #7',
-    type: 'truck',
-    status: 'active',
-    licensePlate: 'TRK-7720',
-    make: 'Freightliner',
-    model: 'M2',
-    year: 2020,
-    mileage: 89230,
-    assignedDriver: 'Lisa Chen',
-    lastService: '09/15/2024',
-    nextService: '12/30/2024',
-    serviceDue: true
-  }
-])
+const vehicles = computed(() => vehiclesData.value || [])
 
-const filteredVehicles = ref([...vehicles])
+const stats = computed(() => {
+  const allVehicles = vehicles.value
+  const activeVehicles = allVehicles.filter(v => v.status === 'active')
+  const maintenanceVehicles = allVehicles.filter(v => v.status === 'maintenance')
+  const needsServiceVehicles = allVehicles.filter(v => v.service_due)
+
+  return {
+    total: allVehicles.length,
+    active: activeVehicles.length,
+    maintenance: maintenanceVehicles.length,
+    needsService: needsServiceVehicles.length
+  }
+})
+
+const filteredVehicles = ref([])
+
+watch(vehicles, () => {
+  filterVehicles()
+}, { immediate: true })
 
 function filterVehicles() {
-  filteredVehicles.value = vehicles.filter(vehicle => {
-    const matchesSearch = vehicle.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
-      vehicle.licensePlate.toLowerCase().includes(searchTerm.value.toLowerCase())
+  if (!vehicles.value) {
+    filteredVehicles.value = []
+    return
+  }
+
+  filteredVehicles.value = vehicles.value.filter(vehicle => {
+    const matchesSearch =
+      vehicle.name.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+      vehicle.license_plate.toLowerCase().includes(searchTerm.value.toLowerCase())
     const matchesStatus = !statusFilter.value || vehicle.status === statusFilter.value
     const matchesType = !typeFilter.value || vehicle.type === typeFilter.value
 
@@ -252,19 +181,10 @@ function filterVehicles() {
   })
 }
 
-function getVehicleIcon(type) {
-  const icons = {
-    truck: '🚚',
-    van: '🚐',
-    car: '🚗'
-  }
-  return icons[type] || '🚗'
-}
-
 useHead({
   title: 'Vehicles - RouteReady',
   meta: [
-    { name: 'description', content: 'Manage fleet vehicles' }
+    { name: 'description', content: 'Manage your vehicle fleet' }
   ]
 })
 </script>
@@ -272,16 +192,17 @@ useHead({
 <style scoped>
 .vehicles-page {
   width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .page-header {
   margin-bottom: 2rem;
-}
-
-.header-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .page-title {
@@ -303,16 +224,10 @@ useHead({
   gap: 0.5rem;
 }
 
-.btn-icon {
-  display: inline-flex;
-  align-items: center;
-  line-height: 1;
-}
-
 /* Stats Grid */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   margin-bottom: 2rem;
 }
@@ -323,8 +238,10 @@ useHead({
   padding: 1.5rem;
   box-shadow: var(--shadow);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  text-align: center;
+  gap: 0.5rem;
   transition: transform 0.2s;
 }
 
@@ -338,16 +255,11 @@ useHead({
   line-height: 1;
 }
 
-.stat-details {
-  flex: 1;
-}
-
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1;
-  margin-bottom: 0.25rem;
 }
 
 .stat-label {
@@ -357,26 +269,44 @@ useHead({
 
 /* Filters */
 .filters-section {
-  background: var(--bg-primary);
-  padding: 1.25rem;
-  border-radius: 12px;
-  box-shadow: var(--shadow);
   margin-bottom: 2rem;
-}
-
-.filters-group {
   display: flex;
   gap: 1rem;
-  flex-wrap: wrap;
+  align-items: center;
 }
 
 .search-input {
   flex: 1;
-  min-width: 250px;
+  max-width: 400px;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--input-border);
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  transition: all 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .form-select {
-  min-width: 180px;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--input-border);
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  background: var(--input-bg);
+  color: var(--text-primary);
+  transition: all 0.2s;
+}
+
+.form-select:focus {
+  outline: none;
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 /* Vehicles Grid */
@@ -402,18 +332,20 @@ useHead({
 }
 
 .vehicle-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 0.5rem 1rem;
+  align-items: center;
   margin-bottom: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--input-border);
 }
 
-.vehicle-title-section {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+.vehicle-icon {
+  grid-row: 1 / 3;
+  font-size: 3rem;
+  line-height: 1;
 }
 
 .vehicle-name {
@@ -423,17 +355,16 @@ useHead({
   margin: 0;
 }
 
-.vehicle-type {
+.vehicle-plate {
+  grid-column: 2;
   font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
   font-weight: 600;
-  color: var(--text-muted);
-  background: var(--bg-secondary);
-  padding: 0.25rem 0.75rem;
-  border-radius: 6px;
-  text-transform: capitalize;
 }
 
 .vehicle-status {
+  grid-row: 1 / 3;
   display: inline-block;
   padding: 0.25rem 0.75rem;
   border-radius: 9999px;
@@ -441,6 +372,7 @@ useHead({
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.025em;
+  align-self: start;
 }
 
 .status-active {
@@ -458,78 +390,30 @@ useHead({
   color: #ffffff;
 }
 
-.vehicle-image {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 1.5rem;
-  background: var(--bg-secondary);
-  border-radius: 8px;
-  margin-bottom: 1.25rem;
-}
-
-.vehicle-icon {
-  font-size: 4rem;
-  line-height: 1;
-}
-
 .vehicle-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
-  padding: 1rem;
-  background: var(--bg-secondary);
-  border-radius: 8px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem 1rem;
+  margin: 0 0 1.25rem 0;
+  align-items: baseline;
 }
 
-.detail-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.detail-label {
+.vehicle-details dt {
   font-size: 0.875rem;
   color: var(--text-secondary);
   font-weight: 500;
+  margin: 0;
 }
 
-.detail-value {
+.vehicle-details dd {
   font-size: 0.875rem;
   color: var(--text-primary);
   font-weight: 600;
+  text-align: right;
+  margin: 0;
 }
 
-.maintenance-info {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
-  padding: 1rem;
-  background: var(--bg-secondary);
-  border-radius: 8px;
-}
-
-.maintenance-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.maintenance-label {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.maintenance-value {
-  font-size: 0.875rem;
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
-.maintenance-value.service-due {
+.service-due {
   color: #f59e0b;
   font-weight: 700;
 }
@@ -543,45 +427,102 @@ useHead({
 .btn-small {
   font-size: 0.8125rem;
   padding: 0.5rem 0.875rem;
+  flex: 1;
 }
 
-.btn-warning {
-  background: #f59e0b;
-  color: #000000;
+/* Loading/Error/Empty States */
+.loading-state,
+.error-state,
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.loading-spinner,
+.error-icon,
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.loading-spinner {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.error-icon,
+.empty-icon {
+  opacity: 0.5;
+}
+
+.error-title,
+.empty-title {
+  font-size: 1.5rem;
   font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
 }
 
-.btn-warning:hover {
-  background: #d97706;
+.error-message,
+.empty-description {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0 0 1.5rem 0;
 }
 
-@media (max-width: 1200px) {
-  .vehicles-grid {
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  .vehicles-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .header-top {
+/* Responsive */
+@media (max-width: 968px) {
+  .page-header {
     flex-direction: column;
-    gap: 1rem;
+    align-items: stretch;
   }
 
-  .filters-group {
+  .filters-section {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .search-input,
   .form-select {
     width: 100%;
+    max-width: none;
   }
 
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .vehicles-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vehicle-header {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .vehicle-status {
+    grid-column: 2;
+    grid-row: 3;
+    justify-self: start;
+  }
+
+  .vehicle-icon {
+    font-size: 2.5rem;
   }
 }
 </style>

@@ -1,52 +1,42 @@
 <template>
   <main class="drivers-page">
     <header class="page-header">
-      <div class="header-top">
-        <div>
-          <h1 class="page-title">Drivers</h1>
-          <p class="page-subtitle">Manage your driver team and assignments</p>
-        </div>
-        <NuxtLink to="/drivers/new" class="btn btn-primary">
-          <PlusIcon :size="18" />
-          <span>Add New Driver</span>
-        </NuxtLink>
-      </div>
+      <h1 class="page-title">Drivers</h1>
+      <p class="page-subtitle">Manage your driver team and assignments</p>
+      <NuxtLink to="/drivers/new" class="btn btn-primary">
+        <PlusIcon :size="18" />
+        <span>Add New Driver</span>
+      </NuxtLink>
     </header>
 
     <!-- Stats Grid -->
-    <section class="stats-grid" aria-label="Driver statistics">
+    <section class="stats-grid">
       <article class="stat-card">
-        <div class="stat-icon" aria-hidden="true">🚚</div>
-        <div class="stat-details">
-          <div class="stat-value">{{ stats.active }}</div>
-          <div class="stat-label">Active Today</div>
-        </div>
+        <span class="stat-icon" aria-hidden="true">🚚</span>
+        <strong class="stat-value">{{ stats.active }}</strong>
+        <span class="stat-label">Active Today</span>
       </article>
       <article class="stat-card">
-        <div class="stat-icon" aria-hidden="true">👥</div>
-        <div class="stat-details">
-          <div class="stat-value">{{ stats.total }}</div>
-          <div class="stat-label">Total Drivers</div>
-        </div>
+        <span class="stat-icon" aria-hidden="true">👥</span>
+        <strong class="stat-value">{{ stats.total }}</strong>
+        <span class="stat-label">Total Drivers</span>
       </article>
       <article class="stat-card">
-        <div class="stat-icon" aria-hidden="true">⭐</div>
-        <div class="stat-details">
-          <div class="stat-value">{{ stats.avgRating }}</div>
-          <div class="stat-label">Avg Performance</div>
-        </div>
+        <span class="stat-icon" aria-hidden="true">⭐</span>
+        <strong class="stat-value">{{ stats.avgRating }}</strong>
+        <span class="stat-label">Avg Performance</span>
       </article>
     </section>
 
     <!-- Loading State -->
     <section v-if="pending" class="loading-state" aria-live="polite">
-      <div class="loading-spinner" aria-hidden="true">⏳</div>
+      <span class="loading-spinner" aria-hidden="true">⏳</span>
       <p>Loading drivers...</p>
     </section>
 
     <!-- Error State -->
-    <section v-else-if="error" class="error-state" role="alert">
-      <div class="error-icon" aria-hidden="true">⚠️</div>
+    <section v-else-if="error" class="error-state">
+      <span class="error-icon" aria-hidden="true">⚠️</span>
       <h2 class="error-title">Failed to load drivers</h2>
       <p class="error-message">{{ error.message }}</p>
       <button class="btn btn-primary" @click="refresh()">Try Again</button>
@@ -55,65 +45,55 @@
     <!-- Drivers Content -->
     <template v-else>
       <!-- Filters -->
-      <section class="filters-section" aria-label="Filter drivers">
-        <form class="filters-group" @submit.prevent>
-          <input
-            id="search-drivers"
-            v-model="searchTerm"
-            type="search"
-            class="form-input search-input"
-            placeholder="Search drivers..."
-            aria-label="Search drivers by name or email"
-            @input="filterDrivers"
-          >
-          <select id="filter-status" v-model="statusFilter" class="form-select" @change="filterDrivers">
-            <option value="">All Status</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="on-route">On Route</option>
-          </select>
-        </form>
-      </section>
+      <form class="filters-section" @submit.prevent>
+        <input
+          id="search-drivers"
+          v-model="searchTerm"
+          type="search"
+          class="form-input search-input"
+          placeholder="Search drivers..."
+          aria-label="Search drivers by name or email"
+          @input="filterDrivers"
+        >
+        <select id="filter-status" v-model="statusFilter" class="form-select" aria-label="Filter by status" @change="filterDrivers">
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="on-route">On Route</option>
+        </select>
+      </form>
 
-      <!-- Drivers Grid for Desktop/Tablet -->
-      <section class="drivers-grid desktop-view" aria-label="Drivers list">
+      <!-- Drivers Grid -->
+      <section class="drivers-grid">
         <article v-for="driver in filteredDrivers" :key="driver.id" class="driver-card">
           <header class="driver-header">
-            <div class="driver-title-section">
-              <h2 class="driver-name">{{ driver.name }}</h2>
-              <span :class="['driver-status', `status-${driver.status}`]" role="status">
-                {{ driver.status }}
-              </span>
-            </div>
+            <h2 class="driver-name">{{ driver.name }}</h2>
+            <span class="driver-status" :class="`status-${driver.status}`">
+              {{ driver.status }}
+            </span>
           </header>
 
           <dl class="driver-details">
-            <div class="detail-row">
-              <dt class="detail-label">Email:</dt>
-              <dd class="detail-value">{{ driver.email }}</dd>
-            </div>
-            <div class="detail-row">
-              <dt class="detail-label">License:</dt>
-              <dd class="detail-value">{{ driver.license }}</dd>
-            </div>
-            <div class="detail-row">
-              <dt class="detail-label">Phone:</dt>
-              <dd class="detail-value">{{ driver.phone }}</dd>
-            </div>
-            <div class="detail-row">
-              <dt class="detail-label">Current Route:</dt>
-              <dd class="detail-value">{{ driver.current_route || 'None' }}</dd>
-            </div>
-            <div class="detail-row">
-              <dt class="detail-label">Rating:</dt>
-              <dd class="detail-value">
-                <span class="star" aria-hidden="true">⭐</span>
-                {{ Number(driver.rating).toFixed(1) }}/5
-              </dd>
-            </div>
+            <dt>Email:</dt>
+            <dd>{{ driver.email }}</dd>
+
+            <dt>License:</dt>
+            <dd>{{ driver.license }}</dd>
+
+            <dt>Phone:</dt>
+            <dd>{{ driver.phone }}</dd>
+
+            <dt>Current Route:</dt>
+            <dd>{{ driver.current_route || 'None' }}</dd>
+
+            <dt>Rating:</dt>
+            <dd>
+              <span aria-hidden="true">⭐</span>
+              {{ Number(driver.rating).toFixed(1) }}/5
+            </dd>
           </dl>
 
-          <nav class="driver-actions" aria-label="Driver actions">
+          <nav class="driver-actions">
             <NuxtLink :to="`/drivers/${driver.id}`" class="btn btn-secondary btn-small">
               View
             </NuxtLink>
@@ -131,57 +111,9 @@
         </article>
       </section>
 
-      <!-- Mobile List View (hidden on desktop) -->
-      <section v-if="false" class="drivers-list mobile-view" aria-label="Drivers list">
-        <article v-for="driver in filteredDrivers" :key="driver.id" class="driver-list-item">
-          <header class="driver-list-header">
-            <div class="driver-avatar-small" aria-hidden="true">
-              {{ driver.name.charAt(0) }}
-            </div>
-            <div class="driver-list-info">
-              <h2 class="driver-list-name">{{ driver.name }}</h2>
-              <p class="driver-list-email">{{ driver.email }}</p>
-            </div>
-            <span :class="['driver-status-badge', `status-${driver.status}`]" role="status">
-              {{ driver.status }}
-            </span>
-          </header>
-
-          <dl class="driver-list-details">
-            <div class="detail-item">
-              <dt class="visually-hidden">Phone</dt>
-              <dd class="detail-content">
-                <span class="detail-icon" aria-hidden="true">📞</span>
-                <span class="detail-text">{{ driver.phone }}</span>
-              </dd>
-            </div>
-            <div class="detail-item">
-              <dt class="visually-hidden">Current Route</dt>
-              <dd class="detail-content">
-                <span class="detail-icon" aria-hidden="true">🚗</span>
-                <span class="detail-text">{{ driver.current_route || 'No route' }}</span>
-              </dd>
-            </div>
-            <div class="detail-item">
-              <dt class="visually-hidden">Rating</dt>
-              <dd class="detail-content">
-                <span class="detail-icon" aria-hidden="true">⭐</span>
-                <span class="detail-text">{{ Number(driver.rating).toFixed(1) }}/5</span>
-              </dd>
-            </div>
-          </dl>
-
-          <nav class="driver-list-actions" aria-label="Driver actions">
-            <NuxtLink :to="`/drivers/${driver.id}`" class="btn btn-secondary btn-small btn-full">
-              View Details
-            </NuxtLink>
-          </nav>
-        </article>
-      </section>
-
       <!-- Empty State -->
       <section v-if="filteredDrivers.length === 0" class="empty-state" aria-live="polite">
-        <div class="empty-icon" aria-hidden="true">👥</div>
+        <span class="empty-icon" aria-hidden="true">👥</span>
         <h2 class="empty-title">No drivers found</h2>
         <p class="empty-description">
           {{ searchTerm || statusFilter ? 'Try adjusting your search or filters' : 'Get started by adding your first driver' }}
@@ -203,15 +135,12 @@ definePageMeta({
 const searchTerm = ref('')
 const statusFilter = ref('')
 
-// Fetch drivers from API
 const { data: driversData, pending, error, refresh } = await useFetch('/api/drivers', {
   transform: (response) => response.data || []
 })
 
-// Computed drivers list
 const drivers = computed(() => driversData.value || [])
 
-// Stats
 const stats = computed(() => {
   const allDrivers = drivers.value
   const activeDrivers = allDrivers.filter(d => d.status === 'active' || d.status === 'on-route')
@@ -224,10 +153,8 @@ const stats = computed(() => {
   }
 })
 
-// Filtered drivers
 const filteredDrivers = ref([])
 
-// Watch for changes in drivers data
 watch(drivers, () => {
   filterDrivers()
 }, { immediate: true })
@@ -260,9 +187,7 @@ async function toggleDriverStatus(driver) {
     })
 
     if (data) {
-      // Update local driver data
       driver.status = data.status
-      // Refresh the list to update stats
       await refresh()
     }
   } catch (err) {
@@ -288,12 +213,10 @@ useHead({
 
 .page-header {
   margin-bottom: 2rem;
-}
-
-.header-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-wrap: wrap;
   gap: 1rem;
 }
 
@@ -316,66 +239,6 @@ useHead({
   gap: 0.5rem;
 }
 
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-/* Loading State */
-.loading-state {
-  text-align: center;
-  padding: 4rem 2rem;
-  background: var(--bg-primary);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-}
-
-.loading-spinner {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  animation: spin 2s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Error State */
-.error-state {
-  text-align: center;
-  padding: 4rem 2rem;
-  background: var(--bg-primary);
-  border-radius: 12px;
-  box-shadow: var(--shadow);
-}
-
-.error-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  opacity: 0.5;
-}
-
-.error-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 0.5rem 0;
-}
-
-.error-message {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  margin: 0 0 1.5rem 0;
-}
-
 /* Stats Grid */
 .stats-grid {
   display: grid;
@@ -390,8 +253,10 @@ useHead({
   padding: 1.5rem;
   box-shadow: var(--shadow);
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  text-align: center;
+  gap: 0.5rem;
   transition: transform 0.2s;
 }
 
@@ -405,16 +270,11 @@ useHead({
   line-height: 1;
 }
 
-.stat-details {
-  flex: 1;
-}
-
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1;
-  margin-bottom: 0.25rem;
 }
 
 .stat-label {
@@ -425,27 +285,13 @@ useHead({
 /* Filters */
 .filters-section {
   margin-bottom: 2rem;
-}
-
-.filters-group {
   display: flex;
   gap: 1rem;
   align-items: center;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-group label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
 .search-input {
+  flex: 1;
   max-width: 400px;
   padding: 0.75rem 1rem;
   border: 2px solid var(--input-border);
@@ -463,11 +309,10 @@ useHead({
 }
 
 .form-select {
-  max-width: 200px;
   padding: 0.75rem 1rem;
   border: 2px solid var(--input-border);
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   background: var(--input-bg);
   color: var(--text-primary);
   transition: all 0.2s;
@@ -479,16 +324,9 @@ useHead({
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-/* Desktop Grid View */
-.desktop-view {
-  display: grid;
-}
-
-.mobile-view {
-  display: none;
-}
-
+/* Drivers Grid */
 .drivers-grid {
+  display: grid;
   grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
   gap: 1.5rem;
 }
@@ -512,9 +350,6 @@ useHead({
   margin-bottom: 1rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid var(--input-border);
-}
-
-.driver-title-section {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -555,36 +390,26 @@ useHead({
 }
 
 .driver-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem 1rem;
   margin: 0 0 1.25rem 0;
+  align-items: baseline;
 }
 
-.detail-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 0;
-}
-
-.detail-label {
+.driver-details dt {
   font-size: 0.875rem;
   color: var(--text-secondary);
   font-weight: 500;
   margin: 0;
 }
 
-.detail-value {
+.driver-details dd {
   font-size: 0.875rem;
   color: var(--text-primary);
   font-weight: 600;
   text-align: right;
   margin: 0;
-}
-
-.star {
-  color: #fbbf24;
 }
 
 .driver-actions {
@@ -617,121 +442,9 @@ useHead({
   background: #059669;
 }
 
-/* Mobile List View */
-.drivers-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.driver-list-item {
-  background: var(--bg-primary);
-  border-radius: 12px;
-  padding: 1rem;
-  box-shadow: var(--shadow);
-  border: 2px solid transparent;
-  transition: all 0.2s;
-}
-
-.driver-list-item:active {
-  border-color: var(--button-primary);
-}
-
-.driver-list-header {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-}
-
-.driver-avatar-small {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--button-primary);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 1.25rem;
-  flex-shrink: 0;
-}
-
-.driver-list-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.driver-list-name {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin: 0 0 0.25rem 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.driver-list-email {
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.driver-status-badge {
-  padding: 0.25rem 0.625rem;
-  border-radius: 9999px;
-  font-size: 0.625rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-  flex-shrink: 0;
-}
-
-.driver-list-details {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin: 0 0 1rem 0;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--input-border);
-}
-
-.detail-item {
-  margin: 0;
-}
-
-.detail-content {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0;
-}
-
-.detail-icon {
-  font-size: 1rem;
-  flex-shrink: 0;
-}
-
-.detail-text {
-  font-size: 0.875rem;
-  color: var(--text-primary);
-}
-
-.driver-list-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.btn-full {
-  flex: 1;
-}
-
-/* Empty State */
+/* Loading/Error/Empty States */
+.loading-state,
+.error-state,
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
@@ -740,12 +453,29 @@ useHead({
   box-shadow: var(--shadow);
 }
 
+.loading-spinner,
+.error-icon,
 .empty-icon {
   font-size: 4rem;
   margin-bottom: 1rem;
+  display: block;
+}
+
+.loading-spinner {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.error-icon,
+.empty-icon {
   opacity: 0.5;
 }
 
+.error-title,
 .empty-title {
   font-size: 1.5rem;
   font-weight: 700;
@@ -753,6 +483,7 @@ useHead({
   margin: 0 0 0.5rem 0;
 }
 
+.error-message,
 .empty-description {
   font-size: 1rem;
   color: var(--text-secondary);
@@ -761,12 +492,12 @@ useHead({
 
 /* Responsive */
 @media (max-width: 968px) {
-  .header-top {
+  .page-header {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .filters-group {
+  .filters-section {
     flex-direction: column;
     align-items: stretch;
   }
@@ -787,14 +518,6 @@ useHead({
 }
 
 @media (max-width: 640px) {
-  .desktop-view {
-    display: none;
-  }
-
-  .mobile-view {
-    display: flex;
-  }
-
   .stats-grid {
     grid-template-columns: 1fr;
   }
