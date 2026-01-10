@@ -7,12 +7,12 @@
       <div class="header-content">
         <div class="user-info">
           <div class="user-avatar">
-            <Avatar
+            <img
               v-if="session"
               :src="session.user?.image"
               :alt="session.user?.name || 'User'"
               :fallback="session.user?.name?.charAt(0) || 'U'"
-            />
+            >
           </div>
           <h2 class="user-greeting">
             Hello, <span class="user-name">{{ session?.user?.name || 'User' }}</span>!
