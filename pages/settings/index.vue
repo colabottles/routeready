@@ -348,6 +348,37 @@
           <p class="section-description">Customize your application experience</p>
         </div>
         <div class="section-content">
+          <h3 class="subsection-title">Schedule Preferences</h3>
+
+          <div class="form-group">
+            <label for="default-schedule-view">Default Schedule View</label>
+            <select
+              id="default-schedule-view"
+              v-model="preferences.defaultScheduleView"
+              class="form-select"
+            >
+              <option value="day">Day View</option>
+              <option value="week">Week View</option>
+              <option value="month">Month View</option>
+            </select>
+            <span class="help-text">Choose which view appears when you open the schedule page</span>
+          </div>
+
+          <div class="form-group">
+            <label for="week-start-day">Week Start Day</label>
+            <select
+              id="week-start-day"
+              v-model="preferences.weekStartDay"
+              class="form-select"
+            >
+              <option value="0">Sunday</option>
+              <option value="1">Monday</option>
+            </select>
+            <span class="help-text">Select which day starts the week in calendar views</span>
+          </div>
+
+          <div class="divider"/>
+
           <div class="form-group">
             <label for="language">Language</label>
             <select
@@ -783,6 +814,8 @@ const smsNotifications = reactive([
 ])
 
 const preferences = reactive({
+  defaultScheduleView: 'week',
+  weekStartDay: '0',
   language: 'en',
   timezone: 'EST',
   dateFormat: 'MM/DD/YYYY',
@@ -814,9 +847,84 @@ const billingHistory = reactive([
   { id: 3, date: 'Oct 1, 2024', description: 'Professional Plan - Monthly', amount: 99 }
 ])
 
+// Load saved settings on mount
+onMounted(() => {
+  try {
+    const savedSettings = localStorage.getItem('routeready-settings')
+    if (savedSettings) {
+      const parsed = JSON.parse(savedSettings)
+
+      // Load preferences
+      if (parsed.preferences) {
+        Object.assign(preferences, parsed.preferences)
+      }
+
+      // Load company settings
+      if (parsed.company) {
+        Object.assign(companySettings, parsed.company)
+      }
+
+      // Load admin profile
+      if (parsed.admin) {
+        Object.assign(adminProfile, parsed.admin)
+      }
+
+      // Load security settings
+      if (parsed.security) {
+        Object.assign(securitySettings, parsed.security)
+      }
+
+      // Load notifications
+      if (parsed.notifications) {
+        if (parsed.notifications.email) {
+          parsed.notifications.email.forEach((notif, index) => {
+            if (emailNotifications[index]) {
+              emailNotifications[index].enabled = notif.enabled
+            }
+          })
+        }
+        if (parsed.notifications.push) {
+          parsed.notifications.push.forEach((notif, index) => {
+            if (pushNotifications[index]) {
+              pushNotifications[index].enabled = notif.enabled
+            }
+          })
+        }
+        if (parsed.notifications.sms) {
+          parsed.notifications.sms.forEach((notif, index) => {
+            if (smsNotifications[index]) {
+              smsNotifications[index].enabled = notif.enabled
+            }
+          })
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Error loading settings:', error)
+  }
+})
+
 function saveAllSettings() {
-  console.log('Saving all settings...')
-  alert('Settings saved successfully!')
+  try {
+    // Save all settings to localStorage
+    const allSettings = {
+      company: companySettings,
+      admin: adminProfile,
+      notifications: {
+        email: emailNotifications,
+        push: pushNotifications,
+        sms: smsNotifications
+      },
+      preferences: preferences,
+      security: securitySettings
+    }
+
+    localStorage.setItem('routeready-settings', JSON.stringify(allSettings))
+    alert('Settings saved successfully!')
+  } catch (error) {
+    console.error('Error saving settings:', error)
+    alert('Failed to save settings. Please try again.')
+  }
 }
 
 function uploadLogo() {
@@ -939,6 +1047,13 @@ useHead({
 
 .tab-label {
   font-size: 0.9375rem;
+}
+
+.help-text {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+  display: block;
 }
 
 /* Section Card */
