@@ -1,755 +1,799 @@
 <template>
-  <div class="settings-page">
-    <div class="page-header">
-      <div class="header-top">
-        <div>
-          <h1 class="page-title">Settings</h1>
-          <p class="page-subtitle">Manage your account and application preferences</p>
-        </div>
-        <button class="btn btn-primary" @click="saveAllSettings">
-          <span class="btn-icon">💾</span>
-          Save Changes
-        </button>
-      </div>
-    </div>
+  <main class="settings-page">
+    <header class="page-header">
+      <h1 class="page-title">Settings</h1>
+      <p class="page-subtitle">Manage your account and application preferences</p>
+      <button class="btn btn-primary" @click="saveAllSettings">
+        <span aria-hidden="true">💾</span>
+        Save Changes
+      </button>
+    </header>
 
     <!-- Settings Navigation Tabs -->
-    <div class="settings-tabs">
+    <nav class="settings-tabs" aria-label="Settings categories">
       <button
         v-for="tab in tabs"
         :key="tab.id"
         :class="['tab-btn', { active: activeTab === tab.id }]"
-        @click="activeTab = tab.id"
-      >
-        <span class="tab-icon">{{ tab.icon }}</span>
+        :aria-current="activeTab === tab.id ? 'page' : undefined"
+        @click="activeTab = tab.id">
+        <span class="tab-icon" aria-hidden="true">{{ tab.icon }}</span>
         <span class="tab-label">{{ tab.label }}</span>
       </button>
-    </div>
+    </nav>
 
     <!-- Company Information -->
-    <div v-show="activeTab === 'company'" class="settings-section">
-      <div class="section-card">
-        <div class="section-header">
-          <h2 class="section-title">Company Information</h2>
+    <section
+v-show="activeTab === 'company'" class="settings-section"
+      aria-labelledby="company-heading">
+      <article class="section-card">
+        <header class="section-header">
+          <h2 id="company-heading" class="section-title">Company Information</h2>
           <p class="section-description">Basic information about your company</p>
-        </div>
+        </header>
         <div class="section-content">
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="company-name">Company Name</label>
+          <form class="form-grid" @submit.prevent>
+            <label class="form-group">
+              Company Name
               <input
                 id="company-name"
                 v-model="companySettings.name"
                 type="text"
                 class="form-input"
-                placeholder="RouteReady Inc."
-              >
-            </div>
+                placeholder="RouteReady Inc.">
+            </label>
 
-            <div class="form-group">
-              <label for="company-email">Company Email</label>
+            <label class="form-group">
+              Company Email
               <input
                 id="company-email"
                 v-model="companySettings.email"
                 type="email"
                 class="form-input"
-                placeholder="contact@routeready.com"
-              >
-            </div>
+                placeholder="contact@routeready.com">
+            </label>
 
-            <div class="form-group">
-              <label for="company-phone">Phone Number</label>
+            <label class="form-group">
+              Phone Number
               <input
                 id="company-phone"
                 v-model="companySettings.phone"
                 type="tel"
                 class="form-input"
-                placeholder="(555) 123-4567"
-              >
-            </div>
+                placeholder="(555) 123-4567">
+            </label>
 
-            <div class="form-group">
-              <label for="company-website">Website</label>
+            <label class="form-group">
+              Website
               <input
                 id="company-website"
                 v-model="companySettings.website"
                 type="url"
                 class="form-input"
-                placeholder="https://routeready.com"
-              >
-            </div>
+                placeholder="https://routeready.com">
+            </label>
 
-            <div class="form-group full-width">
-              <label for="company-address">Address</label>
+            <label class="form-group full-width">
+              Address
               <input
                 id="company-address"
                 v-model="companySettings.address"
                 type="text"
                 class="form-input"
-                placeholder="123 Main Street"
-              >
-            </div>
+                placeholder="123 Main Street">
+            </label>
 
-            <div class="form-group">
-              <label for="company-city">City</label>
+            <label class="form-group">
+              City
               <input
                 id="company-city"
                 v-model="companySettings.city"
                 type="text"
                 class="form-input"
-                placeholder="New York"
-              >
-            </div>
+                placeholder="New York">
+            </label>
 
-            <div class="form-group">
-              <label for="company-state">State</label>
+            <label class="form-group">
+              State
               <input
                 id="company-state"
                 v-model="companySettings.state"
                 type="text"
                 class="form-input"
-                placeholder="NY"
-              >
-            </div>
+                placeholder="NY">
+            </label>
 
-            <div class="form-group">
-              <label for="company-zip">ZIP Code</label>
+            <label class="form-group">
+              ZIP Code
               <input
                 id="company-zip"
                 v-model="companySettings.zip"
                 type="text"
                 class="form-input"
-                placeholder="10001"
-              >
-            </div>
+                placeholder="10001">
+            </label>
 
-            <div class="form-group">
-              <label for="company-country">Country</label>
+            <label class="form-group">
+              Country
               <select
                 id="company-country"
                 v-model="companySettings.country"
-                class="form-select"
-              >
+                class="form-select">
                 <option value="US">United States</option>
                 <option value="CA">Canada</option>
                 <option value="MX">Mexico</option>
                 <option value="UK">United Kingdom</option>
               </select>
-            </div>
-          </div>
+            </label>
 
-          <div class="form-group full-width">
-            <label for="company-description">Company Description</label>
-            <textarea
-              id="company-description"
-              v-model="companySettings.description"
-              class="form-textarea"
-              rows="4"
-              placeholder="Brief description of your company..."
-            />
-          </div>
+            <label class="form-group full-width">
+              Company Description
+              <textarea
+                id="company-description"
+                v-model="companySettings.description"
+                class="form-textarea"
+                rows="4"
+                placeholder="Brief description of your company..." />
+            </label>
 
-          <div class="form-group">
-            <label for="company-logo">Company Logo</label>
-            <div class="file-upload-area">
-              <div class="current-logo">
-                <img v-if="companySettings.logoUrl" :src="companySettings.logoUrl" alt="Company Logo" class="logo-preview">
-                <div v-else class="logo-placeholder">No logo uploaded</div>
+            <div class="form-group full-width">
+              <p class="form-group-label">Company Logo</p>
+              <div class="file-upload-area">
+                <figure class="current-logo">
+                  <img
+v-if="companySettings.logoUrl" :src="companySettings.logoUrl"
+                    alt="Company Logo" class="logo-preview">
+                  <figcaption v-else class="logo-placeholder">No logo uploaded</figcaption>
+                </figure>
+                <button type="button" class="btn btn-secondary" @click="uploadLogo">
+                  <span aria-hidden="true">📸</span>
+                  Upload New Logo
+                </button>
+                <p class="upload-hint">Recommended: 500x500px, PNG or JPG</p>
               </div>
-              <button class="btn btn-secondary" @click="uploadLogo">
-                <span class="btn-icon">📸</span>
-                Upload New Logo
-              </button>
-              <p class="upload-hint">Recommended: 500x500px, PNG or JPG</p>
             </div>
-          </div>
+          </form>
         </div>
-      </div>
-    </div>
+      </article>
+    </section>
 
     <!-- Admin Profile -->
-    <div v-show="activeTab === 'profile'" class="settings-section">
-      <div class="section-card">
-        <div class="section-header">
-          <h2 class="section-title">Admin Profile</h2>
+    <section
+v-show="activeTab === 'profile'" class="settings-section"
+      aria-labelledby="profile-heading">
+      <article class="section-card">
+        <header class="section-header">
+          <h2 id="profile-heading" class="section-title">Admin Profile</h2>
           <p class="section-description">Manage your personal information</p>
-        </div>
+        </header>
         <div class="section-content">
-          <div class="profile-header-section">
-            <div class="avatar-section">
-              <div class="avatar-large">
-                <img v-if="adminProfile.avatarUrl" :src="adminProfile.avatarUrl" alt="Avatar">
-                <span v-else class="avatar-initial">{{ adminProfile.name.charAt(0) }}</span>
-              </div>
-              <div class="avatar-actions">
-                <button class="btn btn-secondary btn-small" @click="uploadAvatar">Upload Photo</button>
-                <button class="btn btn-secondary btn-small" @click="removeAvatar">Remove</button>
-              </div>
+          <figure class="profile-header-section">
+            <div class="avatar-large">
+              <img v-if="adminProfile.avatarUrl" :src="adminProfile.avatarUrl" alt="Admin avatar">
+              <span v-else class="avatar-initial" aria-label="Avatar placeholder">{{
+                adminProfile.name.charAt(0) }}</span>
             </div>
-          </div>
+            <figcaption class="visually-hidden">Profile photo</figcaption>
+            <nav class="avatar-actions" aria-label="Avatar actions">
+              <button type="button" class="btn btn-secondary btn-small" @click="uploadAvatar">Upload
+                Photo</button>
+              <button
+type="button" class="btn btn-secondary btn-small"
+                @click="removeAvatar">Remove</button>
+            </nav>
+          </figure>
 
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="admin-name">Full Name</label>
+          <form class="form-grid" @submit.prevent>
+            <label class="form-group">
+              Full Name
               <input
                 id="admin-name"
                 v-model="adminProfile.name"
                 type="text"
                 class="form-input"
-                placeholder="John Doe"
-              >
-            </div>
+                placeholder="John Doe">
+            </label>
 
-            <div class="form-group">
-              <label for="admin-email">Email Address</label>
+            <label class="form-group">
+              Email Address
               <input
                 id="admin-email"
                 v-model="adminProfile.email"
                 type="email"
                 class="form-input"
-                placeholder="admin@routeready.com"
-              >
-            </div>
+                placeholder="admin@routeready.com">
+            </label>
 
-            <div class="form-group">
-              <label for="admin-phone">Phone Number</label>
+            <label class="form-group">
+              Phone Number
               <input
                 id="admin-phone"
                 v-model="adminProfile.phone"
                 type="tel"
                 class="form-input"
-                placeholder="(555) 123-4567"
-              >
-            </div>
+                placeholder="(555) 123-4567">
+            </label>
 
-            <div class="form-group">
-              <label for="admin-role">Role</label>
+            <label class="form-group">
+              Role
               <input
                 id="admin-role"
                 v-model="adminProfile.role"
                 type="text"
                 class="form-input"
                 placeholder="Administrator"
-                disabled
-              >
-            </div>
-          </div>
+                disabled>
+            </label>
+          </form>
 
-          <div class="divider"/>
+          <hr class="divider" aria-hidden="true">
 
-          <h3 class="subsection-title">Change Password</h3>
-          <div class="form-grid">
-            <div class="form-group">
-              <label for="current-password">Current Password</label>
-              <input
-                id="current-password"
-                v-model="passwordChange.current"
-                type="password"
-                class="form-input"
-                placeholder="Enter current password"
-              >
-            </div>
+          <section aria-labelledby="password-heading">
+            <h3 id="password-heading" class="subsection-title">Change Password</h3>
+            <form class="form-grid" @submit.prevent="changePassword">
+              <label class="form-group">
+                Current Password
+                <input
+                  id="current-password"
+                  v-model="passwordChange.current"
+                  type="password"
+                  class="form-input"
+                  placeholder="Enter current password"
+                  autocomplete="current-password">
+              </label>
 
-            <div class="form-group">
-              <label for="new-password">New Password</label>
-              <input
-                id="new-password"
-                v-model="passwordChange.new"
-                type="password"
-                class="form-input"
-                placeholder="Enter new password"
-              >
-            </div>
+              <label class="form-group">
+                New Password
+                <input
+                  id="new-password"
+                  v-model="passwordChange.new"
+                  type="password"
+                  class="form-input"
+                  placeholder="Enter new password"
+                  autocomplete="new-password">
+              </label>
 
-            <div class="form-group">
-              <label for="confirm-password">Confirm New Password</label>
-              <input
-                id="confirm-password"
-                v-model="passwordChange.confirm"
-                type="password"
-                class="form-input"
-                placeholder="Confirm new password"
-              >
-            </div>
-          </div>
-          <button class="btn btn-primary" @click="changePassword">Update Password</button>
+              <label class="form-group">
+                Confirm New Password
+                <input
+                  id="confirm-password"
+                  v-model="passwordChange.confirm"
+                  type="password"
+                  class="form-input"
+                  placeholder="Confirm new password"
+                  autocomplete="new-password">
+              </label>
+              <button type="submit" class="btn btn-primary full-width">Update Password</button>
+            </form>
+          </section>
         </div>
-      </div>
-    </div>
+      </article>
+    </section>
 
     <!-- Notifications -->
-    <div v-show="activeTab === 'notifications'" class="settings-section">
-      <div class="section-card">
-        <div class="section-header">
-          <h2 class="section-title">Notification Preferences</h2>
+    <section
+v-show="activeTab === 'notifications'" class="settings-section"
+      aria-labelledby="notifications-heading">
+      <article class="section-card">
+        <header class="section-header">
+          <h2 id="notifications-heading" class="section-title">Notification Preferences</h2>
           <p class="section-description">Choose what notifications you want to receive</p>
-        </div>
+        </header>
         <div class="section-content">
-          <div class="notification-group">
-            <h3 class="notification-group-title">Email Notifications</h3>
-            <div class="notification-items">
-              <div v-for="notif in emailNotifications" :key="notif.id" class="notification-item">
+          <section aria-labelledby="email-notif-heading">
+            <h3 id="email-notif-heading" class="notification-group-title">Email Notifications</h3>
+            <ul class="notification-items">
+              <li v-for="notif in emailNotifications" :key="notif.id" class="notification-item">
                 <div class="notification-info">
-                  <label :for="`email-notif-${notif.id}`" class="notification-label">{{ notif.label }}</label>
-                  <div class="notification-description">{{ notif.description }}</div>
+                  <strong class="notification-label">{{ notif.label }}</strong>
+                  <p class="notification-description">{{ notif.description }}</p>
                 </div>
-                <label class="toggle-switch">
+                <label class="toggle-switch" :for="`email-notif-${notif.id}`">
                   <input :id="`email-notif-${notif.id}`" v-model="notif.enabled" type="checkbox">
-                  <span class="toggle-slider"/>
+                  <span class="toggle-slider" aria-hidden="true" />
+                  <span class="visually-hidden">{{ notif.enabled ? 'Disable' : 'Enable' }} {{
+                    notif.label }}</span>
                 </label>
-              </div>
-            </div>
-          </div>
+              </li>
+            </ul>
+          </section>
 
-          <div class="divider"/>
+          <hr class="divider" aria-hidden="true">
 
-          <div class="notification-group">
-            <h3 class="notification-group-title">Push Notifications</h3>
-            <div class="notification-items">
-              <div v-for="notif in pushNotifications" :key="notif.id" class="notification-item">
+          <section aria-labelledby="push-notif-heading">
+            <h3 id="push-notif-heading" class="notification-group-title">Push Notifications</h3>
+            <ul class="notification-items">
+              <li v-for="notif in pushNotifications" :key="notif.id" class="notification-item">
                 <div class="notification-info">
-                  <label :for="`push-notif-${notif.id}`" class="notification-label">{{ notif.label }}</label>
-                  <div class="notification-description">{{ notif.description }}</div>
+                  <strong class="notification-label">{{ notif.label }}</strong>
+                  <p class="notification-description">{{ notif.description }}</p>
                 </div>
-                <label class="toggle-switch">
+                <label class="toggle-switch" :for="`push-notif-${notif.id}`">
                   <input :id="`push-notif-${notif.id}`" v-model="notif.enabled" type="checkbox">
-                  <span class="toggle-slider"/>
+                  <span class="toggle-slider" aria-hidden="true" />
+                  <span class="visually-hidden">{{ notif.enabled ? 'Disable' : 'Enable' }} {{
+                    notif.label }}</span>
                 </label>
-              </div>
-            </div>
-          </div>
+              </li>
+            </ul>
+          </section>
 
-          <div class="divider"/>
+          <hr class="divider" aria-hidden="true">
 
-          <div class="notification-group">
-            <h3 class="notification-group-title">SMS Notifications</h3>
-            <div class="notification-items">
-              <div v-for="notif in smsNotifications" :key="notif.id" class="notification-item">
+          <section aria-labelledby="sms-notif-heading">
+            <h3 id="sms-notif-heading" class="notification-group-title">SMS Notifications</h3>
+            <ul class="notification-items">
+              <li v-for="notif in smsNotifications" :key="notif.id" class="notification-item">
                 <div class="notification-info">
-                  <label :for="`sms-notif-${notif.id}`" class="notification-label">{{ notif.label }}</label>
-                  <div class="notification-description">{{ notif.description }}</div>
+                  <strong class="notification-label">{{ notif.label }}</strong>
+                  <p class="notification-description">{{ notif.description }}</p>
                 </div>
-                <label class="toggle-switch">
+                <label class="toggle-switch" :for="`sms-notif-${notif.id}`">
                   <input :id="`sms-notif-${notif.id}`" v-model="notif.enabled" type="checkbox">
-                  <span class="toggle-slider"/>
+                  <span class="toggle-slider" aria-hidden="true" />
+                  <span class="visually-hidden">{{ notif.enabled ? 'Disable' : 'Enable' }} {{
+                    notif.label }}</span>
                 </label>
-              </div>
-            </div>
-          </div>
+              </li>
+            </ul>
+          </section>
         </div>
-      </div>
-    </div>
+      </article>
+    </section>
 
     <!-- Preferences -->
-    <div v-show="activeTab === 'preferences'" class="settings-section">
-      <div class="section-card">
-        <div class="section-header">
-          <h2 class="section-title">Application Preferences</h2>
+    <section
+v-show="activeTab === 'preferences'" class="settings-section"
+      aria-labelledby="preferences-heading">
+      <article class="section-card">
+        <header class="section-header">
+          <h2 id="preferences-heading" class="section-title">Application Preferences</h2>
           <p class="section-description">Customize your application experience</p>
-        </div>
+        </header>
         <div class="section-content">
-          <h3 class="subsection-title">Schedule Preferences</h3>
+          <section aria-labelledby="schedule-prefs-heading">
+            <h3 id="schedule-prefs-heading" class="subsection-title">Schedule Preferences</h3>
 
-          <div class="form-group">
-            <label for="default-schedule-view">Default Schedule View</label>
-            <select
-              id="default-schedule-view"
-              v-model="preferences.defaultScheduleView"
-              class="form-select"
-            >
-              <option value="day">Day View</option>
-              <option value="week">Week View</option>
-              <option value="month">Month View</option>
-            </select>
-            <span class="help-text">Choose which view appears when you open the schedule page</span>
-          </div>
+            <form class="form-group-section">
+              <label class="form-group">
+                Default Schedule View
+                <select
+                  id="default-schedule-view"
+                  v-model="preferences.defaultScheduleView"
+                  class="form-select">
+                  <option value="day">Day View</option>
+                  <option value="week">Week View</option>
+                  <option value="month">Month View</option>
+                </select>
+                <span class="help-text">Choose which view appears when you open the schedule
+                  page</span>
+              </label>
 
-          <div class="form-group">
-            <label for="week-start-day">Week Start Day</label>
-            <select
-              id="week-start-day"
-              v-model="preferences.weekStartDay"
-              class="form-select"
-            >
-              <option value="0">Sunday</option>
-              <option value="1">Monday</option>
-            </select>
-            <span class="help-text">Select which day starts the week in calendar views</span>
-          </div>
+              <label class="form-group">
+                Week Start Day
+                <select
+                  id="week-start-day"
+                  v-model="preferences.weekStartDay"
+                  class="form-select">
+                  <option value="0">Sunday</option>
+                  <option value="1">Monday</option>
+                </select>
+                <span class="help-text">Select which day starts the week in calendar views</span>
+              </label>
+            </form>
+          </section>
 
-          <div class="divider"/>
+          <hr class="divider" aria-hidden="true">
 
-          <div class="form-group">
-            <label for="language">Language</label>
-            <select
-              id="language"
-              v-model="preferences.language"
-              class="form-select"
-            >
-              <option value="en">English</option>
-              <option value="es">Spanish</option>
-              <option value="fr">French</option>
-              <option value="de">German</option>
-            </select>
-          </div>
+          <section aria-labelledby="regional-prefs-heading">
+            <h3 id="regional-prefs-heading" class="subsection-title">Regional Settings</h3>
 
-          <div class="form-group">
-            <label for="timezone">Timezone</label>
-            <select
-              id="timezone"
-              v-model="preferences.timezone"
-              class="form-select"
-            >
-              <option value="PST">Pacific Time (PST)</option>
-              <option value="MST">Mountain Time (MST)</option>
-              <option value="CST">Central Time (CST)</option>
-              <option value="EST">Eastern Time (EST)</option>
-            </select>
-          </div>
+            <form class="form-group-section">
+              <label class="form-group">
+                Language
+                <select
+                  id="language"
+                  v-model="preferences.language"
+                  class="form-select">
+                  <option value="en">English</option>
+                  <option value="es">Spanish</option>
+                  <option value="fr">French</option>
+                  <option value="de">German</option>
+                </select>
+              </label>
 
-          <div class="form-group">
-            <label for="date-format">Date Format</label>
-            <select
-              id="date-format"
-              v-model="preferences.dateFormat"
-              class="form-select"
-            >
-              <option value="MM/DD/YYYY">MM/DD/YYYY</option>
-              <option value="DD/MM/YYYY">DD/MM/YYYY</option>
-              <option value="YYYY-MM-DD">YYYY-MM-DD</option>
-            </select>
-          </div>
+              <label class="form-group">
+                Timezone
+                <select
+                  id="timezone"
+                  v-model="preferences.timezone"
+                  class="form-select">
+                  <option value="PST">Pacific Time (PST)</option>
+                  <option value="MST">Mountain Time (MST)</option>
+                  <option value="CST">Central Time (CST)</option>
+                  <option value="EST">Eastern Time (EST)</option>
+                </select>
+              </label>
 
-          <div class="form-group">
-            <label for="time-format">Time Format</label>
-            <select
-              id="time-format"
-              v-model="preferences.timeFormat"
-              class="form-select"
-            >
-              <option value="12h">12-hour (AM/PM)</option>
-              <option value="24h">24-hour</option>
-            </select>
-          </div>
+              <label class="form-group">
+                Date Format
+                <select
+                  id="date-format"
+                  v-model="preferences.dateFormat"
+                  class="form-select">
+                  <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                  <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                  <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                </select>
+              </label>
 
-          <div class="form-group">
-            <label for="currency">Currency</label>
-            <select
-              id="currency"
-              v-model="preferences.currency"
-              class="form-select"
-            >
-              <option value="USD">USD ($)</option>
-              <option value="EUR">EUR (€)</option>
-              <option value="GBP">GBP (£)</option>
-              <option value="CAD">CAD (C$)</option>
-            </select>
-          </div>
+              <label class="form-group">
+                Time Format
+                <select
+                  id="time-format"
+                  v-model="preferences.timeFormat"
+                  class="form-select">
+                  <option value="12h">12-hour (AM/PM)</option>
+                  <option value="24h">24-hour</option>
+                </select>
+              </label>
 
-          <div class="form-group">
-            <label for="distance-unit">Distance Unit</label>
-            <select
-              id="distance-unit"
-              v-model="preferences.distanceUnit"
-              class="form-select"
-            >
-              <option value="miles">Miles</option>
-              <option value="kilometers">Kilometers</option>
-            </select>
-          </div>
+              <label class="form-group">
+                Currency
+                <select
+                  id="currency"
+                  v-model="preferences.currency"
+                  class="form-select">
+                  <option value="USD">USD ($)</option>
+                  <option value="EUR">EUR (€)</option>
+                  <option value="GBP">GBP (£)</option>
+                  <option value="CAD">CAD (C$)</option>
+                </select>
+              </label>
 
-          <div class="divider"/>
+              <label class="form-group">
+                Distance Unit
+                <select
+                  id="distance-unit"
+                  v-model="preferences.distanceUnit"
+                  class="form-select">
+                  <option value="miles">Miles</option>
+                  <option value="kilometers">Kilometers</option>
+                </select>
+              </label>
+            </form>
+          </section>
 
-          <h3 class="subsection-title">Display Settings</h3>
+          <hr class="divider" aria-hidden="true">
 
-          <div class="preference-item">
-            <div class="preference-info">
-              <div class="preference-label">
-                <label for="dark-mode">Dark Mode</label>
-              </div>
-              <div class="preference-description">Use dark theme across the application</div>
-            </div>
-            <label class="toggle-switch">
-              <input id="dark-mode" v-model="preferences.darkMode" type="checkbox">
-              <span class="toggle-slider"/>
-            </label>
-          </div>
+          <section aria-labelledby="display-settings-heading">
+            <h3 id="display-settings-heading" class="subsection-title">Display Settings</h3>
 
-          <div class="preference-item">
-            <div class="preference-info">
-              <div class="preference-label">
-                <label for="compact-view">Compact View</label>
-              </div>
-              <div class="preference-description">Show more information in less space</div>
-            </div>
-            <label class="toggle-switch">
-              <input id="compact-view" v-model="preferences.compactView" type="checkbox">
-              <span class="toggle-slider"/>
-            </label>
-          </div>
+            <ul class="preferences-list">
+              <li class="preference-item">
+                <div class="preference-info">
+                  <strong class="preference-label">Dark Mode</strong>
+                  <p class="preference-description">Use dark theme across the application</p>
+                </div>
+                <label class="toggle-switch" for="dark-mode">
+                  <input id="dark-mode" v-model="preferences.darkMode" type="checkbox">
+                  <span class="toggle-slider" aria-hidden="true" />
+                  <span class="visually-hidden">{{ preferences.darkMode ? 'Disable' : 'Enable' }}
+                    dark mode</span>
+                </label>
+              </li>
 
-          <div class="preference-item">
-            <div class="preference-info">
-              <div class="preference-label">
-                <label for="show-tooltips">Show Tooltips</label>
-              </div>
-              <div class="preference-description">Display helpful tooltips when hovering</div>
-            </div>
-            <label class="toggle-switch">
-              <input id="show-tooltips" v-model="preferences.showTooltips" type="checkbox">
-              <span class="toggle-slider"/>
-            </label>
-          </div>
+              <li class="preference-item">
+                <div class="preference-info">
+                  <strong class="preference-label">Compact View</strong>
+                  <p class="preference-description">Show more information in less space</p>
+                </div>
+                <label class="toggle-switch" for="compact-view">
+                  <input id="compact-view" v-model="preferences.compactView" type="checkbox">
+                  <span class="toggle-slider" aria-hidden="true" />
+                  <span class="visually-hidden">{{ preferences.compactView ? 'Disable' : 'Enable' }}
+                    compact view</span>
+                </label>
+              </li>
+
+              <li class="preference-item">
+                <div class="preference-info">
+                  <strong class="preference-label">Show Tooltips</strong>
+                  <p class="preference-description">Display helpful tooltips when hovering</p>
+                </div>
+                <label class="toggle-switch" for="show-tooltips">
+                  <input id="show-tooltips" v-model="preferences.showTooltips" type="checkbox">
+                  <span class="toggle-slider" aria-hidden="true" />
+                  <span class="visually-hidden">{{ preferences.showTooltips ? 'Disable' : 'Enable'
+                    }} tooltips</span>
+                </label>
+              </li>
+            </ul>
+          </section>
         </div>
-      </div>
-    </div>
+      </article>
+    </section>
 
     <!-- Security -->
-    <div v-show="activeTab === 'security'" class="settings-section">
-      <div class="section-card">
-        <div class="section-header">
-          <h2 class="section-title">Security Settings</h2>
+    <section
+v-show="activeTab === 'security'" class="settings-section"
+      aria-labelledby="security-heading">
+      <article class="section-card">
+        <header class="section-header">
+          <h2 id="security-heading" class="section-title">Security Settings</h2>
           <p class="section-description">Manage your account security</p>
-        </div>
+        </header>
         <div class="section-content">
-          <div class="security-item">
+          <article class="security-item">
             <div class="security-info">
-              <div class="security-label">Two-Factor Authentication</div>
-              <div class="security-description">Add an extra layer of security to your account</div>
-              <div class="security-status enabled">
-                <span class="status-dot"/>
+              <h3 class="security-label">Two-Factor Authentication</h3>
+              <p class="security-description">Add an extra layer of security to your account</p>
+              <span class="security-status enabled">
+                <span class="status-dot" aria-hidden="true" />
                 <span>Enabled</span>
-              </div>
+              </span>
             </div>
-            <button class="btn btn-secondary">Configure</button>
-          </div>
+            <button type="button" class="btn btn-secondary">Configure</button>
+          </article>
 
-          <div class="divider"/>
+          <hr class="divider" aria-hidden="true">
 
-          <div class="security-item">
+          <article class="security-item">
             <div class="security-info">
-              <div class="security-label">Active Sessions</div>
-              <div class="security-description">Manage your active login sessions</div>
+              <h3 class="security-label">Active Sessions</h3>
+              <p class="security-description">Manage your active login sessions</p>
             </div>
-            <button class="btn btn-secondary">View Sessions</button>
-          </div>
+            <button type="button" class="btn btn-secondary">View Sessions</button>
+          </article>
 
-          <div class="divider"/>
+          <hr class="divider" aria-hidden="true">
 
-          <div class="security-item">
+          <article class="security-item">
             <div class="security-info">
-              <div class="security-label">Login History</div>
-              <div class="security-description">View recent login activity</div>
+              <h3 class="security-label">Login History</h3>
+              <p class="security-description">View recent login activity</p>
             </div>
-            <button class="btn btn-secondary">View History</button>
-          </div>
+            <button type="button" class="btn btn-secondary">View History</button>
+          </article>
 
-          <div class="divider"/>
+          <hr class="divider" aria-hidden="true">
 
-          <h3 class="subsection-title">Security Preferences</h3>
+          <section aria-labelledby="security-prefs-heading">
+            <h3 id="security-prefs-heading" class="subsection-title">Security Preferences</h3>
 
-          <div class="preference-item">
-            <div class="preference-info">
-              <div class="preference-label">Require Password on Sensitive Actions</div>
-              <div class="preference-description">Ask for password before critical operations</div>
-            </div>
-            <label class="toggle-switch">
-              <input id="require-password" v-model="securitySettings.requirePassword" type="checkbox">
-              <span class="toggle-slider"/>
-            </label>
-          </div>
+            <ul class="preferences-list">
+              <li class="preference-item">
+                <div class="preference-info">
+                  <strong class="preference-label">Require Password on Sensitive Actions</strong>
+                  <p class="preference-description">Ask for password before critical operations</p>
+                </div>
+                <label class="toggle-switch" for="require-password">
+                  <input
+id="require-password" v-model="securitySettings.requirePassword"
+                    type="checkbox">
+                  <span class="toggle-slider" aria-hidden="true" />
+                  <span class="visually-hidden">{{ securitySettings.requirePassword ? 'Disable' :
+                    'Enable' }} password requirement</span>
+                </label>
+              </li>
 
-          <div class="preference-item">
-            <div class="preference-info">
-              <div class="preference-label">Session Timeout</div>
-              <div class="preference-description">Auto-logout after period of inactivity</div>
-            </div>
-            <select v-model="securitySettings.sessionTimeout" class="form-select compact">
-              <option value="15">15 minutes</option>
-              <option value="30">30 minutes</option>
-              <option value="60">1 hour</option>
-              <option value="120">2 hours</option>
-              <option value="0">Never</option>
-            </select>
-          </div>
+              <li class="preference-item">
+                <div class="preference-info">
+                  <strong class="preference-label">Session Timeout</strong>
+                  <p class="preference-description">Auto-logout after period of inactivity</p>
+                </div>
+                <label for="session-timeout" class="visually-hidden">Session timeout
+                  duration</label>
+                <select
+id="session-timeout" v-model="securitySettings.sessionTimeout"
+                  class="form-select compact">
+                  <option value="15">15 minutes</option>
+                  <option value="30">30 minutes</option>
+                  <option value="60">1 hour</option>
+                  <option value="120">2 hours</option>
+                  <option value="0">Never</option>
+                </select>
+              </li>
+            </ul>
+          </section>
         </div>
-      </div>
-    </div>
+      </article>
+    </section>
 
     <!-- Integrations -->
-    <div v-show="activeTab === 'integrations'" class="settings-section">
-      <div class="section-card">
-        <div class="section-header">
-          <h2 class="section-title">Integrations</h2>
+    <section
+v-show="activeTab === 'integrations'" class="settings-section"
+      aria-labelledby="integrations-heading">
+      <article class="section-card">
+        <header class="section-header">
+          <h2 id="integrations-heading" class="section-title">Integrations</h2>
           <p class="section-description">Connect with third-party services</p>
-        </div>
+        </header>
         <div class="section-content">
-          <div class="integrations-grid">
-            <div v-for="integration in integrations" :key="integration.id" class="integration-card">
-              <div class="integration-icon">{{ integration.icon }}</div>
+          <ul class="integrations-grid">
+            <li v-for="integration in integrations" :key="integration.id" class="integration-card">
+              <span class="integration-icon" aria-hidden="true">{{ integration.icon }}</span>
               <div class="integration-info">
-                <div class="integration-name">{{ integration.name }}</div>
-                <div class="integration-description">{{ integration.description }}</div>
-                <div class="integration-status" :class="integration.connected ? 'connected' : 'disconnected'">
-                  <span class="status-dot"/>
+                <h3 class="integration-name">{{ integration.name }}</h3>
+                <p class="integration-description">{{ integration.description }}</p>
+                <span
+class="integration-status"
+                  :class="integration.connected ? 'connected' : 'disconnected'">
+                  <span class="status-dot" aria-hidden="true" />
                   <span>{{ integration.connected ? 'Connected' : 'Not Connected' }}</span>
-                </div>
+                </span>
               </div>
               <button
+                type="button"
                 :class="['btn', integration.connected ? 'btn-secondary' : 'btn-primary']"
-                @click="toggleIntegration(integration.id)"
-              >
+                :aria-label="`${integration.connected ? 'Disconnect from' : 'Connect to'} ${integration.name}`"
+                @click="toggleIntegration(integration.id)">
                 {{ integration.connected ? 'Disconnect' : 'Connect' }}
               </button>
-            </div>
-          </div>
+            </li>
+          </ul>
         </div>
-      </div>
-    </div>
+      </article>
+    </section>
 
     <!-- Billing -->
-    <div v-show="activeTab === 'billing'" class="settings-section">
-      <div class="section-card">
-        <div class="section-header">
-          <h2 class="section-title">Billing & Subscription</h2>
+    <section
+v-show="activeTab === 'billing'" class="settings-section"
+      aria-labelledby="billing-heading">
+      <article class="section-card">
+        <header class="section-header">
+          <h2 id="billing-heading" class="section-title">Billing & Subscription</h2>
           <p class="section-description">Manage your subscription and payment methods</p>
-        </div>
+        </header>
         <div class="section-content">
-          <div class="current-plan">
-            <div class="plan-header">
+          <article class="current-plan">
+            <header class="plan-header">
               <div>
-                <div class="plan-name">Professional Plan</div>
-                <div class="plan-price">$99/month</div>
+                <h3 class="plan-name">Professional Plan</h3>
+                <p class="plan-price">$99/month</p>
               </div>
-              <button class="btn btn-primary">Upgrade Plan</button>
-            </div>
-            <div class="plan-features">
-              <div class="plan-feature">
-                <span class="feature-icon">✓</span>
+              <button type="button" class="btn btn-primary">Upgrade Plan</button>
+            </header>
+            <ul class="plan-features">
+              <li class="plan-feature">
+                <span class="feature-icon" aria-hidden="true">✓</span>
                 <span>Unlimited Drivers</span>
-              </div>
-              <div class="plan-feature">
-                <span class="feature-icon">✓</span>
+              </li>
+              <li class="plan-feature">
+                <span class="feature-icon" aria-hidden="true">✓</span>
                 <span>Unlimited Routes</span>
-              </div>
-              <div class="plan-feature">
-                <span class="feature-icon">✓</span>
+              </li>
+              <li class="plan-feature">
+                <span class="feature-icon" aria-hidden="true">✓</span>
                 <span>Advanced Analytics</span>
-              </div>
-              <div class="plan-feature">
-                <span class="feature-icon">✓</span>
+              </li>
+              <li class="plan-feature">
+                <span class="feature-icon" aria-hidden="true">✓</span>
                 <span>24/7 Support</span>
+              </li>
+            </ul>
+          </article>
+
+          <hr class="divider" aria-hidden="true">
+
+          <section aria-labelledby="payment-method-heading">
+            <h3 id="payment-method-heading" class="subsection-title">Payment Method</h3>
+            <article class="payment-method">
+              <div class="card-info">
+                <span class="card-icon" aria-hidden="true">💳</span>
+                <div class="card-details">
+                  <p class="card-type">Visa ending in 4242</p>
+                  <p class="card-expiry">Expires 12/2025</p>
+                </div>
               </div>
-            </div>
-          </div>
+              <button type="button" class="btn btn-secondary">Update</button>
+            </article>
+          </section>
 
-          <div class="divider"/>
+          <hr class="divider" aria-hidden="true">
 
-          <h3 class="subsection-title">Payment Method</h3>
-          <div class="payment-method">
-            <div class="card-info">
-              <div class="card-icon">💳</div>
-              <div class="card-details">
-                <div class="card-type">Visa ending in 4242</div>
-                <div class="card-expiry">Expires 12/2025</div>
-              </div>
-            </div>
-            <button class="btn btn-secondary">Update</button>
-          </div>
-
-          <div class="divider"/>
-
-          <h3 class="subsection-title">Billing History</h3>
-          <div class="billing-history">
-            <div v-for="invoice in billingHistory" :key="invoice.id" class="invoice-item">
-              <div class="invoice-info">
-                <div class="invoice-date">{{ invoice.date }}</div>
-                <div class="invoice-description">{{ invoice.description }}</div>
-              </div>
-              <div class="invoice-amount">${{ invoice.amount }}</div>
-              <button class="btn btn-secondary btn-small">Download</button>
-            </div>
-          </div>
+          <section aria-labelledby="billing-history-heading">
+            <h3 id="billing-history-heading" class="subsection-title">Billing History</h3>
+            <ul class="billing-history">
+              <li v-for="invoice in billingHistory" :key="invoice.id" class="invoice-item">
+                <div class="invoice-info">
+                  <p class="invoice-date">{{ invoice.date }}</p>
+                  <p class="invoice-description">{{ invoice.description }}</p>
+                </div>
+                <p class="invoice-amount">${{ invoice.amount }}</p>
+                <button
+type="button" class="btn btn-secondary btn-small"
+                  :aria-label="`Download invoice from ${invoice.date}`">Download</button>
+              </li>
+            </ul>
+          </section>
         </div>
-      </div>
-    </div>
+      </article>
+    </section>
 
     <!-- Advanced -->
-    <div v-show="activeTab === 'advanced'" class="settings-section">
-      <div class="section-card">
-        <div class="section-header">
-          <h2 class="section-title">Advanced Settings</h2>
+    <section
+v-show="activeTab === 'advanced'" class="settings-section"
+      aria-labelledby="advanced-heading">
+      <article class="section-card">
+        <header class="section-header">
+          <h2 id="advanced-heading" class="section-title">Advanced Settings</h2>
           <p class="section-description">System and data management options</p>
-        </div>
+        </header>
         <div class="section-content">
-          <div class="advanced-item">
+          <article class="advanced-item">
             <div class="advanced-info">
-              <div class="advanced-label">Export Data</div>
-              <div class="advanced-description">Download all your data in CSV format</div>
+              <h3 class="advanced-label">Export Data</h3>
+              <p class="advanced-description">Download all your data in CSV format</p>
             </div>
-            <button class="btn btn-secondary">Export</button>
-          </div>
+            <button type="button" class="btn btn-secondary">Export</button>
+          </article>
 
-          <div class="divider"/>
+          <hr class="divider" aria-hidden="true">
 
-          <div class="advanced-item">
+          <article class="advanced-item">
             <div class="advanced-info">
-              <div class="advanced-label">Import Data</div>
-              <div class="advanced-description">Import drivers, routes, or vehicles from CSV</div>
+              <h3 class="advanced-label">Import Data</h3>
+              <p class="advanced-description">Import drivers, routes, or vehicles from CSV</p>
             </div>
-            <button class="btn btn-secondary">Import</button>
-          </div>
+            <button type="button" class="btn btn-secondary">Import</button>
+          </article>
 
-          <div class="divider"/>
+          <hr class="divider" aria-hidden="true">
 
-          <div class="advanced-item">
+          <article class="advanced-item">
             <div class="advanced-info">
-              <div class="advanced-label">API Access</div>
-              <div class="advanced-description">Generate API keys for integrations</div>
+              <h3 class="advanced-label">API Access</h3>
+              <p class="advanced-description">Generate API keys for integrations</p>
             </div>
-            <button class="btn btn-secondary">Manage API Keys</button>
-          </div>
+            <button type="button" class="btn btn-secondary">Manage API Keys</button>
+          </article>
 
-          <div class="divider"/>
+          <hr class="divider" aria-hidden="true">
 
-          <div class="advanced-item">
+          <article class="advanced-item">
             <div class="advanced-info">
-              <div class="advanced-label">Webhooks</div>
-              <div class="advanced-description">Configure webhooks for real-time updates</div>
+              <h3 class="advanced-label">Webhooks</h3>
+              <p class="advanced-description">Configure webhooks for real-time updates</p>
             </div>
-            <button class="btn btn-secondary">Configure</button>
-          </div>
+            <button type="button" class="btn btn-secondary">Configure</button>
+          </article>
 
-          <div class="divider"/>
+          <hr class="divider" aria-hidden="true">
 
-          <h3 class="subsection-title danger-zone-title">Danger Zone</h3>
+          <section aria-labelledby="danger-zone-heading">
+            <h3 id="danger-zone-heading" class="subsection-title danger-zone-title">Danger Zone</h3>
 
-          <div class="danger-zone">
-            <div class="danger-item">
-              <div class="danger-info">
-                <div class="danger-label">Clear All Data</div>
-                <div class="danger-description">Permanently delete all routes, drivers, and vehicles</div>
-              </div>
-              <button class="btn btn-danger">Clear Data</button>
+            <div class="danger-zone">
+              <article class="danger-item">
+                <div class="danger-info">
+                  <h4 class="danger-label">Clear All Data</h4>
+                  <p class="danger-description">Permanently delete all routes, drivers, and vehicles
+                  </p>
+                </div>
+                <button type="button" class="btn btn-danger">Clear Data</button>
+              </article>
+
+              <hr class="divider" aria-hidden="true">
+
+              <article class="danger-item">
+                <div class="danger-info">
+                  <h4 class="danger-label">Delete Account</h4>
+                  <p class="danger-description">Permanently delete your account and all data</p>
+                </div>
+                <button type="button" class="btn btn-danger">Delete Account</button>
+              </article>
             </div>
-
-            <div class="divider"/>
-
-            <div class="danger-item">
-              <div class="danger-info">
-                <div class="danger-label">Delete Account</div>
-                <div class="danger-description">Permanently delete your account and all data</div>
-              </div>
-              <button class="btn btn-danger">Delete Account</button>
-            </div>
-          </div>
+          </section>
         </div>
-      </div>
-    </div>
-  </div>
+      </article>
+    </section>
+  </main>
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
+
 definePageMeta({
   layout: 'dashboard',
 })
@@ -854,27 +898,22 @@ onMounted(() => {
     if (savedSettings) {
       const parsed = JSON.parse(savedSettings)
 
-      // Load preferences
       if (parsed.preferences) {
         Object.assign(preferences, parsed.preferences)
       }
 
-      // Load company settings
       if (parsed.company) {
         Object.assign(companySettings, parsed.company)
       }
 
-      // Load admin profile
       if (parsed.admin) {
         Object.assign(adminProfile, parsed.admin)
       }
 
-      // Load security settings
       if (parsed.security) {
         Object.assign(securitySettings, parsed.security)
       }
 
-      // Load notifications
       if (parsed.notifications) {
         if (parsed.notifications.email) {
           parsed.notifications.email.forEach((notif, index) => {
@@ -906,7 +945,6 @@ onMounted(() => {
 
 function saveAllSettings() {
   try {
-    // Save all settings to localStorage
     const allSettings = {
       company: companySettings,
       admin: adminProfile,
@@ -964,19 +1002,32 @@ useHead({
 </script>
 
 <style scoped>
+/* Accessibility */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 .settings-page {
   width: 100%;
   max-width: 1200px;
+  margin: 0 auto;
 }
 
 .page-header {
   margin-bottom: 2rem;
-}
-
-.header-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .page-title {
@@ -984,24 +1035,20 @@ useHead({
   font-weight: 700;
   color: var(--text-primary);
   margin: 0 0 0.5rem 0;
+  flex-basis: 100%;
 }
 
 .page-subtitle {
   color: var(--text-secondary);
   margin: 0;
   font-size: 1rem;
+  flex: 1;
 }
 
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.btn-icon {
-  display: inline-flex;
-  align-items: center;
-  line-height: 1;
 }
 
 /* Settings Tabs */
@@ -1049,13 +1096,6 @@ useHead({
   font-size: 0.9375rem;
 }
 
-.help-text {
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
-  margin-top: 0.25rem;
-  display: block;
-}
-
 /* Section Card */
 .settings-section {
   margin-bottom: 2rem;
@@ -1098,20 +1138,31 @@ useHead({
   margin-bottom: 1.5rem;
 }
 
+.form-group-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .form-group.full-width {
   grid-column: 1 / -1;
 }
 
-.form-group label {
+.form-group-label {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
+  margin: 0 0 0.5rem 0;
 }
 
 .form-input,
@@ -1148,6 +1199,12 @@ useHead({
   max-width: 200px;
 }
 
+.help-text {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
 /* File Upload */
 .file-upload-area {
   display: flex;
@@ -1165,6 +1222,7 @@ useHead({
   justify-content: center;
   overflow: hidden;
   background: var(--bg-secondary);
+  margin: 0;
 }
 
 .logo-preview {
@@ -1189,9 +1247,6 @@ useHead({
 /* Profile Section */
 .profile-header-section {
   margin-bottom: 2rem;
-}
-
-.avatar-section {
   display: flex;
   align-items: center;
   gap: 1.5rem;
@@ -1208,6 +1263,7 @@ useHead({
   justify-content: center;
   overflow: hidden;
   border: 4px solid var(--bg-secondary);
+  flex-shrink: 0;
 }
 
 .avatar-large img {
@@ -1232,6 +1288,7 @@ useHead({
   height: 1px;
   background: var(--input-border);
   margin: 2rem 0;
+  border: none;
 }
 
 .subsection-title {
@@ -1242,14 +1299,6 @@ useHead({
 }
 
 /* Notifications */
-.notification-group {
-  margin-bottom: 2rem;
-}
-
-.notification-group:last-child {
-  margin-bottom: 0;
-}
-
 .notification-group-title {
   font-size: 1rem;
   font-weight: 700;
@@ -1257,13 +1306,18 @@ useHead({
   margin: 0 0 1rem 0;
 }
 
-.notification-items {
+.notification-items,
+.preferences-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.notification-item {
+.notification-item,
+.preference-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1272,20 +1326,24 @@ useHead({
   border-radius: 8px;
 }
 
-.notification-info {
+.notification-info,
+.preference-info {
   flex: 1;
 }
 
-.notification-label {
+.notification-label,
+.preference-label {
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 0.25rem;
+  margin: 0 0 0.25rem 0;
 }
 
-.notification-description {
+.notification-description,
+.preference-description {
   font-size: 0.8125rem;
   color: var(--text-secondary);
+  margin: 0;
 }
 
 /* Toggle Switch */
@@ -1294,6 +1352,7 @@ useHead({
   display: inline-block;
   width: 52px;
   height: 28px;
+  flex-shrink: 0;
 }
 
 .toggle-switch input {
@@ -1326,43 +1385,17 @@ useHead({
   border-radius: 50%;
 }
 
-input:checked + .toggle-slider {
+input:checked+.toggle-slider {
   background-color: var(--button-primary);
 }
 
-input:checked + .toggle-slider:before {
+input:checked+.toggle-slider:before {
   transform: translateX(24px);
 }
 
-/* Preference Items */
-.preference-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem;
-  background: var(--bg-secondary);
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-.preference-info {
-  flex: 1;
-}
-
-.preference-label {
-  font-size: 0.9375rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 0.25rem;
-}
-
-.preference-description {
-  font-size: 0.8125rem;
-  color: var(--text-secondary);
-}
-
 /* Security Items */
-.security-item {
+.security-item,
+.advanced-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1371,21 +1404,24 @@ input:checked + .toggle-slider:before {
   border-radius: 8px;
 }
 
-.security-info {
+.security-info,
+.advanced-info {
   flex: 1;
 }
 
-.security-label {
+.security-label,
+.advanced-label {
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 0;
 }
 
-.security-description {
+.security-description,
+.advanced-description {
   font-size: 0.875rem;
   color: var(--text-secondary);
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 0;
 }
 
 .security-status {
@@ -1403,7 +1439,7 @@ input:checked + .toggle-slider:before {
   color: #065f46;
 }
 
-.security-status .status-dot {
+.status-dot {
   width: 8px;
   height: 8px;
   border-radius: 50%;
@@ -1415,6 +1451,9 @@ input:checked + .toggle-slider:before {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .integration-card {
@@ -1423,6 +1462,8 @@ input:checked + .toggle-slider:before {
   border-radius: 12px;
   border: 2px solid transparent;
   transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
 }
 
 .integration-card:hover {
@@ -1436,19 +1477,20 @@ input:checked + .toggle-slider:before {
 
 .integration-info {
   margin-bottom: 1rem;
+  flex: 1;
 }
 
 .integration-name {
   font-size: 1.125rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 0;
 }
 
 .integration-description {
   font-size: 0.875rem;
   color: var(--text-secondary);
-  margin-bottom: 0.75rem;
+  margin: 0 0 0.75rem 0;
 }
 
 .integration-status {
@@ -1469,13 +1511,6 @@ input:checked + .toggle-slider:before {
 .integration-status.disconnected {
   background: var(--bg-primary);
   color: var(--text-muted);
-}
-
-.integration-status .status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: currentColor;
 }
 
 /* Billing */
@@ -1499,19 +1534,23 @@ input:checked + .toggle-slider:before {
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 0;
 }
 
 .plan-price {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--button-primary);
+  margin: 0;
 }
 
 .plan-features {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .plan-feature {
@@ -1557,17 +1596,22 @@ input:checked + .toggle-slider:before {
   font-size: 0.9375rem;
   font-weight: 600;
   color: var(--text-primary);
+  margin: 0;
 }
 
 .card-expiry {
   font-size: 0.8125rem;
   color: var(--text-secondary);
+  margin: 0;
 }
 
 .billing-history {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
 .invoice-item {
@@ -1587,47 +1631,23 @@ input:checked + .toggle-slider:before {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 0.25rem;
+  margin: 0 0 0.25rem 0;
 }
 
 .invoice-description {
   font-size: 0.8125rem;
   color: var(--text-secondary);
+  margin: 0;
 }
 
 .invoice-amount {
   font-size: 1.125rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-right: 1rem;
+  margin: 0 1rem 0 0;
 }
 
-/* Advanced */
-.advanced-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
-  background: var(--bg-secondary);
-  border-radius: 8px;
-}
-
-.advanced-info {
-  flex: 1;
-}
-
-.advanced-label {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 0.5rem;
-}
-
-.advanced-description {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
+/* Danger Zone */
 .danger-zone-title {
   color: #ef4444;
 }
@@ -1653,12 +1673,13 @@ input:checked + .toggle-slider:before {
   font-size: 1rem;
   font-weight: 600;
   color: #991b1b;
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.5rem 0;
 }
 
 .danger-description {
   font-size: 0.875rem;
   color: #b91c1c;
+  margin: 0;
 }
 
 .btn-danger {
@@ -1677,9 +1698,9 @@ input:checked + .toggle-slider:before {
 }
 
 @media (max-width: 768px) {
-  .header-top {
+  .page-header {
     flex-direction: column;
-    gap: 1rem;
+    align-items: stretch;
   }
 
   .form-grid {
@@ -1696,6 +1717,19 @@ input:checked + .toggle-slider:before {
 
   .integrations-grid {
     grid-template-columns: 1fr;
+  }
+
+  .profile-header-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .avatar-actions {
+    width: 100%;
+  }
+
+  .avatar-actions .btn {
+    width: 100%;
   }
 }
 </style>

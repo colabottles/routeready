@@ -6,79 +6,84 @@
     <header class="top-bar">
       <div class="header-content">
         <div class="user-info">
-          <div class="user-avatar">
-            <Avatar
-              v-if="session"
-              :src="session.user?.image"
-              :alt="session.user?.name || 'User'"
-              :fallback="session.user?.name?.charAt(0) || 'U'"
-            />
-          </div>
-          <h2 class="user-greeting">
+          <figure class="user-avatar">
+            <img
+v-if="session?.user?.image" :src="session.user.image"
+              :alt="session.user.name || 'User'">
+            <span v-else class="avatar-fallback" aria-label="User avatar">
+              {{ session?.user?.name?.charAt(0) || 'U' }}
+            </span>
+            <figcaption class="visually-hidden">User profile picture</figcaption>
+          </figure>
+          <h1 class="user-greeting">
             Hello, <span class="user-name">{{ session?.user?.name || 'User' }}</span>!
-          </h2>
+          </h1>
         </div>
       </div>
     </header>
 
     <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="logo-placeholder">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
+    <aside class="sidebar" aria-label="Main navigation">
+      <header class="sidebar-header">
+        <figure class="logo-placeholder">
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
           </svg>
-        </div>
+          <figcaption class="visually-hidden">RouteReady logo</figcaption>
+        </figure>
         <h2 class="sidebar-title">RouteReady</h2>
-      </div>
+      </header>
 
-      <nav class="sidebar-nav">
+      <nav class="sidebar-nav" aria-label="Primary navigation">
         <NuxtLink to="/drivers" class="nav-item" active-class="active">
-          <span class="nav-icon">👥</span>
+          <span class="nav-icon" aria-hidden="true">👥</span>
           <span>Drivers</span>
         </NuxtLink>
 
         <NuxtLink to="/routes" class="nav-item" active-class="active">
-          <span class="nav-icon">🗺️</span>
+          <span class="nav-icon" aria-hidden="true">🗺️</span>
           <span>Routes</span>
         </NuxtLink>
 
         <NuxtLink to="/vehicles" class="nav-item" active-class="active">
-          <span class="nav-icon">🚚</span>
+          <span class="nav-icon" aria-hidden="true">🚚</span>
           <span>Vehicles</span>
         </NuxtLink>
 
         <NuxtLink to="/schedule" class="nav-item" active-class="active">
-          <span class="nav-icon">📅</span>
+          <span class="nav-icon" aria-hidden="true">📅</span>
           <span>Schedule</span>
         </NuxtLink>
 
         <NuxtLink to="/reports" class="nav-item" active-class="active">
-          <span class="nav-icon">📈</span>
+          <span class="nav-icon" aria-hidden="true">📈</span>
           <span>Reports</span>
         </NuxtLink>
 
         <NuxtLink to="/analytics" class="nav-item" active-class="active">
-          <span class="nav-icon">📊</span>
+          <span class="nav-icon" aria-hidden="true">📊</span>
           <span>Analytics</span>
         </NuxtLink>
 
         <NuxtLink to="/settings" class="nav-item" active-class="active">
-          <span class="nav-icon">⚙️</span>
+          <span class="nav-icon" aria-hidden="true">⚙️</span>
           <span>Settings</span>
         </NuxtLink>
       </nav>
 
-      <div class="sidebar-footer">
-        <button class="logout-btn" @click="handleLogout">
-          <span class="nav-icon">🚪</span>
+      <footer class="sidebar-footer">
+        <button type="button" class="logout-btn" @click="handleLogout">
+          <span class="nav-icon" aria-hidden="true">🚪</span>
           <span>Logout</span>
         </button>
-        <div class="copyright">
+        <p class="copyright">
           RouteReady ©️ 2025
-        </div>
-      </div>
+        </p>
+      </footer>
     </aside>
 
     <!-- Main Content -->
@@ -119,6 +124,19 @@ const handleLogout = async () => {
 </script>
 
 <style scoped>
+/* Accessibility utility */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 .dashboard-layout {
   min-height: 100vh;
   background-color: var(--bg-secondary);
@@ -161,6 +179,19 @@ const handleLogout = async () => {
   justify-content: center;
   border: 2px solid rgba(255, 255, 255, 0.3);
   overflow: hidden;
+  margin: 0;
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-fallback {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
 }
 
 .user-greeting {
@@ -204,7 +235,7 @@ const handleLogout = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin: 0 0 1rem 0;
   backdrop-filter: blur(10px);
 }
 
@@ -223,6 +254,7 @@ const handleLogout = async () => {
   flex: 1;
   padding: 1rem 0;
   overflow-y: auto;
+  min-height: 0;
 }
 
 .nav-item {
@@ -283,6 +315,7 @@ const handleLogout = async () => {
   font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.6);
   padding: 0.5rem 0;
+  margin: 0;
 }
 
 .main-content {
