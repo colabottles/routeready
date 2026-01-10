@@ -58,6 +58,16 @@
           <span class="nav-icon">📈</span>
           <span>Reports</span>
         </NuxtLink>
+
+        <NuxtLink to="/analytics" class="nav-item" active-class="active">
+          <span class="nav-icon" aria-hidden="true">📊</span>
+          <span>Analytics</span>
+        </NuxtLink>
+
+        <NuxtLink to="/settings" class="nav-item" active-class="active">
+          <span class="nav-icon" aria-hidden="true">⚙️</span>
+          <span>Settings</span>
+        </NuxtLink>
       </nav>
 
       <div class="sidebar-footer">

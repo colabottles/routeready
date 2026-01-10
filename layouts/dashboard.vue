@@ -6,18 +6,17 @@
     <header class="top-bar">
       <div class="header-content">
         <div class="user-info">
-          <figure class="user-avatar">
+          <div class="user-avatar">
             <img
-v-if="session?.user?.image" :src="session.user.image"
-              :alt="session.user.name || 'User'">
-            <span v-else class="avatar-fallback" aria-label="User avatar">
-              {{ session?.user?.name?.charAt(0) || 'U' }}
-            </span>
-            <figcaption class="visually-hidden">User profile picture</figcaption>
-          </figure>
-          <h1 class="user-greeting">
+              v-if="session"
+              :src="session.user?.image"
+              :alt="session.user?.name || 'User'"
+              :fallback="session.user?.name?.charAt(0) || 'U'"
+            >
+          </div>
+          <h2 class="user-greeting">
             Hello, <span class="user-name">{{ session?.user?.name || 'User' }}</span>!
-          </h1>
+          </h2>
         </div>
       </div>
     </header>
