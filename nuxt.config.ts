@@ -35,6 +35,11 @@ export default defineNuxtConfig({
     '~/assets/css/main.css',
     '~/assets/css/theme.css',
   ],
+  // Server runtime config (use environment variable ORS_API_KEY)
+  runtimeConfig: {
+    // server only
+    orsApiKey: process.env.ORS_API_KEY || ''
+  },
   // Make sure you have this if using Better Auth
   nitro: {
     experimental: {
