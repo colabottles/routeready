@@ -1,22 +1,24 @@
 <template>
-  <div class="reports-page">
-    <div class="page-header">
+  <main class="reports-page">
+    <header class="page-header">
       <div class="header-top">
         <div>
           <h1 class="page-title">Reports</h1>
-          <p class="page-subtitle">Analytics and performance insights</p>
+          <p class="page-subtitle">Route and dispatch performance insights</p>
         </div>
-        <button class="btn btn-primary" @click="generateReport">
-          <span class="btn-icon">📊</span>
+        <button type="button" class="btn btn-primary" @click="generateReport">
+          <span class="btn-icon" aria-hidden="true">📊</span>
           Generate Report
         </button>
       </div>
-    </div>
+    </header>
 
     <!-- Date Range Filter -->
-    <div class="filters-section">
+    <section class="filters-section" aria-label="Report filters">
       <div class="filters-group">
-        <select v-model="selectedPeriod" class="form-select" @change="updatePeriod">
+        <label for="period-select" class="visually-hidden">Select time period</label>
+        <select id="period-select" v-model="selectedPeriod" class="form-select"
+          @change="updatePeriod">
           <option value="today">Today</option>
           <option value="week">This Week</option>
           <option value="month">This Month</option>
@@ -24,168 +26,198 @@
           <option value="year">This Year</option>
           <option value="custom">Custom Range</option>
         </select>
-        <select v-model="selectedReport" class="form-select" @change="updateReport">
+        <label for="report-type-select" class="visually-hidden">Select report type</label>
+        <select id="report-type-select" v-model="selectedReport" class="form-select"
+          @change="updateReport">
           <option value="overview">Overview</option>
-          <option value="delivery">Delivery Performance</option>
+          <option value="route">Route Performance</option>
           <option value="driver">Driver Performance</option>
           <option value="vehicle">Vehicle Utilization</option>
-          <option value="route">Route Efficiency</option>
+          <option value="dispatch">Dispatch Efficiency</option>
         </select>
       </div>
-    </div>
+    </section>
 
     <!-- Key Metrics -->
-    <div class="metrics-grid">
-      <div class="metric-card">
-        <div class="metric-header">
-          <span class="metric-icon">📦</span>
-          <span class="metric-change positive">+12%</span>
-        </div>
-        <div class="metric-value">{{ metrics.totalDeliveries }}</div>
-        <div class="metric-label">Total Deliveries</div>
-        <div class="metric-subtext">vs last period</div>
-      </div>
+    <section class="metrics-section" aria-labelledby="metrics-heading">
+      <h2 id="metrics-heading" class="visually-hidden">Key Performance Metrics</h2>
+      <div class="metrics-grid">
+        <article class="metric-card">
+          <div class="metric-header">
+            <span class="metric-icon" aria-hidden="true">🗺️</span>
+            <span class="metric-change positive">+12%</span>
+          </div>
+          <p class="metric-value">{{ metrics.totalRoutes }}</p>
+          <p class="metric-label">Total Routes</p>
+          <p class="metric-subtext">vs last period</p>
+        </article>
 
-      <div class="metric-card">
-        <div class="metric-header">
-          <span class="metric-icon">✅</span>
-          <span class="metric-change positive">+5%</span>
-        </div>
-        <div class="metric-value">{{ metrics.onTimeRate }}%</div>
-        <div class="metric-label">On-Time Rate</div>
-        <div class="metric-subtext">vs last period</div>
-      </div>
+        <article class="metric-card">
+          <div class="metric-header">
+            <span class="metric-icon" aria-hidden="true">✅</span>
+            <span class="metric-change positive">+5%</span>
+          </div>
+          <p class="metric-value">{{ metrics.onTimeRate }}%</p>
+          <p class="metric-label">On-Time Completion</p>
+          <p class="metric-subtext">vs last period</p>
+        </article>
 
-      <div class="metric-card">
-        <div class="metric-header">
-          <span class="metric-icon">🚚</span>
-          <span class="metric-change negative">-3%</span>
-        </div>
-        <div class="metric-value">{{ metrics.avgDistance }} mi</div>
-        <div class="metric-label">Avg Distance</div>
-        <div class="metric-subtext">vs last period</div>
-      </div>
+        <article class="metric-card">
+          <div class="metric-header">
+            <span class="metric-icon" aria-hidden="true">🚚</span>
+            <span class="metric-change negative">-3%</span>
+          </div>
+          <p class="metric-value">{{ metrics.avgDistance }} mi</p>
+          <p class="metric-label">Avg Distance</p>
+          <p class="metric-subtext">vs last period</p>
+        </article>
 
-      <div class="metric-card">
-        <div class="metric-header">
-          <span class="metric-icon">💰</span>
-          <span class="metric-change positive">+8%</span>
-        </div>
-        <div class="metric-value">${{ metrics.costPerDelivery }}</div>
-        <div class="metric-label">Cost Per Delivery</div>
-        <div class="metric-subtext">vs last period</div>
+        <article class="metric-card">
+          <div class="metric-header">
+            <span class="metric-icon" aria-hidden="true">💰</span>
+            <span class="metric-change positive">+8%</span>
+          </div>
+          <p class="metric-value">${{ metrics.costPerRoute }}</p>
+          <p class="metric-label">Cost Per Route</p>
+          <p class="metric-subtext">vs last period</p>
+        </article>
       </div>
-    </div>
+    </section>
 
     <!-- Charts Section -->
-    <div class="charts-section">
-      <div class="chart-card large">
-        <div class="chart-header">
-          <h3 class="chart-title">Deliveries Over Time</h3>
-          <select class="chart-select">
+    <section class="charts-section" aria-labelledby="charts-heading">
+      <h2 id="charts-heading" class="visually-hidden">Performance Charts</h2>
+      <article class="chart-card large">
+        <header class="chart-header">
+          <h3 class="chart-title">Routes Over Time</h3>
+          <label for="chart-period-select" class="visually-hidden">Select chart time period</label>
+          <select id="chart-period-select" class="chart-select">
             <option>Last 7 Days</option>
             <option>Last 30 Days</option>
             <option>Last 90 Days</option>
           </select>
-        </div>
-        <div class="chart-placeholder">
-          <div class="placeholder-text">📈 Chart: Daily Deliveries</div>
-          <div class="placeholder-subtext">Integration with Chart.js or similar would go here</div>
-        </div>
-      </div>
+        </header>
+        <figure class="chart-placeholder">
+          <figcaption class="visually-hidden">Daily routes completed chart</figcaption>
+          <div class="placeholder-text" aria-hidden="true">📈 Chart: Daily Routes Completed</div>
+          <div class="placeholder-subtext" aria-hidden="true">Integration with Chart.js or similar
+            would go here</div>
+        </figure>
+      </article>
 
-      <div class="chart-card">
-        <div class="chart-header">
-          <h3 class="chart-title">Delivery Status</h3>
-        </div>
-        <div class="chart-placeholder small">
-          <div class="placeholder-text">🥧 Pie Chart</div>
-          <div class="status-breakdown">
+      <article class="chart-card">
+        <header class="chart-header">
+          <h3 class="chart-title">Route Status</h3>
+        </header>
+        <figure class="chart-placeholder small">
+          <figcaption class="visually-hidden">Route status distribution</figcaption>
+          <div class="placeholder-text" aria-hidden="true">🥧 Pie Chart</div>
+          <dl class="status-breakdown">
             <div class="status-item">
-              <span class="status-dot completed"/>
-              <span class="status-text">Completed: 847 (92%)</span>
+              <dt>
+                <span class="status-dot completed" aria-hidden="true"></span>
+                <span>Completed</span>
+              </dt>
+              <dd>847 (92%)</dd>
             </div>
             <div class="status-item">
-              <span class="status-dot pending"/>
-              <span class="status-text">In Progress: 45 (5%)</span>
+              <dt>
+                <span class="status-dot pending" aria-hidden="true"></span>
+                <span>In Progress</span>
+              </dt>
+              <dd>45 (5%)</dd>
             </div>
             <div class="status-item">
-              <span class="status-dot failed"/>
-              <span class="status-text">Failed: 28 (3%)</span>
+              <dt>
+                <span class="status-dot failed" aria-hidden="true"></span>
+                <span>Failed</span>
+              </dt>
+              <dd>28 (3%)</dd>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+          </dl>
+        </figure>
+      </article>
+    </section>
 
     <!-- Performance Tables -->
-    <div class="tables-section">
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title">Top Performing Drivers</h2>
+    <section class="tables-section" aria-labelledby="tables-heading">
+      <h2 id="tables-heading" class="visually-hidden">Performance Tables</h2>
+
+      <article class="card">
+        <header class="card-header">
+          <h3 class="card-title">Top Performing Drivers</h3>
           <NuxtLink to="/drivers" class="view-all-link">View All</NuxtLink>
-        </div>
+        </header>
         <div class="card-content">
           <div class="performance-table">
-            <div class="table-header">
-              <div class="col-rank">Rank</div>
-              <div class="col-name">Driver</div>
-              <div class="col-metric">Deliveries</div>
-              <div class="col-metric">On-Time Rate</div>
-              <div class="col-metric">Rating</div>
+            <div class="table-header" role="row">
+              <div class="col-rank" role="columnheader">Rank</div>
+              <div class="col-name" role="columnheader">Driver</div>
+              <div class="col-metric" role="columnheader">Routes</div>
+              <div class="col-metric" role="columnheader">On-Time Rate</div>
+              <div class="col-metric" role="columnheader">Rating</div>
             </div>
-            <div v-for="(driver, index) in topDrivers" :key="driver.id" class="table-row">
-              <div class="col-rank">
+            <div v-for="(driver, index) in topDrivers" :key="driver.id" class="table-row"
+              role="row">
+              <div class="col-rank" role="cell">
                 <span class="rank-badge" :class="`rank-${index + 1}`">{{ index + 1 }}</span>
               </div>
-              <div class="col-name">
+              <div class="col-name" role="cell">
                 <div class="driver-cell">
-                  <div class="driver-avatar-small">{{ driver.name.charAt(0) }}</div>
+                  <div class="driver-avatar-small" aria-hidden="true">{{ driver.name.charAt(0) }}
+                  </div>
                   <span>{{ driver.name }}</span>
                 </div>
               </div>
-              <div class="col-metric">{{ driver.deliveries }}</div>
-              <div class="col-metric">{{ driver.onTimeRate }}%</div>
-              <div class="col-metric">
+              <div class="col-metric" role="cell">{{ driver.routes }}</div>
+              <div class="col-metric" role="cell">{{ driver.onTimeRate }}%</div>
+              <div class="col-metric" role="cell">
                 <div class="rating">
-                  <span class="star">⭐</span>
+                  <span class="star" aria-hidden="true">⭐</span>
                   <span>{{ driver.rating }}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </article>
 
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title">Route Efficiency</h2>
+      <article class="card">
+        <header class="card-header">
+          <h3 class="card-title">Route Efficiency</h3>
           <NuxtLink to="/routes" class="view-all-link">View All</NuxtLink>
-        </div>
+        </header>
         <div class="card-content">
           <div class="performance-table">
-            <div class="table-header">
-              <div class="col-name">Route</div>
-              <div class="col-metric">Distance</div>
-              <div class="col-metric">Duration</div>
-              <div class="col-metric">Efficiency</div>
+            <div class="table-header" role="row">
+              <div class="col-name" role="columnheader">Route</div>
+              <div class="col-metric" role="columnheader">Distance</div>
+              <div class="col-metric" role="columnheader">Duration</div>
+              <div class="col-metric" role="columnheader">Efficiency</div>
             </div>
-            <div v-for="route in topRoutes" :key="route.id" class="table-row">
-              <div class="col-name">{{ route.name }}</div>
-              <div class="col-metric">{{ route.distance }} mi</div>
-              <div class="col-metric">{{ route.duration }} hrs</div>
-              <div class="col-metric">
-                <div class="efficiency-bar">
-                  <div class="efficiency-fill" :style="{ width: route.efficiency + '%' }" />
+            <div v-for="route in topRoutes" :key="route.id" class="table-row" role="row">
+              <div class="col-name" role="cell">{{ route.name }}</div>
+              <div class="col-metric" role="cell">{{ route.distance }} mi</div>
+              <div class="col-metric" role="cell">{{ route.duration }} hrs</div>
+              <div class="col-metric" role="cell">
+                <div
+                  class="efficiency-bar"
+                  role="progressbar"
+                  :aria-label="`${route.name} efficiency`"
+                  :aria-valuenow="route.efficiency"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  :aria-valuetext="`${route.efficiency}% efficient`">
+                  <div class="efficiency-fill" :style="{ width: route.efficiency + '%' }"></div>
                   <span class="efficiency-text">{{ route.efficiency }}%</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </article>
+    </section>
+  </main>
 </template>
 
 <script setup>
@@ -197,18 +229,18 @@ const selectedPeriod = ref('month')
 const selectedReport = ref('overview')
 
 const metrics = reactive({
-  totalDeliveries: 920,
+  totalRoutes: 920,
   onTimeRate: 94.5,
   avgDistance: 28.4,
-  costPerDelivery: 12.50
+  costPerRoute: 12.50
 })
 
 const topDrivers = reactive([
-  { id: 1, name: 'John Smith', deliveries: 156, onTimeRate: 98, rating: 4.9 },
-  { id: 2, name: 'Sarah Johnson', deliveries: 142, onTimeRate: 96, rating: 4.8 },
-  { id: 3, name: 'Mike Davis', deliveries: 138, onTimeRate: 95, rating: 4.7 },
-  { id: 4, name: 'Lisa Chen', deliveries: 129, onTimeRate: 97, rating: 4.8 },
-  { id: 5, name: 'Robert Wilson', deliveries: 121, onTimeRate: 93, rating: 4.6 }
+  { id: 1, name: 'John Smith', routes: 156, onTimeRate: 98, rating: 4.9 },
+  { id: 2, name: 'Sarah Johnson', routes: 142, onTimeRate: 96, rating: 4.8 },
+  { id: 3, name: 'Mike Davis', routes: 138, onTimeRate: 95, rating: 4.7 },
+  { id: 4, name: 'Lisa Chen', routes: 129, onTimeRate: 97, rating: 4.8 },
+  { id: 5, name: 'Robert Wilson', routes: 121, onTimeRate: 93, rating: 4.6 }
 ])
 
 const topRoutes = reactive([
@@ -233,12 +265,24 @@ function generateReport() {
 useHead({
   title: 'Reports - RouteReady',
   meta: [
-    { name: 'description', content: 'View analytics and reports' }
+    { name: 'description', content: 'View route and dispatch analytics and reports' }
   ]
 })
 </script>
 
 <style scoped>
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 .reports-page {
   width: 100%;
 }
@@ -297,11 +341,14 @@ useHead({
 }
 
 /* Metrics Grid */
+.metrics-section {
+  margin-bottom: 2rem;
+}
+
 .metrics-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
-  margin-bottom: 2rem;
 }
 
 .metric-card {
@@ -350,19 +397,20 @@ useHead({
   font-size: 2rem;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 0.25rem;
+  margin: 0 0 0.25rem 0;
 }
 
 .metric-label {
   font-size: 0.9375rem;
   color: var(--text-secondary);
   font-weight: 500;
-  margin-bottom: 0.25rem;
+  margin: 0 0 0.25rem 0;
 }
 
 .metric-subtext {
   font-size: 0.75rem;
   color: var(--text-muted);
+  margin: 0;
 }
 
 /* Charts Section */
@@ -418,6 +466,7 @@ useHead({
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  margin: 0;
 }
 
 .chart-placeholder.small {
@@ -443,15 +492,35 @@ useHead({
 }
 
 .status-item {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
   gap: 0.75rem;
+}
+
+.status-item dt {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  font-weight: 500;
+  margin: 0;
+}
+
+.status-item dd {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  margin: 0;
+  text-align: right;
 }
 
 .status-dot {
   width: 12px;
   height: 12px;
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
 .status-dot.completed {
@@ -464,11 +533,6 @@ useHead({
 
 .status-dot.failed {
   background: #ef4444;
-}
-
-.status-text {
-  font-size: 0.875rem;
-  color: var(--text-primary);
 }
 
 /* Performance Tables */
