@@ -17,7 +17,8 @@
     <section class="filters-section" aria-label="Report filters">
       <div class="filters-group">
         <label for="period-select" class="visually-hidden">Select time period</label>
-        <select id="period-select" v-model="selectedPeriod" class="form-select"
+        <select
+id="period-select" v-model="selectedPeriod" class="form-select"
           @change="updatePeriod">
           <option value="today">Today</option>
           <option value="week">This Week</option>
@@ -27,7 +28,8 @@
           <option value="custom">Custom Range</option>
         </select>
         <label for="report-type-select" class="visually-hidden">Select report type</label>
-        <select id="report-type-select" v-model="selectedReport" class="form-select"
+        <select
+id="report-type-select" v-model="selectedReport" class="form-select"
           @change="updateReport">
           <option value="overview">Overview</option>
           <option value="route">Route Performance</option>
@@ -115,21 +117,21 @@
           <dl class="status-breakdown">
             <div class="status-item">
               <dt>
-                <span class="status-dot completed" aria-hidden="true"></span>
+                <span class="status-dot completed" aria-hidden="true"/>
                 <span>Completed</span>
               </dt>
               <dd>847 (92%)</dd>
             </div>
             <div class="status-item">
               <dt>
-                <span class="status-dot pending" aria-hidden="true"></span>
+                <span class="status-dot pending" aria-hidden="true"/>
                 <span>In Progress</span>
               </dt>
               <dd>45 (5%)</dd>
             </div>
             <div class="status-item">
               <dt>
-                <span class="status-dot failed" aria-hidden="true"></span>
+                <span class="status-dot failed" aria-hidden="true"/>
                 <span>Failed</span>
               </dt>
               <dd>28 (3%)</dd>
@@ -157,7 +159,8 @@
               <div class="col-metric" role="columnheader">On-Time Rate</div>
               <div class="col-metric" role="columnheader">Rating</div>
             </div>
-            <div v-for="(driver, index) in topDrivers" :key="driver.id" class="table-row"
+            <div
+v-for="(driver, index) in topDrivers" :key="driver.id" class="table-row"
               role="row">
               <div class="col-rank" role="cell">
                 <span class="rank-badge" :class="`rank-${index + 1}`">{{ index + 1 }}</span>
@@ -208,7 +211,7 @@
                   aria-valuemin="0"
                   aria-valuemax="100"
                   :aria-valuetext="`${route.efficiency}% efficient`">
-                  <div class="efficiency-fill" :style="{ width: route.efficiency + '%' }"></div>
+                  <div class="efficiency-fill" :style="{ width: route.efficiency + '%' }"/>
                   <span class="efficiency-text">{{ route.efficiency }}%</span>
                 </div>
               </div>

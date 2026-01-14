@@ -160,9 +160,9 @@
                 :aria-valuemin="0"
                 :aria-valuemax="driverMetrics.total"
                 :aria-valuetext="`${driverMetrics.active} of ${driverMetrics.total} drivers active`">
-                <div class="progress-fill"
-                  :style="{ width: (driverMetrics.active / driverMetrics.total * 100) + '%' }">
-                </div>
+                <div
+class="progress-fill"
+                  :style="{ width: (driverMetrics.active / driverMetrics.total * 100) + '%' }"/>
               </div>
             </dd>
             <dt class="driver-metric-label">Avg Hours/Week</dt>
@@ -178,7 +178,8 @@
           <section class="top-drivers-list" aria-labelledby="top-drivers-heading">
             <h4 id="top-drivers-heading" class="list-header">Top Performers</h4>
             <ol class="driver-list">
-              <li v-for="(driver, index) in topPerformers" :key="driver.id"
+              <li
+v-for="(driver, index) in topPerformers" :key="driver.id"
                 class="driver-list-item">
                 <span class="driver-rank" aria-label="Rank">{{ index + 1 }}</span>
                 <span class="driver-avatar-tiny" aria-hidden="true">{{ driver.name.charAt(0)
@@ -218,26 +219,27 @@
               class="utilization-bar"
               role="img"
               aria-label="Vehicle utilization showing active, maintenance, and idle vehicles">
-              <div class="utilization-segment active"
-                :style="{ width: (fleetMetrics.activeToday / fleetMetrics.total * 100) + '%' }">
-              </div>
-              <div class="utilization-segment maintenance"
-                :style="{ width: (fleetMetrics.maintenance / fleetMetrics.total * 100) + '%' }">
-              </div>
-              <div class="utilization-segment idle"
-                :style="{ width: (fleetMetrics.idle / fleetMetrics.total * 100) + '%' }"></div>
+              <div
+class="utilization-segment active"
+                :style="{ width: (fleetMetrics.activeToday / fleetMetrics.total * 100) + '%' }"/>
+              <div
+class="utilization-segment maintenance"
+                :style="{ width: (fleetMetrics.maintenance / fleetMetrics.total * 100) + '%' }"/>
+              <div
+class="utilization-segment idle"
+                :style="{ width: (fleetMetrics.idle / fleetMetrics.total * 100) + '%' }"/>
             </div>
             <ul class="utilization-legend">
               <li class="legend-item">
-                <span class="legend-dot active" aria-hidden="true"></span>
+                <span class="legend-dot active" aria-hidden="true"/>
                 <span class="legend-text">Active</span>
               </li>
               <li class="legend-item">
-                <span class="legend-dot maintenance" aria-hidden="true"></span>
+                <span class="legend-dot maintenance" aria-hidden="true"/>
                 <span class="legend-text">Maintenance</span>
               </li>
               <li class="legend-item">
-                <span class="legend-dot idle" aria-hidden="true"></span>
+                <span class="legend-dot idle" aria-hidden="true"/>
                 <span class="legend-text">Idle</span>
               </li>
             </ul>
@@ -308,7 +310,7 @@
                   aria-valuemin="0"
                   aria-valuemax="100"
                   :aria-valuetext="`${route.efficiency}% efficient`">
-                  <div class="efficiency-bar-fill" :style="{ width: route.efficiency + '%' }"></div>
+                  <div class="efficiency-bar-fill" :style="{ width: route.efficiency + '%' }"/>
                   <span class="efficiency-bar-text">{{ route.efficiency }}%</span>
                 </div>
                 <p class="route-time">{{ route.avgTime }}h</p>
@@ -366,7 +368,7 @@
                   aria-valuemin="0"
                   aria-valuemax="100"
                   :aria-valuetext="`${zone.percentage}% of routes`">
-                  <div class="zone-bar-fill" :style="{ width: zone.percentage + '%' }"></div>
+                  <div class="zone-bar-fill" :style="{ width: zone.percentage + '%' }"/>
                 </div>
                 <span class="zone-percentage">{{ zone.percentage }}%</span>
               </li>
@@ -411,7 +413,7 @@
                         class="percentage-fill"
                         :style="{ width: status.percentage + '%' }"
                         role="img"
-                        :aria-label="`${status.percentage}%`"></div>
+                        :aria-label="`${status.percentage}%`"/>
                       <span class="percentage-text">{{ status.percentage }}%</span>
                     </div>
                   </td>
