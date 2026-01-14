@@ -292,7 +292,7 @@ useHead({
 
 .search-input {
   flex: 1;
-  max-width: 400px;
+  min-width: 50%;
   padding: 0.75rem 1rem;
   border: 2px solid var(--input-border);
   border-radius: 8px;
