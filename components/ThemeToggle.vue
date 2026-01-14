@@ -49,7 +49,7 @@ const isDark = computed(() => theme.value === 'dark')
 <style scoped>
 .theme-toggle {
   position: fixed;
-  top: 1.5rem;
+  top: .5rem; /* Needs to stay at this unit */
   right: 1.5rem;
   width: 48px;
   height: 48px;

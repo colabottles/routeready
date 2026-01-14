@@ -1,469 +1,718 @@
 <template>
-  <div class="dashboard-layout">
-    <ThemeToggle />
-
-    <!-- Header -->
-    <header class="top-bar">
-      <div class="header-content">
-        <div class="user-info">
-          <div class="user-avatar">
-            <img
-              v-if="session"
-              :src="session.user?.image"
-              :alt="session.user?.name || 'User'"
-              :fallback="session.user?.name?.charAt(0) || 'U'"
-            >
-          </div>
-          <h2 class="user-greeting">
-            Hello, <span class="user-name">{{ session?.user?.name || 'User' }}</span>!
-          </h2>
-        </div>
-      </div>
+  <main class="dashboard-page">
+    <header class="page-header">
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-subtitle">Welcome to RouteReady - Your route management and dispatching hub</p>
     </header>
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="logo-placeholder">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-            <polyline points="9 22 9 12 15 12 15 22"/>
-          </svg>
-        </div>
-        <h2 class="sidebar-title">RouteReady</h2>
+    <!-- Quick Stats Overview -->
+    <section class="stats-overview" aria-labelledby="stats-heading">
+      <h2 id="stats-heading" class="visually-hidden">Quick Statistics</h2>
+      <div class="stats-grid">
+        <article class="stat-card">
+          <div class="stat-icon-wrapper" aria-hidden="true">
+            <span class="stat-icon">👥</span>
+          </div>
+          <div class="stat-content">
+            <h3 class="stat-label">Active Drivers</h3>
+            <p class="stat-value">{{ stats.activeDrivers }}</p>
+            <p class="stat-change positive">
+              <span class="change-arrow" aria-hidden="true">↑</span>
+              <span>{{ stats.driverChange }}% from last week</span>
+            </p>
+          </div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon-wrapper" aria-hidden="true">
+            <span class="stat-icon">📦</span>
+          </div>
+          <div class="stat-content">
+            <h3 class="stat-label">Today's Routes</h3>
+            <p class="stat-value">{{ stats.todayRoutes }}</p>
+            <p class="stat-change positive">
+              <span class="change-arrow" aria-hidden="true">↑</span>
+              <span>{{ stats.routeChange }}% from yesterday</span>
+            </p>
+          </div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon-wrapper" aria-hidden="true">
+            <span class="stat-icon">🚚</span>
+          </div>
+          <div class="stat-content">
+            <h3 class="stat-label">Active Vehicles</h3>
+            <p class="stat-value">{{ stats.activeVehicles }}/{{ stats.totalVehicles }}</p>
+            <p class="stat-change neutral">
+              <span>{{ stats.vehicleUtilization }}% utilization</span>
+            </p>
+          </div>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon-wrapper" aria-hidden="true">
+            <span class="stat-icon">✅</span>
+          </div>
+          <div class="stat-content">
+            <h3 class="stat-label">Completion Rate</h3>
+            <p class="stat-value">{{ stats.completionRate }}%</p>
+            <p class="stat-change positive">
+              <span class="change-arrow" aria-hidden="true">↑</span>
+              <span>{{ stats.completionChange }}% from last month</span>
+            </p>
+          </div>
+        </article>
       </div>
+    </section>
 
-      <nav class="sidebar-nav">
-        <NuxtLink to="/drivers" class="nav-item" active-class="active">
-          <span class="nav-icon">👥</span>
-          <span>Drivers</span>
-        </NuxtLink>
+    <!-- Main Navigation Cards -->
+    <section class="navigation-section" aria-labelledby="nav-heading">
+      <h2 id="nav-heading" class="section-title">Quick Access</h2>
+      <nav class="nav-cards-grid" aria-label="Dashboard quick access">
+        <article class="nav-card">
+          <div class="nav-card-icon" aria-hidden="true">
+            <span class="icon-large">👥</span>
+          </div>
+          <div class="nav-card-content">
+            <h3 class="nav-card-title">Drivers</h3>
+            <p class="nav-card-description">
+              Manage driver profiles, assignments, and performance tracking
+            </p>
+            <dl class="nav-card-stats">
+              <div class="stat-item">
+                <dt>Total</dt>
+                <dd>{{ stats.totalDrivers }}</dd>
+              </div>
+              <div class="stat-item">
+                <dt>Active</dt>
+                <dd>{{ stats.activeDrivers }}</dd>
+              </div>
+            </dl>
+          </div>
+          <footer class="nav-card-footer">
+            <NuxtLink to="/drivers" class="nav-card-link">
+              Manage Drivers
+              <span aria-hidden="true">→</span>
+            </NuxtLink>
+          </footer>
+        </article>
 
-        <NuxtLink to="/routes" class="nav-item" active-class="active">
-          <span class="nav-icon">🗺️</span>
-          <span>Routes</span>
-        </NuxtLink>
+        <article class="nav-card">
+          <div class="nav-card-icon" aria-hidden="true">
+            <span class="icon-large">🗺️</span>
+          </div>
+          <div class="nav-card-content">
+            <h3 class="nav-card-title">Routes</h3>
+            <p class="nav-card-description">
+              Plan, optimize, and dispatch routes for properties and service areas
+            </p>
+            <dl class="nav-card-stats">
+              <div class="stat-item">
+                <dt>Total</dt>
+                <dd>{{ stats.totalRoutes }}</dd>
+              </div>
+              <div class="stat-item">
+                <dt>Active</dt>
+                <dd>{{ stats.activeRoutes }}</dd>
+              </div>
+            </dl>
+          </div>
+          <footer class="nav-card-footer">
+            <NuxtLink to="/routes" class="nav-card-link">
+              Manage Routes
+              <span aria-hidden="true">→</span>
+            </NuxtLink>
+          </footer>
+        </article>
 
-        <NuxtLink to="/vehicles" class="nav-item" active-class="active">
-          <span class="nav-icon">🚚</span>
-          <span>Vehicles</span>
-        </NuxtLink>
+        <article class="nav-card">
+          <div class="nav-card-icon" aria-hidden="true">
+            <span class="icon-large">🚚</span>
+          </div>
+          <div class="nav-card-content">
+            <h3 class="nav-card-title">Vehicles</h3>
+            <p class="nav-card-description">
+              Track fleet status, maintenance schedules, and vehicle availability
+            </p>
+            <dl class="nav-card-stats">
+              <div class="stat-item">
+                <dt>Total</dt>
+                <dd>{{ stats.totalVehicles }}</dd>
+              </div>
+              <div class="stat-item">
+                <dt>Active</dt>
+                <dd>{{ stats.activeVehicles }}</dd>
+              </div>
+            </dl>
+          </div>
+          <footer class="nav-card-footer">
+            <NuxtLink to="/vehicles" class="nav-card-link">
+              Manage Vehicles
+              <span aria-hidden="true">→</span>
+            </NuxtLink>
+          </footer>
+        </article>
 
-        <NuxtLink to="/schedule" class="nav-item" active-class="active">
-          <span class="nav-icon">📅</span>
-          <span>Schedule</span>
-        </NuxtLink>
+        <article class="nav-card">
+          <div class="nav-card-icon" aria-hidden="true">
+            <span class="icon-large">📅</span>
+          </div>
+          <div class="nav-card-content">
+            <h3 class="nav-card-title">Schedule</h3>
+            <p class="nav-card-description">
+              Create and manage driver schedules across daily, weekly, and monthly views
+            </p>
+            <dl class="nav-card-stats">
+              <div class="stat-item">
+                <dt>Today</dt>
+                <dd>{{ stats.todaySchedules }}</dd>
+              </div>
+              <div class="stat-item">
+                <dt>This Week</dt>
+                <dd>{{ stats.weekSchedules }}</dd>
+              </div>
+            </dl>
+          </div>
+          <footer class="nav-card-footer">
+            <NuxtLink to="/schedule" class="nav-card-link">
+              View Schedule
+              <span aria-hidden="true">→</span>
+            </NuxtLink>
+          </footer>
+        </article>
 
-        <NuxtLink to="/reports" class="nav-item" active-class="active">
-          <span class="nav-icon">📈</span>
-          <span>Reports</span>
-        </NuxtLink>
+        <article class="nav-card">
+          <div class="nav-card-icon" aria-hidden="true">
+            <span class="icon-large">📈</span>
+          </div>
+          <div class="nav-card-content">
+            <h3 class="nav-card-title">Reports</h3>
+            <p class="nav-card-description">
+              Generate detailed reports on routes, dispatches, and operational performance
+            </p>
+            <dl class="nav-card-stats">
+              <div class="stat-item">
+                <dt>Generated</dt>
+                <dd>{{ stats.reportsGenerated }}</dd>
+              </div>
+              <div class="stat-item">
+                <dt>This Month</dt>
+                <dd>{{ stats.monthReports }}</dd>
+              </div>
+            </dl>
+          </div>
+          <footer class="nav-card-footer">
+            <NuxtLink to="/reports" class="nav-card-link">
+              View Reports
+              <span aria-hidden="true">→</span>
+            </NuxtLink>
+          </footer>
+        </article>
 
-        <NuxtLink to="/analytics" class="nav-item" active-class="active">
-          <span class="nav-icon" aria-hidden="true">📊</span>
-          <span>Analytics</span>
-        </NuxtLink>
-
-        <NuxtLink to="/settings" class="nav-item" active-class="active">
-          <span class="nav-icon" aria-hidden="true">⚙️</span>
-          <span>Settings</span>
-        </NuxtLink>
+        <article class="nav-card">
+          <div class="nav-card-icon" aria-hidden="true">
+            <span class="icon-large">📊</span>
+          </div>
+          <div class="nav-card-content">
+            <h3 class="nav-card-title">Analytics</h3>
+            <p class="nav-card-description">
+              Deep insights into route performance, dispatch metrics, and operational intelligence
+            </p>
+            <dl class="nav-card-stats">
+              <div class="stat-item">
+                <dt>Efficiency</dt>
+                <dd>{{ stats.efficiency }}%</dd>
+              </div>
+              <div class="stat-item">
+                <dt>On-Time</dt>
+                <dd>{{ stats.onTimeRate }}%</dd>
+              </div>
+            </dl>
+          </div>
+          <footer class="nav-card-footer">
+            <NuxtLink to="/analytics" class="nav-card-link">
+              View Analytics
+              <span aria-hidden="true">→</span>
+            </NuxtLink>
+          </footer>
+        </article>
       </nav>
+    </section>
 
-      <div class="sidebar-footer">
-        <button class="logout-btn" @click="handleLogout">
-          <span class="nav-icon">🚪</span>
-          <span>Logout</span>
-        </button>
-        <div class="copyright">
-          RouteReady ©️ 2025
+    <!-- Recent Activity -->
+    <section class="recent-activity" aria-labelledby="activity-heading">
+      <h2 id="activity-heading" class="section-title">Recent Activity</h2>
+      <article class="card">
+        <div class="card-content">
+          <ul class="activity-list">
+            <li v-for="activity in recentActivity" :key="activity.id" class="activity-item">
+              <div class="activity-icon" :class="`activity-${activity.type}`" aria-hidden="true">
+                <span>{{ activity.icon }}</span>
+              </div>
+              <div class="activity-content">
+                <p class="activity-text">{{ activity.text }}</p>
+                <time :datetime="activity.timestamp" class="activity-time">
+                  {{ formatTime(activity.timestamp) }}
+                </time>
+              </div>
+            </li>
+          </ul>
         </div>
-      </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-      <slot />
-    </main>
-  </div>
+      </article>
+    </section>
+  </main>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useNuxtApp } from 'nuxt/app'
-
-const router = useRouter()
-const nuxtApp = useNuxtApp()
-const $authClient = nuxtApp.$authClient
-
-const session = ref(null)
-
-onMounted(async () => {
-  if ($authClient) {
-    const result = await $authClient.getSession()
-    session.value = result?.data
-  }
+definePageMeta({
+  layout: 'dashboard',
 })
 
-const handleLogout = async () => {
-  try {
-    if ($authClient) {
-      await $authClient.signOut()
-    }
-    await router.push('/login')
-  } catch (err) {
-    console.error('Logout error:', err)
+// Sample stats data - replace with actual API calls
+const stats = reactive({
+  activeDrivers: 12,
+  totalDrivers: 15,
+  driverChange: 8.3,
+  todayRoutes: 45,
+  routeChange: 12.5,
+  activeVehicles: 10,
+  totalVehicles: 15,
+  vehicleUtilization: 67,
+  completionRate: 94.2,
+  completionChange: 3.2,
+  totalRoutes: 25,
+  activeRoutes: 18,
+  todaySchedules: 12,
+  weekSchedules: 68,
+  reportsGenerated: 156,
+  monthReports: 23,
+  efficiency: 92.8,
+  onTimeRate: 94.2
+})
+
+const recentActivity = reactive([
+  {
+    id: 1,
+    type: 'delivery',
+    icon: '📦',
+    text: 'John Smith completed Downtown Commercial route - 12 stops serviced',
+    timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString()
+  },
+  {
+    id: 2,
+    type: 'schedule',
+    icon: '📅',
+    text: 'New route dispatched to Sarah Johnson - Residential North properties',
+    timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString()
+  },
+  {
+    id: 3,
+    type: 'vehicle',
+    icon: '🚚',
+    text: 'Truck #5 maintenance completed - returned to active duty',
+    timestamp: new Date(Date.now() - 1000 * 60 * 120).toISOString()
+  },
+  {
+    id: 4,
+    type: 'driver',
+    icon: '👥',
+    text: 'Mike Davis achieved 100% on-time completion rate this week',
+    timestamp: new Date(Date.now() - 1000 * 60 * 180).toISOString()
+  },
+  {
+    id: 5,
+    type: 'route',
+    icon: '🗺️',
+    text: 'Industrial Park route optimized - saved 8.5 miles',
+    timestamp: new Date(Date.now() - 1000 * 60 * 240).toISOString()
   }
+])
+
+function formatTime(timestamp) {
+  const date = new Date(timestamp)
+  const now = new Date()
+  const diffMs = now - date
+  const diffMins = Math.floor(diffMs / 60000)
+
+  if (diffMins < 1) return 'Just now'
+  if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`
+
+  const diffHours = Math.floor(diffMins / 60)
+  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`
+
+  const diffDays = Math.floor(diffHours / 24)
+  return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`
 }
+
+useHead({
+  title: 'Dashboard - RouteReady',
+  meta: [
+    { name: 'description', content: 'RouteReady dashboard - Manage your route planning and dispatching operations' }
+  ]
+})
 </script>
 
 <style scoped>
-.dashboard-layout {
-  min-height: 100vh;
-  background-color: var(--bg-secondary);
-}
-
-.top-bar {
-  color: var(--text-on-gradient);
-  display: flex;
-  align-items: center;
-  height: 70px;
-  width: 100%;
-  background: linear-gradient(90deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  padding: 0 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.header-content {
-  width: 100%;
-  max-width: 100%;
-  margin-left: 260px;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.user-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid rgba(255, 255, 255, 0.3);
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
   overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
-.user-greeting {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-  color: white;
-}
-
-.user-name {
-  font-weight: 700;
-}
-
-.sidebar {
-  width: 260px;
-  background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-  color: white;
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  height: 100vh;
-  left: 0;
-  top: 0;
-  z-index: 101;
-}
-
-.sidebar-header {
-  padding: 2rem 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.logo-placeholder {
-  width: 80px;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1rem;
-  backdrop-filter: blur(10px);
-}
-
-.logo-placeholder svg {
-  opacity: 0.9;
-}
-
-.sidebar-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0;
-  text-align: center;
-}
-
-.sidebar-nav {
-  flex: 1;
-  padding: 1rem 0;
-  overflow-y: auto;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.875rem 1.5rem;
-  color: rgba(255, 255, 255, 0.8);
-  text-decoration: none;
-  transition: all 0.2s;
-  font-weight: 500;
-}
-
-.nav-item:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-}
-
-.nav-item.active {
-  background-color: rgba(255, 255, 255, 0.15);
-  color: white;
-  border-left: 4px solid var(--button-primary);
-}
-
-.nav-icon {
-  font-size: 1.25rem;
-  line-height: 1;
-}
-
-.sidebar-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.logout-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+.dashboard-page {
   width: 100%;
-  padding: 0.875rem;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.5rem;
-  color: white;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-bottom: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
-.logout-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.copyright {
-  text-align: center;
-  font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.6);
-  padding: 0.5rem 0;
-}
-
-.main-content {
-  margin-left: 260px;
-  margin-top: 70px;
-  padding: 2rem;
-  min-height: calc(100vh - 70px);
-  background-color: var(--bg-secondary);
-}
-
-/* Global styles for pages using this layout */
-:global(.page-header) {
+.page-header {
   margin-bottom: 2rem;
 }
 
-:global(.page-title) {
+.page-title {
   font-size: 2rem;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0 0 0.5rem 0;
 }
 
-:global(.page-subtitle) {
+.page-subtitle {
+  color: var(--text-secondary);
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Quick Stats */
+.stats-overview {
+  margin-bottom: 3rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.stat-card {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  gap: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.stat-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.stat-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  font-weight: 500;
   color: var(--text-secondary);
   margin: 0;
 }
 
-:global(.card) {
-  background: var(--bg-primary) !important;
-  border-radius: 0.75rem;
-  box-shadow: var(--shadow);
-  margin-bottom: 1.5rem;
+.stat-value {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1;
 }
 
-:global(.card-header) {
-  padding: 1.5rem;
-  border-bottom: 1px solid var(--input-border);
+.stat-change {
+  font-size: 0.75rem;
+  font-weight: 500;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-}
-
-:global(.card-title) {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-primary) !important;
+  gap: 0.25rem;
   margin: 0;
 }
 
-:global(.card-content) {
-  padding: 1.5rem;
-  color: var(--text-primary);
+.stat-change.positive {
+  color: #10b981;
 }
 
-:global(.btn) {
-  padding: 0.625rem 1.25rem;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: none;
-  text-decoration: none;
-  display: inline-block;
+.stat-change.negative {
+  color: #ef4444;
 }
 
-:global(.btn-primary) {
-  background: var(--button-primary);
-  color: white;
+.stat-change.neutral {
+  color: var(--text-secondary);
 }
 
-:global(.btn-primary:hover) {
-  background: var(--button-primary-hover);
-}
-
-:global(.btn-secondary) {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  border: 1px solid var(--input-border);
-}
-
-:global(.btn-secondary:hover) {
-  background: var(--input-border);
-}
-
-:global(.btn-success) {
-  background: #10b981;
-  color: white;
-}
-
-:global(.btn-warning) {
-  background: #f59e0b;
-  color: white;
-}
-
-:global(.form-input),
-:global(.form-select) {
-  padding: 0.625rem 0.875rem;
-  border: 1px solid var(--input-border);
-  background: var(--input-bg);
-  color: var(--text-primary) !important;
-  border-radius: 0.5rem;
+.change-arrow {
   font-size: 0.875rem;
 }
 
-:global(.table-container) {
-  overflow-x: auto;
+/* Navigation Cards */
+.navigation-section {
+  margin-bottom: 3rem;
 }
 
-:global(.table) {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-:global(.table th) {
-  text-align: left;
-  padding: 0.75rem;
-  background: var(--bg-secondary) !important;
-  font-weight: 600;
-  color: var(--text-primary) !important;
-  font-size: 0.875rem;
-  border-bottom: 2px solid var(--input-border);
-}
-
-:global(.table td) {
-  padding: 1rem 0.75rem;
-  border-bottom: 1px solid var(--input-border);
-  color: var(--text-primary) !important;
-}
-
-:global(.table tbody tr) {
-  background: var(--bg-primary) !important;
-}
-
-:global(.status) {
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
+.section-title {
+  font-size: 1.5rem;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
+  color: var(--text-primary);
+  margin: 0 0 1.5rem 0;
 }
 
-:global(.status-active) {
-  background: #10b981 !important;
-  color: #ffffff !important;
-}
-
-:global(.status-pending) {
-  background: #f59e0b !important;
-  color: #000000 !important;
-}
-
-:global(.status-inactive) {
-  background: #6b7280 !important;
-  color: #ffffff !important;
-}
-
-:global(.grid) {
+.nav-cards-grid {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 1.5rem;
 }
 
-:global(.grid-cols-3) {
-  grid-template-columns: repeat(3, 1fr);
+.nav-card {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid transparent;
+}
+
+.nav-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--button-primary);
+}
+
+.nav-card-icon {
+  background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-large {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.nav-card-content {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.nav-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.nav-card-description {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.nav-card-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--input-border);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-item dt {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.stat-item dd {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.nav-card-footer {
+  padding: 1rem 1.5rem;
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--input-border);
+}
+
+.nav-card-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--button-primary);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  transition: gap 0.2s;
+}
+
+.nav-card-link:hover {
+  gap: 0.5rem;
+}
+
+/* Recent Activity */
+.recent-activity {
+  margin-bottom: 2rem;
+}
+
+.activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.activity-item {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.activity-item:hover {
+  background: var(--bg-secondary);
+}
+
+.activity-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.activity-delivery {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.activity-schedule {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.activity-vehicle {
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.activity-driver {
+  background: rgba(139, 92, 246, 0.1);
+}
+
+.activity-route {
+  background: rgba(236, 72, 153, 0.1);
+}
+
+.activity-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.activity-text {
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.activity-time {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-style: normal;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .nav-cards-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
 }
 
 @media (max-width: 768px) {
-  .sidebar {
-    width: 200px;
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 
-  .header-content {
-    margin-left: 200px;
-  }
-
-  .main-content {
-    margin-left: 200px;
-  }
-
-  :global(.grid-cols-3) {
+  .nav-cards-grid {
     grid-template-columns: 1fr;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .nav-card-content {
+    padding: 1rem;
   }
 }
 </style>
