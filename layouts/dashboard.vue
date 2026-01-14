@@ -43,6 +43,11 @@ xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
           <span>Drivers</span>
         </NuxtLink>
 
+        <NuxtLink to="/properties" class="nav-item" active-class="active">
+          <span class="nav-icon" aria-hidden="true">🏢</span>
+          <span>Properties</span>
+        </NuxtLink>
+
         <NuxtLink to="/routes" class="nav-item" active-class="active">
           <span class="nav-icon" aria-hidden="true">🗺️</span>
           <span>Routes</span>
