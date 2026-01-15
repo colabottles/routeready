@@ -4,7 +4,7 @@ export const authClient = createAuthClient({
   baseURL: process.env.BETTER_AUTH_URL || "http://localhost:3000"
 });
 
-export const requestPasswordReset = authClient.forgetPassword;
+export const requestPasswordReset = authClient.resetPassword;
 
 export default defineNuxtPlugin(() => {
   return {
