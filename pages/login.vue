@@ -49,8 +49,7 @@ const handleLogin = async () => {
           <img
             src="~/assets/images/routereadylogo.png"
             alt="RouteReady Logo"
-            class="login-logo"
-          >
+            class="login-logo">
         </div>
         <h1 class="title visually-hidden">RouteReady</h1>
       </div>
@@ -70,8 +69,7 @@ const handleLogin = async () => {
             id="email"
             v-model="email"
             type="email"
-            required
-          >
+            required>
           <small>Your work email address</small>
         </div>
 
@@ -81,16 +79,14 @@ const handleLogin = async () => {
             id="password"
             v-model="password"
             type="password"
-            required
-          >
+            required>
           <small>Must be 8-16 characters</small>
         </div>
 
         <button
           type="submit"
           class="login-button"
-          :disabled="isLoading"
-        >
+          :disabled="isLoading">
           {{ isLoading ? 'Signing In...' : 'Sign In' }}
         </button>
 
@@ -102,16 +98,71 @@ const handleLogin = async () => {
   </div>
 </template>
 
-<style scoped>
-.login-page {
-  min-height: 100vh;
-  display: flex;
+<style>
+/* CSS Variables for theme colors */
+:root[data-theme="light"] {
+  --bg-gradient-start: #667eea;
+  --bg-gradient-end: #764ba2;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
+  --input-focus: #667eea;
+  --error-bg: #fef2f2;
+  --error-border: #fecaca;
+  --error-text: #991b1b;
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --link-color: #4338ca;
+  --link-hover: #3730a3;
+}
+
+/* Dark mode - WCAG AA compliant colors */
+:root[data-theme="dark"] {
+  --bg-gradient-start: #110c47;
+  --bg-gradient-end: #2d2fa0;
+  --bg-primary: #1f2937;
+  --bg-secondary: #111827;
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+  --input-bg: #374151;
+  --input-border: #4b5563;
+  --input-focus: #818cf8;
+  --error-bg: #7f1d1d;
+  --error-border: #991b1b;
+  --error-text: #fecaca;
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.3);
+  --link-color: #818cf8;
+  --link-hover: #6366f1;
 }
 
 .login-container {
   display: flex;
   width: 100%;
   min-height: 100vh;
+}
+
+.login-column {
+  flex: 1;
+}
+
+.login-left {
+  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  padding: 2rem;
+}
+
+.login-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .logo-container {
@@ -124,10 +175,8 @@ const handleLogin = async () => {
   width: 240px;
   height: auto;
   filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
-  animation: fadeInDown 0.8s ease-out;
 }
 
-/* Visually Hidden - Accessible to screen readers */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -140,45 +189,7 @@ const handleLogin = async () => {
   border-width: 0;
 }
 
-.login-left {
-  flex: 1;
-  background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  padding: 2rem;
-}
-
-.logo-section {
-  margin-bottom: 2rem;
-  display: flex;
-  justify-content: center;
-}
-
-.logo {
-  width: 120px;
-  height: auto;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
-}
-
-.brand-title {
-  font-size: 3rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
-  text-align: center;
-}
-
-.brand-subtitle {
-  font-size: 1.25rem;
-  opacity: 0.95;
-  text-align: center;
-  max-width: 400px;
-}
-
 .login-right {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -186,13 +197,16 @@ const handleLogin = async () => {
   padding: 2rem;
 }
 
-.login-form-container {
+.login-form {
   width: 100%;
   max-width: 440px;
   background: var(--bg-primary);
   padding: 3rem 2.5rem;
   border-radius: 12px;
   box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .form-title {
@@ -203,29 +217,14 @@ const handleLogin = async () => {
   text-align: center;
 }
 
-.form-subtitle {
-  font-size: 1rem;
-  color: var(--text-secondary);
-  margin: 0 0 2rem 0;
-  text-align: center;
-  font-weight: 500;
-}
-
 .error-message {
   background: var(--error-bg);
   border: 2px solid var(--error-border);
   color: var(--error-text);
   padding: 1rem;
   border-radius: 8px;
-  margin-bottom: 1.5rem;
   font-size: 0.9375rem;
   font-weight: 600;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
 }
 
 .form-group {
@@ -260,43 +259,13 @@ const handleLogin = async () => {
   color: var(--text-muted);
 }
 
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: -0.5rem;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9375rem;
-  color: var(--text-primary);
-  cursor: pointer;
+.form-group small {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
   font-weight: 500;
 }
 
-.checkbox-label input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-}
-
-.forgot-link {
-  font-size: 0.9375rem;
-  color: #4338ca;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.forgot-link:hover {
-  color: #3730a3;
-  text-decoration: underline;
-}
-
-/* Submit Button - WCAG AAA Compliant */
-.submit-button {
+.login-button {
   padding: 1rem 2rem;
   background: #4338ca;
   color: #ffffff;
@@ -310,45 +279,31 @@ const handleLogin = async () => {
   letter-spacing: 0.025em;
 }
 
-.submit-button:hover:not(:disabled) {
+.login-button:hover:not(:disabled) {
   background: #3730a3;
   border-color: #3730a3;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(67, 56, 202, 0.3);
 }
 
-.submit-button:focus {
-  outline: 3px solid #4338ca;
+.login-button:focus {
+  outline: 3px solid #818cf8;
   outline-offset: 3px;
 }
 
-.submit-button:disabled {
+.login-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.signup-prompt {
-  margin-top: 2rem;
-  text-align: center;
-  padding-top: 2rem;
-  border-top: 1px solid var(--input-border);
-}
-
-.signup-prompt p {
-  font-size: 0.9375rem;
-  color: var(--text-secondary);
-  margin: 0;
-  font-weight: 500;
-}
-
-.signup-link {
-  color: #4338ca;
+a {
+  color: var(--link-color);
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 600;
 }
 
-.signup-link:hover {
-  color: #3730a3;
+a:hover {
+  color: var(--link-hover);
   text-decoration: underline;
 }
 
@@ -361,37 +316,21 @@ const handleLogin = async () => {
     min-height: 40vh;
   }
 
-  .logo {
-    width: 100px;
+  .login-logo {
+    width: 200px;
   }
 
-  .brand-title {
-    font-size: 2.5rem;
-  }
-
-  .brand-subtitle {
-    font-size: 1.125rem;
-  }
-
-  .login-form-container {
+  .login-form {
     padding: 2.5rem 2rem;
   }
 }
 
 @media (max-width: 480px) {
-  .logo {
-    width: 80px;
+  .login-logo {
+    width: 160px;
   }
 
-  .brand-title {
-    font-size: 2rem;
-  }
-
-  .brand-subtitle {
-    font-size: 1rem;
-  }
-
-  .login-form-container {
+  .login-form {
     padding: 2rem 1.5rem;
   }
 
@@ -399,13 +338,7 @@ const handleLogin = async () => {
     font-size: 1.75rem;
   }
 
-  .form-actions {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-
-  .submit-button {
+  .login-button {
     font-size: 1rem;
   }
 }

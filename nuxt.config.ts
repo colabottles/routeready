@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     strict: false,
     typeCheck: false
   },
+  ssr: false,
   imports: {
     autoImport: true
   },
