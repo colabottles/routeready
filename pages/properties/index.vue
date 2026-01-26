@@ -54,9 +54,9 @@
             class="form-select filter-select"
             @change="filterProperties">
             <option value="">All Types</option>
-            <option value="commercial">Commercial</option>
-            <option value="residential">Residential</option>
-            <option value="industrial">Industrial</option>
+            <option value="Commercial">Commercial</option>
+            <option value="Residential">Residential</option>
+            <option value="Industrial">Industrial</option>
           </select>
 
           <label for="status-filter" class="visually-hidden">Filter by status</label>
@@ -174,7 +174,7 @@
         <div class="empty-icon" aria-hidden="true">🏢</div>
         <h3 class="empty-title">No Properties Found</h3>
         <p class="empty-text">
-          {{ searchTerm || typeFilter || statusFilter
+          {{ searchTerm || typeFilter || statusFilter || priorityFilter
             ? 'Try adjusting your filters'
             : 'Get started by adding your first property' }}
         </p>
@@ -220,21 +220,15 @@ id="schedule-driver" v-model="scheduleForm.driverId" class="form-select"
           <div class="form-group">
             <label for="schedule-date">Date</label>
             <input
-              id="schedule-date"
-              v-model="scheduleForm.date"
-              type="date"
-              class="form-input"
+id="schedule-date" v-model="scheduleForm.date" type="date" class="form-input"
               required>
           </div>
 
           <div class="form-group">
             <label for="schedule-time">Start Time</label>
             <input
-              id="schedule-time"
-              v-model="scheduleForm.startTime"
-              type="time"
-              class="form-input"
-              required>
+id="schedule-time" v-model="scheduleForm.startTime" type="time"
+              class="form-input" required>
           </div>
 
           <div class="form-group">
@@ -252,11 +246,8 @@ id="schedule-vehicle" v-model="scheduleForm.vehicle" class="form-select"
           <div class="form-group">
             <label for="schedule-notes">Notes (Optional)</label>
             <textarea
-              id="schedule-notes"
-              v-model="scheduleForm.notes"
-              class="form-input"
-              rows="3"
-              placeholder="Special instructions or notes..."/>
+id="schedule-notes" v-model="scheduleForm.notes" class="form-input" rows="3"
+              placeholder="Special instructions or notes..." />
           </div>
 
           <p v-if="scheduleSuccess" class="success-message">Schedule created successfully!</p>
@@ -353,6 +344,8 @@ id="priority-select" v-model="priorityForm.priority" class="form-select"
 </template>
 
 <script setup>
+import { ref, reactive } from 'vue'
+
 definePageMeta({
   layout: 'dashboard',
 })
@@ -375,76 +368,11 @@ const stats = reactive({
   overdue: 3
 })
 
-const properties = reactive([
-  {
-    id: 1,
-    name: 'Westfield Shopping Center',
-    address: '123 Main St, Downtown',
-    type: 'commercial',
-    size: '50,000 sq ft',
-    frequency: 'Weekly',
-    lastService: '3 days ago',
-    nextService: 'Today',
-    status: 'active',
-    priority: 'normal',
-    icon: '🏬'
-  },
-  {
-    id: 2,
-    name: 'Riverside Apartments',
-    address: '456 River Rd, Riverside',
-    type: 'residential',
-    size: '25 units',
-    frequency: 'Bi-weekly',
-    lastService: '1 week ago',
-    nextService: 'Tomorrow',
-    status: 'active',
-    priority: 'normal',
-    icon: '🏠'
-  },
-  {
-    id: 3,
-    name: 'Industrial Park Complex',
-    address: '789 Industrial Blvd, South Side',
-    type: 'industrial',
-    size: '100,000 sq ft',
-    frequency: 'Monthly',
-    lastService: '2 weeks ago',
-    nextService: 'Next week',
-    status: 'maintenance',
-    priority: 'high',
-    icon: '🏭'
-  },
-  {
-    id: 4,
-    name: 'City Office Building',
-    address: '321 Government Ave, Downtown',
-    type: 'commercial',
-    size: '75,000 sq ft',
-    frequency: 'Weekly',
-    lastService: '2 days ago',
-    nextService: 'Friday',
-    status: 'active',
-    priority: 'normal',
-    icon: '🏢'
-  },
-  {
-    id: 5,
-    name: 'Sunset Medical Center',
-    address: '654 Health Way, Midtown',
-    type: 'commercial',
-    size: '120,000 sq ft',
-    frequency: 'Twice weekly',
-    lastService: '1 day ago',
-    nextService: 'Tomorrow',
-    status: 'active',
-    priority: 'high',
-    icon: '🏥'
-  }
-])
+// Fetch properties from database
+const { data: propertiesData } = await useFetch('/api/properties')
+const properties = reactive(propertiesData.value?.data || [])
 
 const filteredProperties = ref([...properties])
-
 const priorityForm = reactive({
   id: null,
   priority: ''
@@ -566,7 +494,6 @@ function openScheduleModal(property) {
 }
 
 function saveSchedule() {
-  // In a real app, this would save to the database
   console.log('Creating schedule:', scheduleForm)
   scheduleSuccess.value = true
 
@@ -596,7 +523,6 @@ function deleteProperty() {
 }
 
 function exportProperties() {
-  // In a real app, this would generate and download a CSV/Excel file
   const csvContent = [
     ['Name', 'Address', 'Type', 'Size', 'Frequency', 'Status', 'Last Service', 'Next Service'],
     ...filteredProperties.value.map(p => [
@@ -652,8 +578,7 @@ useHead({
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 2rem;
-  flex-wrap: wrap;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .page-title {
@@ -751,11 +676,6 @@ useHead({
 .export-btn {
   margin-left: auto;
 }
-
-/* .form-input,
-.form-select {
- Removed old min-width rule
-} */
 
 /* Properties Section */
 .properties-section {
@@ -1180,6 +1100,35 @@ useHead({
   min-width: 60px;
 }
 
+.status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.status-active {
+  background: #10b981 !important;
+  color: #ffffff !important;
+}
+
+.status-pending {
+  background: #f59e0b !important;
+  color: #000000 !important;
+}
+
+.status-inactive {
+  background: #6b7280 !important;
+  color: #ffffff !important;
+}
+
+.status-warning {
+  background: #f59e0b !important;
+  color: #000000 !important;
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
   .property-details {
@@ -1231,6 +1180,11 @@ useHead({
 
   .property-actions {
     flex-wrap: wrap;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
   }
 }
 </style>

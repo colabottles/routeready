@@ -1,29 +1,39 @@
+// server/api/properties/index.post.ts
+import { defineEventHandler, readBody, createError } from 'h3'
+import { getDb } from '~/server/utils/db'
+
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+  try {
+    const body = await readBody(event)
 
-  // Validate required fields
-  if (!body.name || !body.type || !body.address || !body.size || !body.frequency || !body.priority) {
-    throw createError({
-      statusCode: 400,
-      statusMessage: 'Missing required fields'
-    })
-  }
+    // Validate required fields
+    if (!body.name || !body.type || !body.address || !body.size || !body.frequency || !body.priority) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: 'Missing required fields'
+      })
+    }
 
-  // In a real app, insert into your database:
-  /*
-  const result = await event.context.db.query(
-    `INSERT INTO properties
-    (name, address, type, size, icon, frequency, priority, start_date, preferred_time,
-     contact_name, contact_phone, contact_email, access_instructions, special_requirements, status, created_at, updated_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
-    [
+    const db = getDb()
+
+    const query = `
+      INSERT INTO properties (
+        name, address, type, size, icon,
+        frequency, priority, start_date, preferred_time,
+        contact_name, contact_phone, contact_email,
+        access_instructions, special_requirements, status
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)
+      RETURNING *
+    `
+
+    const values = [
       body.name,
       body.address,
       body.type,
       body.size,
       body.icon || '🏢',
       body.frequency,
-      body.priority,
+      body.priority || 'normal',
       body.startDate || null,
       body.preferredTime || null,
       body.contactName || null,
@@ -33,38 +43,19 @@ export default defineEventHandler(async (event) => {
       body.specialRequirements || null,
       body.status || 'active'
     ]
-  )
 
-  const propertyId = result.insertId
-  */
+    const result = await db.query(query, values)
 
-  // Mock response for development
-  const propertyId = Math.floor(Math.random() * 10000)
+    return {
+      success: true,
+      data: result.rows[0]
+    }
 
-  const newProperty = {
-    id: propertyId,
-    name: body.name,
-    address: body.address,
-    type: body.type,
-    size: body.size,
-    icon: body.icon || '🏢',
-    frequency: body.frequency,
-    priority: body.priority,
-    startDate: body.startDate || null,
-    preferredTime: body.preferredTime || null,
-    contactName: body.contactName || null,
-    contactPhone: body.contactPhone || null,
-    contactEmail: body.contactEmail || null,
-    accessInstructions: body.accessInstructions || null,
-    specialRequirements: body.specialRequirements || null,
-    status: body.status || 'active',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString()
-  }
-
-  return {
-    success: true,
-    data: newProperty,
-    message: 'Property created successfully'
+  } catch (error) {
+    console.error('Error creating property:', error)
+    throw createError({
+      statusCode: 500,
+      statusMessage: error instanceof Error ? error.message : 'Failed to create property'
+    })
   }
 })

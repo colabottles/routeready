@@ -20,7 +20,7 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'RouteReady - Route management and delivery optimization platform' }
+        { name: 'description', content: 'RouteReady - Route management and maintenance optimization platform' }
       ]
     }
   },
@@ -45,6 +45,18 @@ export default defineNuxtConfig({
   nitro: {
     experimental: {
       openAPI: true
-    }
+    },
+    database: {
+      default: {
+        connector: 'postgresql',
+        options: {
+          host: 'localhost',
+          port: 5432,
+          database: 'routeready',
+          user: 'postgres',
+          password: 'routeready123'
+        },
+      },
+    },
   }
 })

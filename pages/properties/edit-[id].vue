@@ -37,13 +37,22 @@
             </div>
 
             <div class="form-group">
-              <label for="property-type">Property Type <span class="required">*</span></label>
-              <select id="property-type" v-model="formData.type" class="form-select" required>
-                <option value="">Select Type</option>
-                <option value="commercial">Commercial</option>
-                <option value="residential">Residential</option>
-                <option value="industrial">Industrial</option>
-              </select>
+              <label for="property-type">
+                Property Type
+                <span class="required">*</span>
+              </label>
+              <input
+                id="property-type"
+                v-model="formData.type"
+                type="text"
+                class="form-input"
+                placeholder="e.g., Commercial, Hospital, Gas Station"
+                list="property-types-list"
+                required>
+              <datalist id="property-types-list">
+                <option v-for="type in savedTypes" :key="type" :value="type"/></datalist>
+              <small class="help-text">Type a property category or choose from existing
+                types</small>
             </div>
           </fieldset>
 
@@ -189,7 +198,7 @@
               v-model="formData.accessInstructions"
               class="form-input"
               rows="3"
-              placeholder="Enter gate codes, key locations, or special access requirements..."/>
+              placeholder="Enter gate codes, key locations, or special access requirements..." />
           </div>
 
           <div class="form-group">
@@ -199,7 +208,7 @@
               v-model="formData.specialRequirements"
               class="form-input"
               rows="3"
-              placeholder="Any special cleaning requirements, hazards, or important notes..."/>
+              placeholder="Any special cleaning requirements, hazards, or important notes..." />
           </div>
 
           <div class="form-group">
@@ -336,12 +345,20 @@ const successMessage = ref('')
 const errorMessage = ref('')
 const showDeleteModal = ref(false)
 
+const savedTypes = ref([])
+
+// Load existing types from localStorage
+onMounted(() => {
+  const types = JSON.parse(localStorage.getItem('propertyTypes') ?? '["Commercial", "Residential", "Industrial"]')
+  savedTypes.value = types
+})
+
 // In a real app, this would fetch from API based on propertyId
 // const { data: propertyData, pending, error } = await useFetch(`/api/properties/${propertyId}`)
 
 const formData = reactive({
   name: 'Westfield Shopping Center',
-  type: 'commercial',
+  type: 'Commercial',
   address: '123 Main St, Downtown',
   size: '50,000 sq ft',
   icon: '🏬',
@@ -398,6 +415,12 @@ async function saveProperty() {
       return
     }
 
+    // Save the new property type if it doesn't exist
+    if (formData.type && !savedTypes.value.includes(formData.type)) {
+      savedTypes.value.push(formData.type)
+      localStorage.setItem('propertyTypes', JSON.stringify(savedTypes.value))
+    }
+
     // In a real app, this would be an API call
     // await $fetch(`/api/properties/${propertyId}`, { method: 'PUT', body: formData })
 
@@ -411,10 +434,10 @@ async function saveProperty() {
     setTimeout(() => {
       successMessage.value = ''
     }, 3000)
-
-  } catch {
+  } catch (error) {
     errorMessage.value = 'Failed to update property. Please try again.'
     isSaving.value = false
+    console.error('Error saving property:', error)
   }
 }
 
@@ -541,6 +564,13 @@ fieldset.form-row legend {
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
+}
+
+.help-text {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
 }
 
 .required {

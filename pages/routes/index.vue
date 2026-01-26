@@ -4,7 +4,7 @@
       <div class="header-top">
         <div>
           <h1 class="page-title">Routes</h1>
-          <p class="page-subtitle">Manage delivery routes and assignments</p>
+          <p class="page-subtitle">Manage maintenance routes and assignments</p>
         </div>
         <NuxtLink to="/routes/new" class="btn btn-primary">
           <PlusIcon :size="18" />
@@ -190,7 +190,7 @@ function activateRoute(route) {
 useHead({
   title: 'Routes - RouteReady',
   meta: [
-    { name: 'description', content: 'Manage delivery routes' }
+    { name: 'description', content: 'Manage maintenance routes' }
   ]
 })
 </script>

@@ -152,7 +152,7 @@ const handleLogout = async () => {
   align-items: center;
   height: 70px;
   width: 100%;
-  background: linear-gradient(90deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  background: var(--bg-gradient-start);
   position: fixed;
   top: 0;
   left: 0;
@@ -211,7 +211,7 @@ const handleLogout = async () => {
 
 .sidebar {
   width: 260px;
-  background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+  background: var(--bg-gradient-start);
   color: white;
   display: flex;
   flex-direction: column;

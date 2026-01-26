@@ -97,14 +97,59 @@
   --transition-slow: 350ms ease-out;
 }
 
-:root {
+/* :root {
   --left-bg-color: #795695;
   --right-bg-color: #fff;
-    /* #2d1c7f */
   --primary-color: #643b9f;
   --text-color: #eae6e0;
   --border-color: #c8a4d4;
-  --focus-ring-color: rgba(100, 59, 159, 0.75);
+  --focus-ring-color-dark: rgba(100, 59, 159, 0.75);
+} */
+
+/* EXPERIMENTAL
+  :root[data-theme="light"] {
+    --focus-ring-color-light: #2d1c7f;
+  }
+ */
+
+/* CSS Variables for theme colors */
+:root[data-theme="light"] {
+  --bg-gradient-start: #667eea;
+  --bg-gradient-end: #764ba2;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f9fafb;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
+  --input-focus: #667eea;
+  --error-bg: #fef2f2;
+  --error-border: #fecaca;
+  --error-text: #991b1b;
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+  --link-color: #4338ca;
+  --link-hover: #3730a3;
+}
+
+/* Dark mode - WCAG AA compliant colors */
+:root[data-theme="dark"] {
+  --bg-gradient-start: #110c47;
+  --bg-gradient-end: #2d2fa0;
+  --bg-primary: #1f2937;
+  --bg-secondary: #111827;
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+  --input-bg: #374151;
+  --input-border: #4b5563;
+  --input-focus: #818cf8;
+  --error-bg: #7f1d1d;
+  --error-border: #991b1b;
+  --error-text: #fecaca;
+  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.3);
+  --link-color: #818cf8;
+  --link-hover: #6366f1;
 }
 
 html,

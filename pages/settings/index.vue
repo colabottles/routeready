@@ -821,7 +821,7 @@ const companySettings = reactive({
   state: 'NY',
   zip: '10001',
   country: 'US',
-  description: 'Leading route optimization and delivery management platform',
+  description: 'Leading route optimization and maintenance management platform',
   logoUrl: null
 })
 
@@ -840,15 +840,15 @@ const passwordChange = reactive({
 })
 
 const emailNotifications = reactive([
-  { id: 1, label: 'Delivery Updates', description: 'Get notified when deliveries are completed', enabled: true },
+  { id: 1, label: 'Maintenance Updates', description: 'Get notified when maintenance is completed', enabled: true },
   { id: 2, label: 'Driver Assignments', description: 'When drivers are assigned to routes', enabled: true },
-  { id: 3, label: 'Vehicle Maintenance', description: 'Reminders for scheduled maintenance', enabled: true },
+  { id: 3, label: 'Vehicle Maintenance', description: 'Reminders for scheduled vehicle maintenance', enabled: true },
   { id: 4, label: 'Weekly Reports', description: 'Summary of weekly performance', enabled: false }
 ])
 
 const pushNotifications = reactive([
   { id: 1, label: 'Route Delays', description: 'When routes are running behind schedule', enabled: true },
-  { id: 2, label: 'Failed Deliveries', description: 'When a delivery fails', enabled: true },
+  { id: 2, label: 'Failed Maintenance', description: 'When maintenance job fails', enabled: true },
   { id: 3, label: 'New Messages', description: 'When you receive new messages', enabled: false }
 ])
 

@@ -294,7 +294,7 @@ const stats = reactive({
 const recentActivity = reactive([
   {
     id: 1,
-    type: 'delivery',
+    type: 'maintenance',
     icon: '📦',
     text: 'John Smith completed Downtown Commercial route - 12 stops serviced',
     timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString()
@@ -637,7 +637,7 @@ useHead({
   flex-shrink: 0;
 }
 
-.activity-delivery {
+.activity-maintenance {
   background: rgba(16, 185, 129, 0.1);
 }
 
