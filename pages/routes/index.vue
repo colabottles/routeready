@@ -91,9 +91,9 @@
           <NuxtLink :to="`/routes/${route.id}/edit`" class="btn btn-secondary btn-small">
             Edit
           </NuxtLink>
-          <button class="btn btn-secondary btn-small">
+          <NuxtLink :to="`/routes/${route.id}/map`" class="btn btn-secondary btn-small">
             View Map
-          </button>
+          </NuxtLink>
           <button
             v-if="route.status === 'planned'"
             class="btn btn-success btn-small"

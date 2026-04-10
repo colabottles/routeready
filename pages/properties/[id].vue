@@ -307,6 +307,7 @@ const propertyId = route.params.id
 // In a real app, this would fetch from API
 const property = reactive({
   id: propertyId,
+  routeId: 2, // replace with actual route ID from Supabase
   name: 'Westfield Shopping Center',
   address: '123 Main St, Downtown',
   type: 'commercial',
@@ -414,8 +415,9 @@ function scheduleService() {
 }
 
 function viewOnMap() {
-  // In a real app, this would open a map view
-  alert('Map view would open here with property location')
+  if (property.routeId) {
+    router.push(`/routes/${property.routeId}/map`)
+  }
 }
 
 function deleteProperty() {

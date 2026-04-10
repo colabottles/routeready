@@ -141,14 +141,23 @@ v-show="activeTab === 'company'" class="settings-section"
               <div class="file-upload-area">
                 <figure class="current-logo">
                   <img
-v-if="companySettings.logoUrl" :src="companySettings.logoUrl"
-                    alt="Company Logo" class="logo-preview">
+                    v-if="companyLogo"
+                    :src="companyLogo"
+                    alt="Company Logo"
+                    class="logo-preview">
                   <figcaption v-else class="logo-placeholder">No logo uploaded</figcaption>
                 </figure>
-                <button type="button" class="btn btn-secondary" @click="uploadLogo">
+                <button type="button" class="btn btn-secondary" @click="triggerLogoUpload">
                   <span aria-hidden="true">📸</span>
                   Upload New Logo
                 </button>
+                <input
+                  ref="logoFileInput"
+                  type="file"
+                  accept="image/png, image/jpeg, image/webp"
+                  class="visually-hidden"
+                  aria-label="Upload company logo"
+                  @change="handleLogoUpload" >
                 <p class="upload-hint">Recommended: 500x500px, PNG or JPG</p>
               </div>
             </div>
@@ -891,51 +900,44 @@ const billingHistory = reactive([
   { id: 3, date: 'Oct 1, 2024', description: 'Professional Plan - Monthly', amount: 99 }
 ])
 
+const { companyLogo, uploadLogo } = useOrganization()
+
+function triggerLogoUpload() {
+  logoFileInput.value?.click()
+}
+
+async function handleLogoUpload(event) {
+  const file = event.target.files?.[0]
+  if (!file) return
+  await uploadLogo(file)
+}
+
 // Load saved settings on mount
 onMounted(() => {
+  if (!import.meta.client) return
   try {
+    const savedLogo = localStorage.getItem('routeready-logo')
+    if (savedLogo) companyLogo.value = savedLogo
+
     const savedSettings = localStorage.getItem('routeready-settings')
     if (savedSettings) {
       const parsed = JSON.parse(savedSettings)
 
-      if (parsed.preferences) {
-        Object.assign(preferences, parsed.preferences)
-      }
-
-      if (parsed.company) {
-        Object.assign(companySettings, parsed.company)
-      }
-
-      if (parsed.admin) {
-        Object.assign(adminProfile, parsed.admin)
-      }
-
-      if (parsed.security) {
-        Object.assign(securitySettings, parsed.security)
-      }
+      if (parsed.preferences) Object.assign(preferences, parsed.preferences)
+      if (parsed.company) Object.assign(companySettings, parsed.company)
+      if (parsed.admin) Object.assign(adminProfile, parsed.admin)
+      if (parsed.security) Object.assign(securitySettings, parsed.security)
 
       if (parsed.notifications) {
-        if (parsed.notifications.email) {
-          parsed.notifications.email.forEach((notif, index) => {
-            if (emailNotifications[index]) {
-              emailNotifications[index].enabled = notif.enabled
-            }
-          })
-        }
-        if (parsed.notifications.push) {
-          parsed.notifications.push.forEach((notif, index) => {
-            if (pushNotifications[index]) {
-              pushNotifications[index].enabled = notif.enabled
-            }
-          })
-        }
-        if (parsed.notifications.sms) {
-          parsed.notifications.sms.forEach((notif, index) => {
-            if (smsNotifications[index]) {
-              smsNotifications[index].enabled = notif.enabled
-            }
-          })
-        }
+        parsed.notifications.email?.forEach((notif, index) => {
+          if (emailNotifications[index]) emailNotifications[index].enabled = notif.enabled
+        })
+        parsed.notifications.push?.forEach((notif, index) => {
+          if (pushNotifications[index]) pushNotifications[index].enabled = notif.enabled
+        })
+        parsed.notifications.sms?.forEach((notif, index) => {
+          if (smsNotifications[index]) smsNotifications[index].enabled = notif.enabled
+        })
       }
     }
   } catch (error) {
@@ -944,6 +946,7 @@ onMounted(() => {
 })
 
 function saveAllSettings() {
+  if (!import.meta.client) return
   try {
     const allSettings = {
       company: companySettings,
@@ -951,22 +954,18 @@ function saveAllSettings() {
       notifications: {
         email: emailNotifications,
         push: pushNotifications,
-        sms: smsNotifications
+        sms: smsNotifications,
       },
-      preferences: preferences,
-      security: securitySettings
+      preferences,
+      security: securitySettings,
     }
-
     localStorage.setItem('routeready-settings', JSON.stringify(allSettings))
+    localStorage.setItem('routeready-logo', companyLogo.value || '')
     alert('Settings saved successfully!')
   } catch (error) {
     console.error('Error saving settings:', error)
     alert('Failed to save settings. Please try again.')
   }
-}
-
-function uploadLogo() {
-  console.log('Upload logo')
 }
 
 function uploadAvatar() {
@@ -1680,21 +1679,6 @@ input:checked+.toggle-slider:before {
   font-size: 0.875rem;
   color: #b91c1c;
   margin: 0;
-}
-
-.btn-danger {
-  padding: 0.625rem 1.25rem;
-  background: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.btn-danger:hover {
-  background: #dc2626;
 }
 
 @media (max-width: 768px) {
