@@ -61,14 +61,11 @@ xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
         <NuxtLink to="/properties" class="nav-item" active-class="active">
           <span class="nav-icon" aria-hidden="true">
             <svg
-xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
               stroke-linejoin="round" aria-hidden="true">
-              <rect x="4" y="2" width="16" height="20" />
-              <line x1="4" y1="22" x2="20" y2="22" />
-              <rect x="8" y="5" width="3" height="5" />
-              <rect x="13" y="5" width="3" height="5" />
-              <rect x="10" y="14" width="4" height="10" />
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
             </svg>
           </span>
           <span>Properties</span>
@@ -383,11 +380,16 @@ const handleLogout = async () => {
   background-color: rgba(255, 255, 255, 0.15);
   color: white;
   border-left: 4px solid var(--button-primary);
+  padding-left: calc(1.5rem - 4px);
 }
 
 .nav-icon {
-  font-size: 1.25rem;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  flex-shrink: 0;
+  margin-right: 0.75rem;
 }
 
 .sidebar-footer {
@@ -498,13 +500,15 @@ const handleLogout = async () => {
 }
 
 :global(.btn-secondary) {
-  background: var(--bg-secondary);
+  background: var(--bg-primary);
   color: var(--text-primary);
-  border: 1px solid var(--input-border);
+  border: 2px solid var(--text-secondary);
 }
 
 :global(.btn-secondary:hover) {
-  background: var(--input-border);
+  background: var(--button-primary);
+  color: white;
+  border-color: var(--button-primary);
 }
 
 :global(.btn-success) {

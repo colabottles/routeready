@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   pages: true,
   typescript: {
     strict: false,
@@ -38,7 +38,7 @@ export default defineNuxtConfig({
     supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
     databaseUrl: process.env.DATABASE_URL || '',
     betterAuthSecret: process.env.BETTER_AUTH_SECRET || '',
-    betterAuthUrl: process.env.BETTER_AUTH_URL || '',
+    betterAuthUrl: process.env.BETTER_AUTH_URL || 'http://localhost:8080',  // ← fallback updated
     // Public (exposed to client)
     public: {
       supabaseUrl: process.env.SUPABASE_URL || '',

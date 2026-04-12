@@ -150,6 +150,9 @@
   --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.3);
   --link-color: #818cf8;
   --link-hover: #6366f1;
+  --button-secondary: #374151;
+  --button-secondary-hover: #4b5563;
+  --button-secondary-border: #6b7280;
 }
 
 html,
@@ -438,17 +441,17 @@ a.logo {
 
 /* Secondary */
 .btn-secondary {
-  background: var(--gray-100);
-  color: var(--gray-700);
-  border: 1px solid var(--gray-300);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 2px solid var(--text-secondary);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: var(--primary-600);
+  background: var(--button-primary);
   color: white;
-  border-color: var(--primary-600);
+  border-color: var(--button-primary);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow);
 }
 
 .btn-secondary:focus-visible {
@@ -745,4 +748,15 @@ a.logo {
   .dashboardPage {
     padding: 0;
   }
+}
+
+/* Input field autofill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px var(--input-bg) inset !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  caret-color: var(--text-primary);
+  transition: background-color 5000s ease-in-out 0s;
 }

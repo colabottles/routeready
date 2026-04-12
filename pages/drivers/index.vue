@@ -402,6 +402,7 @@ useHead({
   display: flex;
   gap: 1rem;
   align-items: center;
+  max-width: 600px;
 }
 
 .search-wrapper {
@@ -439,6 +440,7 @@ useHead({
   padding: 0.75rem 1rem;
   border: 1.5px solid var(--input-border);
   border-radius: 8px;
+  flex: 1;
   font-size: 0.9375rem;
   background: var(--input-bg);
   color: var(--text-primary);
@@ -592,6 +594,7 @@ useHead({
 .btn-small {
   font-size: 0.8125rem;
   padding: 0.5rem 0.875rem;
+  background-color: var(--button-primary);
 }
 
 .btn-deactivate {

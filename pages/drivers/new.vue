@@ -55,14 +55,12 @@ class="required-star"
               Phone Number
               <span class="required-star" aria-label="required">*</span>
             </label>
-            <input
+            <PhoneInput
               id="driver-phone"
               v-model="formData.phone"
-              type="tel"
-              class="form-input"
-              placeholder="e.g. (555) 123-4567"
-              required
-              autocomplete="tel">
+              label="Phone Number"
+              :required="true"
+              autocomplete="tel" />
           </div>
 
           <div class="form-group">

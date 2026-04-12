@@ -1,56 +1,71 @@
-// Stub — replace with Supabase fetch when database is ready
-// Expected table: organizations (id, name, logo_url, address, ...)
+import { createClient } from '@supabase/supabase-js'
+
+let _supabase: ReturnType<typeof createClient> | null = null
+
+function getSupabase() {
+  if (_supabase) return _supabase
+  const config = useRuntimeConfig()
+  _supabase = createClient(
+    config.public.supabaseUrl as string,
+    config.public.supabaseAnonKey as string
+  )
+  return _supabase
+}
 
 export function useOrganization() {
-  // const supabase = useSupabaseClient()
-  const companyLogo = useState('company-logo', () => null)
-  const orgName = useState('org-name', () => 'RouteReady')
+  const supabase = getSupabase()
+
+  const companyLogo = useState<string | null>('company-logo', () => null)
+  const orgName = useState<string>('org-name', () => 'RouteReady')
+  const orgId = useState<string | null>('org-id', () => null)
 
   async function fetchOrganization() {
-    // TODO: uncomment when organizations table exists
-    // const { data, error } = await supabase
-    //   .from('organizations')
-    //   .select('name, logo_url')
-    //   .single()
-    // if (data) {
-    //   companyLogo.value = data.logo_url
-    //   orgName.value = data.name
-    // }
+    const { data, error } = await supabase
+      .from('organizations')
+      .select('id, name, logo_url')
+      .limit(1)
+      .maybeSingle()
 
-    // Temporary: fall back to localStorage
-    if (import.meta.client) {
-      const savedLogo = localStorage.getItem('routeready-logo')
-      if (savedLogo) companyLogo.value = savedLogo
+    if (error) {
+      console.error('Error fetching organization:', error.message)
+      return
+    }
+    if (data) {
+      orgId.value = data.id
+      orgName.value = data.name
+      companyLogo.value = data.logo_url
     }
   }
 
   async function uploadLogo(file: File) {
-    // TODO: uncomment when Supabase Storage is ready
-    // const { data, error } = await supabase.storage
-    //   .from('org-assets')
-    //   .upload(`logos/${Date.now()}-${file.name}`, file, { upsert: true })
-    // if (data) {
-    //   const { data: { publicUrl } } = supabase.storage
-    //     .from('org-assets')
-    //     .getPublicUrl(data.path)
-    //   companyLogo.value = publicUrl
-    //   await supabase.from('organizations').update({ logo_url: publicUrl }).eq('id', orgId)
-    // }
+    if (!orgId.value) await fetchOrganization()
 
-    // Temporary: use base64 + localStorage
-    return new Promise<void>((resolve) => {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        const result = e.target?.result as string
-        companyLogo.value = result
-        if (import.meta.client) {
-          localStorage.setItem('routeready-logo', result)
-        }
-        resolve()
-      }
-      reader.readAsDataURL(file)
-    })
+    if (!orgId.value) {
+      console.error('No organization found — cannot upload logo')
+      return
+    }
+
+    const path = `logos/${orgId.value}-${Date.now()}-${file.name}`
+    const { data, error } = await supabase.storage
+      .from('org-assets')
+      .upload(path, file, { upsert: true })
+
+    if (error) {
+      console.error('Error uploading logo:', error.message)
+      return
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('org-assets')
+      .getPublicUrl(data.path)
+
+    companyLogo.value = publicUrl
+
+    await supabase
+      .from('organizations')
+      .update({ logo_url: publicUrl })
+      .eq('id', orgId.value)
   }
 
-  return { companyLogo, orgName, fetchOrganization, uploadLogo }
+  return { companyLogo, orgName, orgId, fetchOrganization, uploadLogo }
 }
