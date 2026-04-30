@@ -595,6 +595,7 @@ useHead({
   font-size: 0.8125rem;
   padding: 0.5rem 0.875rem;
   background-color: var(--button-primary);
+  color: white;
 }
 
 .btn-deactivate {

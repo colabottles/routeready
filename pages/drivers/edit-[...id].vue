@@ -270,13 +270,18 @@ useHead({
   gap: 0.5rem;
   color: var(--button-primary);
   text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9375rem;
+  font-weight: 700;
+  font-size: 1rem;
   margin-bottom: 1.5rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 8px;
+  transition: background 0.2s;
 }
 
 .back-link:hover {
-  text-decoration: underline;
+  background: rgba(102, 126, 234, 0.2);
+  text-decoration: none;
 }
 
 .page-header {
@@ -307,6 +312,11 @@ useHead({
   display: flex;
   gap: 0.75rem;
   flex-shrink: 0;
+}
+
+.header-actions .btn-secondary {
+  background-color: var(--button-primary);
+  color: white;
 }
 
 .card {
