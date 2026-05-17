@@ -4,46 +4,115 @@
       <h1 class="page-title">Vehicles</h1>
       <p class="page-subtitle">Manage your fleet and maintenance schedules</p>
       <NuxtLink to="/vehicles/new" class="btn btn-primary">
-        <PlusIcon :size="18" />
+        <svg
+xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
         <span>Add Vehicle</span>
       </NuxtLink>
     </header>
 
-    <!-- Loading State -->
-    <section v-if="pending" class="loading-state" aria-live="polite">
-      <span class="loading-spinner" aria-hidden="true">⏳</span>
-      <p>Loading vehicles...</p>
-    </section>
+      <!-- Loading state -->
+      <section v-if="pending" class="loading-state" aria-live="polite">
+        <svg
+xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true" class="loading-spinner">
+          <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+        </svg>
+        <p>Loading vehicles...</p>
+      </section>
 
-    <!-- Error State -->
-    <section v-else-if="error" class="error-state">
-      <span class="error-icon" aria-hidden="true">⚠️</span>
-      <h2 class="error-title">Failed to load vehicles</h2>
-      <p class="error-message">{{ error.message }}</p>
-      <button class="btn btn-primary" @click="refresh()">Try Again</button>
-    </section>
+      <!-- Error state -->
+      <section v-else-if="error" class="error-state">
+        <svg
+xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true" class="error-icon">
+          <path
+            d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+          <line x1="12" y1="9" x2="12" y2="13" />
+          <line x1="12" y1="17" x2="12.01" y2="17" />
+        </svg>
+        <h2 class="error-title">Failed to load vehicles</h2>
+        <p class="error-message">{{ error.message }}</p>
+        <button class="btn btn-primary" @click="refresh()">Try Again</button>
+      </section>
+
+      <!-- Empty state -->
+      <section v-if="filteredVehicles.length === 0" class="empty-state" aria-live="polite">
+        <svg
+xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true" class="empty-icon">
+          <rect x="1" y="3" width="15" height="13" rx="1" />
+          <path d="M16 8h4l3 4v4h-7V8z" />
+          <circle cx="5.5" cy="18.5" r="2.5" />
+          <circle cx="18.5" cy="18.5" r="2.5" />
+        </svg>
+        <h2 class="empty-title">No vehicles found</h2>
+        <p class="empty-description">Try adjusting your search or filters</p>
+      </section>
 
     <!-- Vehicles Content -->
     <template v-else>
       <!-- Stats Grid -->
       <section class="stats-grid">
+        <!-- Total Vehicles -->
         <article class="stat-card">
-          <span class="stat-icon" aria-hidden="true">🚚</span>
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true" class="stat-icon">
+            <rect x="1" y="3" width="15" height="13" rx="1" />
+            <path d="M16 8h4l3 4v4h-7V8z" />
+            <circle cx="5.5" cy="18.5" r="2.5" />
+            <circle cx="18.5" cy="18.5" r="2.5" />
+          </svg>
           <strong class="stat-value">{{ stats.total }}</strong>
           <span class="stat-label">Total Vehicles</span>
         </article>
+
+        <!-- Active -->
         <article class="stat-card">
-          <span class="stat-icon" aria-hidden="true">✅</span>
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true" class="stat-icon">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
+          </svg>
           <strong class="stat-value">{{ stats.active }}</strong>
           <span class="stat-label">Active</span>
         </article>
+
+        <!-- In Maintenance -->
         <article class="stat-card">
-          <span class="stat-icon" aria-hidden="true">🔧</span>
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true" class="stat-icon">
+            <path
+              d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+          </svg>
           <strong class="stat-value">{{ stats.maintenance }}</strong>
           <span class="stat-label">In Maintenance</span>
         </article>
+
+        <!-- Needs Service -->
         <article class="stat-card">
-          <span class="stat-icon" aria-hidden="true">⚠️</span>
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true" class="stat-icon">
+            <path
+              d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
           <strong class="stat-value">{{ stats.needsService }}</strong>
           <span class="stat-label">Needs Service</span>
         </article>
@@ -78,7 +147,15 @@
       <section class="vehicles-grid">
         <article v-for="vehicle in filteredVehicles" :key="vehicle.id" class="vehicle-card">
           <header class="vehicle-header">
-            <span class="vehicle-icon" aria-hidden="true">{{ vehicle.icon }}</span>
+            <svg
+xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true" class="vehicle-icon">
+              <rect x="1" y="3" width="15" height="13" rx="1" />
+              <path d="M16 8h4l3 4v4h-7V8z" />
+              <circle cx="5.5" cy="18.5" r="2.5" />
+              <circle cx="18.5" cy="18.5" r="2.5" />
+            </svg>
             <h2 class="vehicle-name">{{ vehicle.name }}</h2>
             <p class="vehicle-plate">{{ vehicle.license_plate }}</p>
             <span class="vehicle-status" :class="`status-${vehicle.status}`">
@@ -251,8 +328,17 @@ useHead({
 }
 
 .stat-icon {
-  font-size: 2.5rem;
-  line-height: 1;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.loading-spinner,
+.error-icon,
+.empty-icon {
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  display: block;
+  opacity: 0.5;
 }
 
 .stat-value {
@@ -344,8 +430,8 @@ useHead({
 
 .vehicle-icon {
   grid-row: 1 / 3;
-  font-size: 3rem;
-  line-height: 1;
+  align-self: center;
+  color: var(--text-secondary);
 }
 
 .vehicle-name {
@@ -444,9 +530,10 @@ useHead({
 .loading-spinner,
 .error-icon,
 .empty-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
+  color: var(--text-muted);
+  margin: 0 auto 1rem;
   display: block;
+  opacity: 0.5;
 }
 
 .loading-spinner {
@@ -522,7 +609,8 @@ useHead({
   }
 
   .vehicle-icon {
-    font-size: 2.5rem;
+    grid-row: 1 / 3;
+    align-self: center;
   }
 }
 </style>

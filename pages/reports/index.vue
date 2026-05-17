@@ -7,7 +7,14 @@
           <p class="page-subtitle">Route and dispatch performance insights</p>
         </div>
         <button type="button" class="btn btn-primary" @click="generateReport">
-          <span class="btn-icon" aria-hidden="true">📊</span>
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <line x1="18" y1="20" x2="18" y2="10" />
+            <line x1="12" y1="20" x2="12" y2="4" />
+            <line x1="6" y1="20" x2="6" y2="14" />
+          </svg>
           Generate Report
         </button>
       </div>
@@ -46,7 +53,17 @@ id="report-type-select" v-model="selectedReport" class="form-select"
       <div class="metrics-grid">
         <article class="metric-card">
           <div class="metric-header">
-            <span class="metric-icon" aria-hidden="true">🗺️</span>
+            <span class="metric-icon" aria-hidden="true">
+              <svg
+xmlns="http://www.w3.org/2000/svg"
+                width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                focusable="false" class="metric-icon">
+                <circle cx="3" cy="6" r="2" />
+                <circle cx="21" cy="18" r="2" />
+                <path d="M3 8v4a4 4 0 0 0 4 4h10v-4a4 4 0 0 0-4-4H3" />
+              </svg>
+            </span>
             <span class="metric-change positive">+12%</span>
           </div>
           <p class="metric-value">{{ metrics.totalRoutes }}</p>
@@ -56,7 +73,15 @@ id="report-type-select" v-model="selectedReport" class="form-select"
 
         <article class="metric-card">
           <div class="metric-header">
-            <span class="metric-icon" aria-hidden="true">✅</span>
+            <span class="metric-icon" aria-hidden="true">
+              <svg
+xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true" focusable="false" class="metric-icon">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </span>
             <span class="metric-change positive">+5%</span>
           </div>
           <p class="metric-value">{{ metrics.onTimeRate }}%</p>
@@ -66,7 +91,17 @@ id="report-type-select" v-model="selectedReport" class="form-select"
 
         <article class="metric-card">
           <div class="metric-header">
-            <span class="metric-icon" aria-hidden="true">🚚</span>
+            <span class="metric-icon" aria-hidden="true">
+              <svg
+xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true" focusable="false" class="metric-icon">
+                <rect x="1" y="3" width="15" height="13" rx="2" />
+                <path d="M16 8h4l3 5v3h-7V8z" />
+                <circle cx="5.5" cy="18.5" r="2.5" />
+                <circle cx="18.5" cy="18.5" r="2.5" />
+              </svg>
+            </span>
             <span class="metric-change negative">-3%</span>
           </div>
           <p class="metric-value">{{ metrics.avgDistance }} mi</p>
@@ -76,7 +111,16 @@ id="report-type-select" v-model="selectedReport" class="form-select"
 
         <article class="metric-card">
           <div class="metric-header">
-            <span class="metric-icon" aria-hidden="true">💰</span>
+            <span class="metric-icon" aria-hidden="true">
+              <svg
+xmlns="http://www.w3.org/2000/svg"
+                width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"
+                focusable="false" class="metric-icon">
+                <line x1="12" y1="1" x2="12" y2="23" />
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+              </svg>
+            </span>
             <span class="metric-change positive">+8%</span>
           </div>
           <p class="metric-value">${{ metrics.costPerRoute }}</p>
@@ -101,7 +145,15 @@ id="report-type-select" v-model="selectedReport" class="form-select"
         </header>
         <figure class="chart-placeholder">
           <figcaption class="visually-hidden">Daily routes completed chart</figcaption>
-          <div class="placeholder-text" aria-hidden="true">📈 Chart: Daily Routes Completed</div>
+          <div class="placeholder-text" aria-hidden="true">
+            <svg
+xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
+            Chart: Daily Routes Completed
+          </div>
           <div class="placeholder-subtext" aria-hidden="true">Integration with Chart.js or similar
             would go here</div>
         </figure>
@@ -113,28 +165,37 @@ id="report-type-select" v-model="selectedReport" class="form-select"
         </header>
         <figure class="chart-placeholder small">
           <figcaption class="visually-hidden">Route status distribution</figcaption>
-          <div class="placeholder-text" aria-hidden="true">🥧 Pie Chart</div>
+          <div class="placeholder-text" aria-hidden="true">
+            <svg
+xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true">
+              <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
+              <path d="M22 12A10 10 0 0 0 12 2v10z" />
+            </svg>
+            Pie Chart
+          </div>
           <dl class="status-breakdown">
             <div class="status-item">
               <dt>
-                <span class="status-dot completed" aria-hidden="true"/>
+                <span class="status-dot completed" aria-hidden="true" />
                 <span>Completed</span>
               </dt>
-              <dd>847 (92%)</dd>
+              <dd>{{routes.filter(r => r.status === 'completed').length}}</dd>
             </div>
             <div class="status-item">
               <dt>
-                <span class="status-dot pending" aria-hidden="true"/>
+                <span class="status-dot pending" aria-hidden="true" />
                 <span>In Progress</span>
               </dt>
-              <dd>45 (5%)</dd>
+              <dd>{{routes.filter(r => r.status === 'active').length}}</dd>
             </div>
             <div class="status-item">
               <dt>
-                <span class="status-dot failed" aria-hidden="true"/>
-                <span>Failed</span>
+                <span class="status-dot failed" aria-hidden="true" />
+                <span>Planned</span>
               </dt>
-              <dd>28 (3%)</dd>
+              <dd>{{routes.filter(r => r.status === 'planned').length}}</dd>
             </div>
           </dl>
         </figure>
@@ -176,7 +237,17 @@ v-for="(driver, index) in topDrivers" :key="driver.id" class="table-row"
               <div class="col-metric" role="cell">{{ driver.onTimeRate }}%</div>
               <div class="col-metric" role="cell">
                 <div class="rating">
-                  <span class="star" aria-hidden="true">⭐</span>
+                  <span class="star" aria-hidden="true">
+                    <svg
+xmlns="http://www.w3.org/2000/svg"
+                      width="14" height="14" viewBox="0 0 24 24"
+                      fill="currentColor" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round" aria-hidden="true" class="star">
+                      <polygon
+                        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                  </span>
                   <span>{{ driver.rating }}</span>
                 </div>
               </div>
@@ -224,34 +295,59 @@ v-for="(driver, index) in topDrivers" :key="driver.id" class="table-row"
 </template>
 
 <script setup>
-definePageMeta({
-  layout: 'dashboard',
-})
-
 const selectedPeriod = ref('month')
 const selectedReport = ref('overview')
 
-const metrics = reactive({
-  totalRoutes: 920,
-  onTimeRate: 94.5,
-  avgDistance: 28.4,
-  costPerRoute: 12.50
+const [routesRes, driversRes] = await Promise.all([
+  useFetch('/api/routes'),
+  useFetch('/api/drivers')
+])
+
+const routes = reactive(routesRes.data.value?.data || [])
+const drivers = reactive(driversRes.data.value?.data || [])
+
+const metrics = computed(() => {
+  const total = routes.length
+  const completed = routes.filter(r => r.status === 'completed').length
+  const onTimeRate = total > 0 ? Math.round((completed / total) * 100 * 10) / 10 : 0
+  const distances = routes.filter(r => r.distance).map(r => Number(r.distance))
+  const avgDistance = distances.length > 0
+    ? Math.round(distances.reduce((a, b) => a + b, 0) / distances.length * 10) / 10
+    : 0
+  return {
+    totalRoutes: total,
+    onTimeRate,
+    avgDistance,
+    costPerRoute: 0
+  }
 })
 
-const topDrivers = reactive([
-  { id: 1, name: 'John Smith', routes: 156, onTimeRate: 98, rating: 4.9 },
-  { id: 2, name: 'Sarah Johnson', routes: 142, onTimeRate: 96, rating: 4.8 },
-  { id: 3, name: 'Mike Davis', routes: 138, onTimeRate: 95, rating: 4.7 },
-  { id: 4, name: 'Lisa Chen', routes: 129, onTimeRate: 97, rating: 4.8 },
-  { id: 5, name: 'Robert Wilson', routes: 121, onTimeRate: 93, rating: 4.6 }
-])
+const topDrivers = computed(() =>
+  [...drivers]
+    .sort((a, b) => (b.rating || 0) - (a.rating || 0))
+    .slice(0, 5)
+    .map(d => ({
+      id: d.id,
+      name: d.name,
+      routes: routes.filter(r => r.driver_id === d.id).length,
+      onTimeRate: 0,
+      rating: d.rating || 0
+    }))
+)
 
-const topRoutes = reactive([
-  { id: 1, name: 'Downtown Commercial', distance: 32, duration: 4.5, efficiency: 96 },
-  { id: 2, name: 'Residential District A', distance: 28, duration: 3.5, efficiency: 92 },
-  { id: 3, name: 'Industrial Park', distance: 45, duration: 5.0, efficiency: 88 },
-  { id: 4, name: 'Suburban Loop', distance: 38, duration: 4.2, efficiency: 90 }
-])
+const topRoutes = computed(() =>
+  [...routes]
+    .filter(r => r.efficiency)
+    .sort((a, b) => Number(b.efficiency) - Number(a.efficiency))
+    .slice(0, 4)
+    .map(r => ({
+      id: r.id,
+      name: r.name,
+      distance: r.distance,
+      duration: r.duration,
+      efficiency: r.efficiency
+    }))
+)
 
 function updatePeriod() {
   console.log('Update period:', selectedPeriod.value)
@@ -264,6 +360,10 @@ function updateReport() {
 function generateReport() {
   console.log('Generate custom report')
 }
+
+definePageMeta({
+  layout: 'dashboard',
+})
 
 useHead({
   title: 'Reports - RouteReady',
@@ -288,6 +388,8 @@ useHead({
 
 .reports-page {
   width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .page-header {
@@ -375,8 +477,8 @@ useHead({
 }
 
 .metric-icon {
-  font-size: 2rem;
-  line-height: 1;
+  color: var(--button-primary);
+  flex-shrink: 0;
 }
 
 .metric-change {
@@ -477,9 +579,13 @@ useHead({
 }
 
 .placeholder-text {
-  font-size: 1.5rem;
+  font-size: 1.125rem;
   color: var(--text-primary);
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .placeholder-subtext {
