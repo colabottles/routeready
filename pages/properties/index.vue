@@ -6,32 +6,76 @@
         <p class="page-subtitle">Manage maintenance locations and schedules</p>
       </div>
       <NuxtLink to="/properties/new" class="btn btn-primary">
-        <span aria-hidden="true">➕</span>
-        Add Property
+        <svg
+xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
+        </svg>
+        <span>Add Property</span>
       </NuxtLink>
     </header>
 
     <!-- Property Stats -->
     <section class="stats-section" aria-labelledby="stats-heading">
       <h2 id="stats-heading" class="visually-hidden">Property Statistics</h2>
-      <div class="stats-grid">
-        <article class="stat-card">
-          <p class="stat-value">{{ stats.total }}</p>
-          <p class="stat-label">Total Properties</p>
-        </article>
-        <article class="stat-card">
-          <p class="stat-value stat-success">{{ stats.active }}</p>
-          <p class="stat-label">Active</p>
-        </article>
-        <article class="stat-card">
-          <p class="stat-value stat-accent">{{ stats.scheduled }}</p>
-          <p class="stat-label">Scheduled Today</p>
-        </article>
-        <article class="stat-card">
-          <p class="stat-value stat-warning">{{ stats.overdue }}</p>
-          <p class="stat-label">Overdue</p>
-        </article>
-      </div>
+      <article class="stat-card">
+        <div class="stat-icon" aria-hidden="true">
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+            <polyline points="9 22 9 12 15 12 15 22" />
+          </svg>
+        </div>
+        <strong class="stat-value">{{ stats.total }}</strong>
+        <span class="stat-label">Total Properties</span>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon stat-icon--success" aria-hidden="true">
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
+          </svg>
+        </div>
+        <strong class="stat-value">{{ stats.active }}</strong>
+        <span class="stat-label">Active</span>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon stat-icon--accent" aria-hidden="true">
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+            stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+        </div>
+        <strong class="stat-value">{{ stats.scheduled }}</strong>
+        <span class="stat-label">Scheduled Today</span>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon stat-icon--warning" aria-hidden="true">
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path
+              d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+        </div>
+        <strong class="stat-value">{{ stats.overdue }}</strong>
+        <span class="stat-label">Overdue</span>
+      </article>
     </section>
 
     <!-- Filters and Search -->
@@ -84,8 +128,15 @@
           </select>
 
           <button type="button" class="btn btn-secondary export-btn" @click="exportProperties">
-            <span aria-hidden="true">📁</span>
-            Export
+            <svg
+xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            <span>Export</span>
           </button>
         </div>
       </div>
@@ -102,7 +153,15 @@
           <div class="property-content">
             <div class="property-main">
               <div class="property-header">
-                <div class="property-icon" aria-hidden="true">{{ property.icon }}</div>
+                <div class="property-icon" aria-hidden="true">
+                  <svg
+xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                  </svg>
+                </div>
                 <div class="property-title-section">
                   <h3 class="property-name">{{ property.name }}</h3>
                   <p class="property-address">{{ property.address }}</p>
@@ -124,7 +183,7 @@
                 </div>
                 <div class="detail-item">
                   <dt>Last Service</dt>
-                  <dd>{{ property.lastService }}</dd>
+                  <dd>{{ property.last_service_date || 'N/A' }}</dd>
                 </div>
               </dl>
 
@@ -132,8 +191,8 @@
                 <span :class="getStatusClass(property.status)">
                   {{ formatStatus(property.status) }}
                 </span>
-                <span v-if="property.nextService" class="next-service">
-                  Next: {{ property.nextService }}
+                <span v-if="property.next_service_date" class="next-service">
+                  Next: {{ property.next_service_date }}
                 </span>
                 <span :class="getPriorityClass(property.priority)" @click="editPriority(property)">
                   {{ formatPriority(property.priority) }}
@@ -171,7 +230,13 @@
 
       <!-- Empty State -->
       <div v-if="filteredProperties.length === 0" class="empty-state">
-        <div class="empty-icon" aria-hidden="true">🏢</div>
+        <svg
+xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true" focusable="false" class="empty-icon">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
+        </svg>
         <h3 class="empty-title">No Properties Found</h3>
         <p class="empty-text">
           {{ searchTerm || typeFilter || statusFilter || priorityFilter
@@ -197,7 +262,14 @@ type="button" class="close-btn" aria-label="Close modal"
         </header>
         <form @submit.prevent="saveSchedule">
           <div class="property-info">
-            <div class="property-icon-small" aria-hidden="true">{{ scheduleForm.propertyIcon }}
+            <div class="property-icon-small" aria-hidden="true">
+              <svg
+xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
             </div>
             <div>
               <p class="property-name-small">{{ scheduleForm.propertyName }}</p>
@@ -304,7 +376,14 @@ type="button" class="close-btn" aria-label="Close modal"
         <form @submit.prevent="savePriority">
           <div class="modal-body">
             <div class="property-info-small">
-              <div class="property-icon-tiny" aria-hidden="true">{{ propertyForPriority?.icon }}
+              <div class="property-icon-tiny" aria-hidden="true">
+                <svg
+xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+                  stroke-linejoin="round">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                  <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
               </div>
               <p class="property-name-tiny">{{ propertyForPriority?.name }}</p>
             </div>
@@ -361,16 +440,23 @@ const scheduleSuccess = ref(false)
 const propertyToDelete = ref(null)
 const propertyForPriority = ref(null)
 
-const stats = reactive({
-  total: 145,
-  active: 138,
-  scheduled: 12,
-  overdue: 3
-})
-
 // Fetch properties from database
-const { data: propertiesData } = await useFetch('/api/properties')
-const properties = reactive(propertiesData.value?.data || [])
+const [propertiesRes, driversRes, vehiclesRes] = await Promise.all([
+  useFetch('/api/properties'),
+  useFetch('/api/drivers'),
+  useFetch('/api/vehicles')
+])
+
+const properties = reactive(propertiesRes.data.value?.data || [])
+const availableDrivers = reactive(driversRes.data.value?.data || [])
+const availableVehicles = reactive(vehiclesRes.data.value?.data || [])
+
+const stats = computed(() => ({
+  total: properties.length,
+  active: properties.filter(p => p.status === 'active').length,
+  scheduled: properties.filter(p => p.status === 'scheduled').length,
+  overdue: properties.filter(p => p.status === 'overdue').length
+}))
 
 const filteredProperties = ref([...properties])
 const priorityForm = reactive({
@@ -389,21 +475,6 @@ const scheduleForm = reactive({
   vehicle: '',
   notes: ''
 })
-
-const availableDrivers = reactive([
-  { id: 1, name: 'John Smith' },
-  { id: 2, name: 'Sarah Johnson' },
-  { id: 3, name: 'Mike Davis' },
-  { id: 4, name: 'Lisa Chen' },
-  { id: 5, name: 'Robert Wilson' }
-])
-
-const availableVehicles = reactive([
-  { id: 1, name: 'Truck #1 (TRK-2024)' },
-  { id: 2, name: 'Truck #2 (TRK-2025)' },
-  { id: 3, name: 'Van #3 (VAN-3305)' },
-  { id: 4, name: 'Truck #5 (TRK-5019)' }
-])
 
 function filterProperties() {
   filteredProperties.value = properties.filter(property => {
@@ -469,12 +540,15 @@ function editPriority(property) {
   showPriorityModal.value = true
 }
 
-function savePriority() {
-  const index = properties.findIndex(p => p.id === priorityForm.id)
-  if (index !== -1) {
-    properties[index].priority = priorityForm.priority
-    filterProperties()
-  }
+async function savePriority() {
+  const id = priorityForm.id
+  await $fetch(`/api/properties/${id}`, {
+    method: 'PUT',
+    body: { ...properties.find(p => p.id === id), priority: priorityForm.priority }
+  })
+  const index = properties.findIndex(p => p.id === id)
+  if (index !== -1) properties[index].priority = priorityForm.priority
+  filterProperties()
   showPriorityModal.value = false
   propertyForPriority.value = null
 }
@@ -508,16 +582,12 @@ function confirmDelete(property) {
   showDeleteModal.value = true
 }
 
-function deleteProperty() {
-  const index = properties.findIndex(p => p.id === propertyToDelete.value.id)
-  if (index !== -1) {
-    properties.splice(index, 1)
-    filterProperties()
-    stats.total--
-    if (propertyToDelete.value.status === 'active') {
-      stats.active--
-    }
-  }
+async function deleteProperty() {
+  const id = propertyToDelete.value.id
+  await $fetch(`/api/properties/${id}`, { method: 'DELETE' })
+  const index = properties.findIndex(p => p.id === id)
+  if (index !== -1) properties.splice(index, 1)
+  filterProperties()
   showDeleteModal.value = false
   propertyToDelete.value = null
 }
@@ -532,8 +602,8 @@ function exportProperties() {
       p.size,
       p.frequency,
       p.status,
-      p.lastService,
-      p.nextService || 'N/A'
+      p.last_service_date || 'N/A',
+      p.next_service_date || 'N/A'
     ])
   ].map(row => row.join(',')).join('\n')
 
@@ -596,22 +666,27 @@ useHead({
 
 /* Stats Section */
 .stats-section {
-  margin-bottom: 2rem;
-}
-
-.stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
   background: var(--bg-primary);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1.75rem 1.5rem;
   box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  transition: transform 0.2s;
+  gap: 0.625rem;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .stat-card:hover {
@@ -619,23 +694,37 @@ useHead({
   box-shadow: var(--shadow-lg);
 }
 
+.stat-icon {
+  color: var(--button-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 50%;
+}
+
+.stat-icon--success {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.stat-icon--accent {
+  color: #818cf8;
+  background: rgba(129, 140, 248, 0.1);
+}
+
+.stat-icon--warning {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
+}
+
 .stat-value {
   font-size: 2rem;
   font-weight: 700;
   color: var(--button-primary);
   margin: 0 0 0.5rem 0;
-}
-
-.stat-value.stat-success {
-  color: #10b981;
-}
-
-.stat-value.stat-accent {
-  color: #818cf8;
-}
-
-.stat-value.stat-warning {
-  color: #f59e0b;
 }
 
 .stat-label {
@@ -862,7 +951,7 @@ useHead({
 }
 
 .empty-icon {
-  font-size: 4rem;
+  color: var(--text-muted);
   margin-bottom: 1rem;
 }
 
@@ -1110,23 +1199,23 @@ useHead({
 }
 
 .status-active {
-  background: #10b981 !important;
-  color: #ffffff !important;
+  background: #10b981;
+  color: #ffffff;
 }
 
 .status-pending {
-  background: #f59e0b !important;
-  color: #000000 !important;
+  background: #f59e0b;
+  color: #000000;
 }
 
 .status-inactive {
-  background: #6b7280 !important;
-  color: #ffffff !important;
+  background: #6b7280;
+  color: #ffffff;
 }
 
 .status-warning {
-  background: #f59e0b !important;
-  color: #000000 !important;
+  background: #f59e0b;
+  color: #000000;
 }
 
 /* Responsive */
@@ -1138,6 +1227,10 @@ useHead({
 
 @media (max-width: 968px) {
   .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stats-section {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -1157,6 +1250,10 @@ useHead({
 
 @media (max-width: 640px) {
   .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-section {
     grid-template-columns: 1fr;
   }
 

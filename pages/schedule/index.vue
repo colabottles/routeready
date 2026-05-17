@@ -5,19 +5,99 @@
       <p class="page-subtitle">Manage driver schedules and assignments</p>
       <nav class="header-actions">
         <button class="btn btn-secondary" @click="showPrintDialog = true">
-          <span aria-hidden="true">🖨️</span>
-          Print
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <polyline points="6 9 6 2 18 2 18 9" />
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+            <rect x="6" y="14" width="12" height="8" />
+          </svg>
+          <span>Print</span>
         </button>
+
         <button class="btn btn-secondary" @click="showShareDialog = true">
-          <span aria-hidden="true">📤</span>
-          Share
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <circle cx="18" cy="5" r="3" />
+            <circle cx="6" cy="12" r="3" />
+            <circle cx="18" cy="19" r="3" />
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+          </svg>
+          <span>Share</span>
         </button>
         <NuxtLink to="/schedule/new" class="btn btn-primary">
-          <span aria-hidden="true">➕</span>
-          Add Schedule
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
+          <span>Add Schedule</span>
         </NuxtLink>
       </nav>
     </header>
+
+    <!-- Summary Stats -->
+    <section class="stats-section" aria-label="Schedule statistics">
+      <article class="stat-card">
+        <div class="stat-icon" aria-hidden="true">
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+            stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+        </div>
+        <strong class="stat-value">{{ stats.total }}</strong>
+        <span class="stat-label">Total Schedules</span>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon stat-icon--success" aria-hidden="true">
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+            stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
+          </svg>
+        </div>
+        <strong class="stat-value">{{ stats.scheduled }}</strong>
+        <span class="stat-label">Scheduled</span>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon stat-icon--accent" aria-hidden="true">
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+        </div>
+        <strong class="stat-value">{{ stats.inProgress }}</strong>
+        <span class="stat-label">In Progress</span>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon stat-icon--warning" aria-hidden="true">
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <strong class="stat-value">{{ stats.completed }}</strong>
+        <span class="stat-label">Completed</span>
+      </article>
+    </section>
 
     <!-- View Toggle & Date Navigation -->
     <section class="controls-section">
@@ -197,30 +277,6 @@
             </div>
           </div>
         </div>
-      </section>
-
-      <!-- Summary Stats -->
-      <section class="stats-section">
-        <article class="stat-card">
-          <span class="stat-icon" aria-hidden="true">📅</span>
-          <strong class="stat-value">{{ stats.total }}</strong>
-          <span class="stat-label">Total Schedules</span>
-        </article>
-        <article class="stat-card">
-          <span class="stat-icon" aria-hidden="true">✅</span>
-          <strong class="stat-value">{{ stats.scheduled }}</strong>
-          <span class="stat-label">Scheduled</span>
-        </article>
-        <article class="stat-card">
-          <span class="stat-icon" aria-hidden="true">🚀</span>
-          <strong class="stat-value">{{ stats.inProgress }}</strong>
-          <span class="stat-label">In Progress</span>
-        </article>
-        <article class="stat-card">
-          <span class="stat-icon" aria-hidden="true">✔️</span>
-          <strong class="stat-value">{{ stats.completed }}</strong>
-          <span class="stat-label">Completed</span>
-        </article>
       </section>
     </template>
 
@@ -660,6 +716,7 @@ useHead({
 
 .controls-section {
   margin-bottom: 2rem;
+  padding-top: 0.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1127,7 +1184,7 @@ useHead({
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
-  margin-top: 2rem;
+  margin-bottom: 3rem;
 }
 
 .stat-card {
@@ -1149,8 +1206,29 @@ useHead({
 }
 
 .stat-icon {
-  font-size: 2.5rem;
-  line-height: 1;
+  color: var(--button-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 50%;
+}
+
+.stat-icon--success {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.stat-icon--accent {
+  color: #818cf8;
+  background: rgba(129, 140, 248, 0.1);
+}
+
+.stat-icon--warning {
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.1);
 }
 
 .stat-value {
