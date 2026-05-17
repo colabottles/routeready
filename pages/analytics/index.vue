@@ -8,11 +8,25 @@
         </div>
         <nav class="header-actions" aria-label="Analytics actions">
           <button type="button" class="btn btn-secondary" @click="exportData">
-            <span class="btn-icon" aria-hidden="true">📥</span>
+            <svg
+xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
             Export Data
           </button>
           <button type="button" class="btn btn-primary" @click="refreshData">
-            <span class="btn-icon" aria-hidden="true">🔄</span>
+            <svg
+xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <polyline points="23 4 23 10 17 10" />
+              <polyline points="1 20 1 14 7 14" />
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+            </svg>
             Refresh
           </button>
         </nav>
@@ -44,7 +58,14 @@
       <h2 id="summary-heading" class="section-title">Executive Summary</h2>
       <div class="executive-grid">
         <article class="executive-card">
-          <div class="executive-icon" aria-hidden="true">🗺️</div>
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true" focusable="false" class="executive-icon">
+            <circle cx="3" cy="6" r="2" />
+            <circle cx="21" cy="18" r="2" />
+            <path d="M3 8v4a4 4 0 0 0 4 4h10v-4a4 4 0 0 0-4-4H3" />
+          </svg>
           <div class="executive-content">
             <h3 class="executive-label">Total Routes</h3>
             <p class="executive-value">{{ summary.totalRoutes.toLocaleString() }}</p>
@@ -56,7 +77,13 @@
         </article>
 
         <article class="executive-card">
-          <div class="executive-icon" aria-hidden="true">💰</div>
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true" focusable="false" class="executive-icon">
+            <line x1="12" y1="1" x2="12" y2="23" />
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+          </svg>
           <div class="executive-content">
             <h3 class="executive-label">Revenue</h3>
             <p class="executive-value">${{ summary.revenue.toLocaleString() }}</p>
@@ -68,7 +95,12 @@
         </article>
 
         <article class="executive-card">
-          <div class="executive-icon" aria-hidden="true">⚡</div>
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true" focusable="false" class="executive-icon">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+          </svg>
           <div class="executive-content">
             <h3 class="executive-label">Avg Efficiency</h3>
             <p class="executive-value">{{ summary.avgEfficiency }}%</p>
@@ -80,7 +112,13 @@
         </article>
 
         <article class="executive-card">
-          <div class="executive-icon" aria-hidden="true">⏱️</div>
+          <svg
+xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true" focusable="false" class="executive-icon">
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
           <div class="executive-content">
             <h3 class="executive-label">On-Time Rate</h3>
             <p class="executive-value">{{ summary.onTimeRate }}%</p>
@@ -161,15 +199,21 @@
                 :aria-valuemax="driverMetrics.total"
                 :aria-valuetext="`${driverMetrics.active} of ${driverMetrics.total} drivers active`">
                 <div
-class="progress-fill"
-                  :style="{ width: (driverMetrics.active / driverMetrics.total * 100) + '%' }"/>
+                  class="progress-fill"
+                  :style="{ width: (driverMetrics.active / driverMetrics.total * 100) + '%' }" />
               </div>
             </dd>
             <dt class="driver-metric-label">Avg Hours/Week</dt>
             <dd class="driver-metric-value">{{ driverMetrics.avgHours }}h</dd>
             <dt class="driver-metric-label">Avg Rating</dt>
             <dd class="driver-metric-value">
-              <span class="star" aria-hidden="true">⭐</span>
+              <svg
+xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                fill="#fbbf24" stroke="#fbbf24" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+              </svg>
               {{ driverMetrics.avgRating }}/5
             </dd>
             <dt class="driver-metric-label">Total Routes</dt>
@@ -179,7 +223,8 @@ class="progress-fill"
             <h4 id="top-drivers-heading" class="list-header">Top Performers</h4>
             <ol class="driver-list">
               <li
-v-for="(driver, index) in topPerformers" :key="driver.id"
+                v-for="(driver, index) in topPerformers"
+                :key="driver.id"
                 class="driver-list-item">
                 <span class="driver-rank" aria-label="Rank">{{ index + 1 }}</span>
                 <span class="driver-avatar-tiny" aria-hidden="true">{{ driver.name.charAt(0)
@@ -220,26 +265,26 @@ v-for="(driver, index) in topPerformers" :key="driver.id"
               role="img"
               aria-label="Vehicle utilization showing active, maintenance, and idle vehicles">
               <div
-class="utilization-segment active"
-                :style="{ width: (fleetMetrics.activeToday / fleetMetrics.total * 100) + '%' }"/>
+                class="utilization-segment active"
+                :style="{ width: (fleetMetrics.activeToday / fleetMetrics.total * 100) + '%' }" />
               <div
-class="utilization-segment maintenance"
-                :style="{ width: (fleetMetrics.maintenance / fleetMetrics.total * 100) + '%' }"/>
+                class="utilization-segment maintenance"
+                :style="{ width: (fleetMetrics.maintenance / fleetMetrics.total * 100) + '%' }" />
               <div
-class="utilization-segment idle"
-                :style="{ width: (fleetMetrics.idle / fleetMetrics.total * 100) + '%' }"/>
+                class="utilization-segment idle"
+                :style="{ width: (fleetMetrics.idle / fleetMetrics.total * 100) + '%' }" />
             </div>
             <ul class="utilization-legend">
               <li class="legend-item">
-                <span class="legend-dot active" aria-hidden="true"/>
+                <span class="legend-dot active" aria-hidden="true" />
                 <span class="legend-text">Active</span>
               </li>
               <li class="legend-item">
-                <span class="legend-dot maintenance" aria-hidden="true"/>
+                <span class="legend-dot maintenance" aria-hidden="true" />
                 <span class="legend-text">Maintenance</span>
               </li>
               <li class="legend-item">
-                <span class="legend-dot idle" aria-hidden="true"/>
+                <span class="legend-dot idle" aria-hidden="true" />
                 <span class="legend-text">Idle</span>
               </li>
             </ul>
@@ -253,7 +298,16 @@ class="utilization-segment idle"
           <ul class="maintenance-list">
             <li v-for="vehicle in maintenanceSchedule" :key="vehicle.id" class="maintenance-item">
               <div class="maintenance-vehicle">
-                <div class="vehicle-icon-small" aria-hidden="true">🚚</div>
+                <svg
+xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" aria-hidden="true" focusable="false"
+                  class="vehicle-icon-small">
+                  <rect x="1" y="3" width="15" height="13" rx="2" />
+                  <path d="M16 8h4l3 5v3h-7V8z" />
+                  <circle cx="5.5" cy="18.5" r="2.5" />
+                  <circle cx="18.5" cy="18.5" r="2.5" />
+                </svg>
                 <div class="vehicle-info-small">
                   <p class="vehicle-name-small">{{ vehicle.name }}</p>
                   <p class="vehicle-plate-small">{{ vehicle.plate }}</p>
@@ -310,7 +364,7 @@ class="utilization-segment idle"
                   aria-valuemin="0"
                   aria-valuemax="100"
                   :aria-valuetext="`${route.efficiency}% efficient`">
-                  <div class="efficiency-bar-fill" :style="{ width: route.efficiency + '%' }"/>
+                  <div class="efficiency-bar-fill" :style="{ width: route.efficiency + '%' }" />
                   <span class="efficiency-bar-text">{{ route.efficiency }}%</span>
                 </div>
                 <p class="route-time">{{ route.avgTime }}h</p>
@@ -368,7 +422,7 @@ class="utilization-segment idle"
                   aria-valuemin="0"
                   aria-valuemax="100"
                   :aria-valuetext="`${zone.percentage}% of routes`">
-                  <div class="zone-bar-fill" :style="{ width: zone.percentage + '%' }"/>
+                  <div class="zone-bar-fill" :style="{ width: zone.percentage + '%' }" />
                 </div>
                 <span class="zone-percentage">{{ zone.percentage }}%</span>
               </li>
@@ -413,7 +467,7 @@ class="utilization-segment idle"
                         class="percentage-fill"
                         :style="{ width: status.percentage + '%' }"
                         role="img"
-                        :aria-label="`${status.percentage}%`"/>
+                        :aria-label="`${status.percentage}%`" />
                       <span class="percentage-text">{{ status.percentage }}%</span>
                     </div>
                   </td>
@@ -499,126 +553,164 @@ const periods = [
   { label: 'Year', value: 'year' }
 ]
 
-const summary = reactive({
-  totalRoutes: 3456,
-  routeGrowth: 12.5,
-  revenue: 189450,
-  revenueGrowth: 8.3,
-  avgEfficiency: 92.8,
-  efficiencyGrowth: 3.2,
-  onTimeRate: 94.2,
-  onTimeChange: -1.5
+const [routesRes, driversRes, vehiclesRes] = await Promise.all([
+  useFetch('/api/routes'),
+  useFetch('/api/drivers'),
+  useFetch('/api/vehicles')
+])
+
+const routes = reactive(routesRes.data.value?.data || [])
+const drivers = reactive(driversRes.data.value?.data || [])
+const vehicles = reactive(vehiclesRes.data.value?.data || [])
+
+const summary = computed(() => {
+  const total = routes.length
+  const completed = routes.filter(r => r.status === 'completed').length
+  const onTimeRate = total > 0 ? Math.round((completed / total) * 1000) / 10 : 0
+  const efficiencies = routes.filter(r => r.efficiency).map(r => Number(r.efficiency))
+  const avgEfficiency = efficiencies.length > 0
+    ? Math.round(efficiencies.reduce((a, b) => a + b, 0) / efficiencies.length * 10) / 10
+    : 0
+  return {
+    totalRoutes: total,
+    routeGrowth: 0,
+    revenue: 0,
+    revenueGrowth: 0,
+    avgEfficiency,
+    efficiencyGrowth: 0,
+    onTimeRate,
+    onTimeChange: 0
+  }
 })
 
-const routeMetrics = reactive({
-  completed: 3189,
-  pending: 156,
-  failed: 111,
-  successRate: 92.3
+const routeMetrics = computed(() => {
+  const completed = routes.filter(r => r.status === 'completed').length
+  const pending = routes.filter(r => r.status === 'active').length
+  const failed = routes.filter(r => r.status === 'failed').length
+  const total = routes.length
+  const successRate = total > 0 ? Math.round((completed / total) * 1000) / 10 : 0
+  return { completed, pending, failed, successRate }
 })
 
+const driverMetrics = computed(() => {
+  const active = drivers.filter(d => d.status === 'active').length
+  const total = drivers.length
+  const ratings = drivers.filter(d => d.rating).map(d => Number(d.rating))
+  const avgRating = ratings.length > 0
+    ? Math.round(ratings.reduce((a, b) => a + b, 0) / ratings.length * 10) / 10
+    : 0
+  return {
+    active,
+    total,
+    avgHours: 0,
+    avgRating,
+    totalRoutes: routes.length
+  }
+})
+
+const topPerformers = computed(() =>
+  [...drivers]
+    .filter(d => d.rating)
+    .sort((a, b) => Number(b.rating) - Number(a.rating))
+    .slice(0, 5)
+    .map(d => ({
+      id: d.id,
+      name: d.name,
+      score: Math.round(Number(d.rating) * 20)
+    }))
+)
+
+const fleetMetrics = computed(() => {
+  const total = vehicles.length
+  const activeToday = vehicles.filter(v => v.status === 'active').length
+  const maintenance = vehicles.filter(v => v.status === 'maintenance').length
+  const idle = vehicles.filter(v => v.status === 'available').length
+  const utilizationRate = total > 0 ? Math.round((activeToday / total) * 100) : 0
+  return { total, activeToday, maintenance, idle, utilizationRate }
+})
+
+const routeEfficiency = computed(() =>
+  [...routes]
+    .filter(r => r.efficiency)
+    .sort((a, b) => Number(b.efficiency) - Number(a.efficiency))
+    .slice(0, 4)
+    .map(r => ({
+      id: r.id,
+      name: r.name,
+      distance: r.distance || 0,
+      stops: 0,
+      efficiency: r.efficiency,
+      avgTime: r.duration || 0
+    }))
+)
+
+const routeStatus = computed(() => {
+  const total = routes.length
+  const completed = routes.filter(r => r.status === 'completed').length
+  const active = routes.filter(r => r.status === 'active').length
+  const failed = routes.filter(r => r.status === 'failed').length
+  return [
+    { name: 'Completed', count: completed, percentage: total > 0 ? Math.round(completed / total * 100 * 10) / 10 : 0, trend: 0, avgTime: 'N/A', class: 'completed' },
+    { name: 'In Transit', count: active, percentage: total > 0 ? Math.round(active / total * 100 * 10) / 10 : 0, trend: 0, avgTime: 'N/A', class: 'transit' },
+    { name: 'Failed', count: failed, percentage: total > 0 ? Math.round(failed / total * 100 * 10) / 10 : 0, trend: 0, avgTime: 'N/A', class: 'failed' }
+  ]
+})
+
+const maintenanceSchedule = computed(() =>
+  vehicles
+    .filter(v => v.status === 'maintenance')
+    .map(v => ({
+      id: v.id,
+      name: v.name,
+      plate: v.license_plate,
+      nextService: 'Scheduled',
+      urgency: 'normal'
+    }))
+)
+
+// No backing tables yet — kept as empty placeholders
 const routeChart = reactive([
-  { day: 'Mon', value: 45 },
-  { day: 'Tue', value: 38 },
-  { day: 'Wed', value: 42 },
-  { day: 'Thu', value: 35 },
-  { day: 'Fri', value: 48 },
-  { day: 'Sat', value: 28 },
-  { day: 'Sun', value: 22 }
-])
-
-const driverMetrics = reactive({
-  active: 12,
-  total: 15,
-  avgHours: 38.5,
-  avgRating: 4.7,
-  totalRoutes: 3456
-})
-
-const topPerformers = reactive([
-  { id: 1, name: 'John Smith', score: 98 },
-  { id: 2, name: 'Sarah Johnson', score: 96 },
-  { id: 3, name: 'Mike Davis', score: 94 },
-  { id: 4, name: 'Lisa Chen', score: 92 },
-  { id: 5, name: 'Robert Wilson', score: 89 }
-])
-
-const fleetMetrics = reactive({
-  total: 15,
-  activeToday: 12,
-  maintenance: 2,
-  idle: 1,
-  utilizationRate: 80
-})
-
-const maintenanceSchedule = reactive([
-  { id: 1, name: 'Truck #1', plate: 'TRK-2024', nextService: '3 days', urgency: 'soon' },
-  { id: 2, name: 'Van #3', plate: 'VAN-3305', nextService: '2 weeks', urgency: 'normal' },
-  { id: 3, name: 'Truck #5', plate: 'TRK-5019', nextService: 'Overdue', urgency: 'urgent' }
+  { day: 'Mon', value: 0 },
+  { day: 'Tue', value: 0 },
+  { day: 'Wed', value: 0 },
+  { day: 'Thu', value: 0 },
+  { day: 'Fri', value: 0 },
+  { day: 'Sat', value: 0 },
+  { day: 'Sun', value: 0 }
 ])
 
 const costMetrics = reactive({
-  fuelCost: 12450,
-  fuelGallons: 2890,
-  maintenanceCost: 8920,
-  maintenanceEvents: 15,
-  costPerMile: 2.45,
-  totalMiles: 28450
+  fuelCost: 0,
+  fuelGallons: 0,
+  maintenanceCost: 0,
+  maintenanceEvents: 0,
+  costPerMile: 0,
+  totalMiles: 0
 })
 
-const routeEfficiency = reactive([
-  { id: 1, name: 'Downtown Commercial', distance: 32, stops: 8, efficiency: 96, avgTime: 4.5 },
-  { id: 2, name: 'Residential A', distance: 28, stops: 12, efficiency: 92, avgTime: 3.8 },
-  { id: 3, name: 'Industrial Park', distance: 45, stops: 6, efficiency: 88, avgTime: 5.2 },
-  { id: 4, name: 'Suburban Loop', distance: 38, stops: 10, efficiency: 90, avgTime: 4.2 }
-])
-
 const peakHours = reactive([
-  { time: '6AM', routes: 8 },
-  { time: '8AM', routes: 24 },
-  { time: '10AM', routes: 28 },
-  { time: '12PM', routes: 22 },
-  { time: '2PM', routes: 26 },
-  { time: '4PM', routes: 18 },
-  { time: '6PM', routes: 12 }
+  { time: '6AM', routes: 0 },
+  { time: '8AM', routes: 0 },
+  { time: '10AM', routes: 0 },
+  { time: '12PM', routes: 0 },
+  { time: '2PM', routes: 0 },
+  { time: '4PM', routes: 0 },
+  { time: '6PM', routes: 0 }
 ])
 
 const geographicCoverage = reactive({
-  totalRoutes: 25,
-  coverageArea: 450,
-  avgDistance: 32,
-  totalDistance: 28450
+  totalRoutes: routes.length,
+  coverageArea: 0,
+  avgDistance: 0,
+  totalDistance: 0
 })
 
-const serviceZones = reactive([
-  { name: 'Downtown', percentage: 35 },
-  { name: 'Residential', percentage: 28 },
-  { name: 'Industrial', percentage: 22 },
-  { name: 'Suburban', percentage: 15 }
-])
-
-const routeStatus = reactive([
-  { name: 'Completed', count: 3189, percentage: 92.3, trend: 5.2, avgTime: '3.2h', class: 'completed' },
-  { name: 'In Transit', count: 156, percentage: 4.5, trend: -2.1, avgTime: '1.8h', class: 'transit' },
-  { name: 'Failed', count: 111, percentage: 3.2, trend: -0.5, avgTime: '2.5h', class: 'failed' }
-])
-
-const costAnalysis = reactive([
-  { category: 'Fuel', current: 12450, previous: 11800, change: 5.5, percentage: 35 },
-  { category: 'Maintenance', current: 8920, previous: 9200, change: -3.0, percentage: 25 },
-  { category: 'Labor', current: 11200, previous: 10800, change: 3.7, percentage: 32 },
-  { category: 'Insurance', current: 2890, previous: 2800, change: 3.2, percentage: 8 }
-])
-
-const costTotals = reactive({
-  current: 35460,
-  previous: 34600,
-  change: 2.5
-})
+const serviceZones = reactive([])
+const costAnalysis = reactive([])
+const costTotals = reactive({ current: 0, previous: 0, change: 0 })
 
 function selectPeriod(period) {
   selectedPeriod.value = period
-  console.log('Selected period:', period)
 }
 
 function exportData() {
@@ -626,7 +718,7 @@ function exportData() {
 }
 
 function refreshData() {
-  console.log('Refresh data')
+  window.location.reload()
 }
 
 useHead({
@@ -688,12 +780,6 @@ useHead({
   gap: 0.5rem;
 }
 
-.btn-icon {
-  display: inline-flex;
-  align-items: center;
-  line-height: 1;
-}
-
 /* Period Selector */
 .period-selector {
   display: flex;
@@ -751,7 +837,6 @@ useHead({
   font-size: 0.875rem;
 }
 
-/* Section Titles */
 .section-title {
   font-size: 1.5rem;
   font-weight: 700;
@@ -786,8 +871,8 @@ useHead({
 }
 
 .executive-icon {
-  font-size: 3rem;
-  line-height: 1;
+  color: var(--button-primary);
+  flex-shrink: 0;
 }
 
 .executive-content {
@@ -902,7 +987,6 @@ useHead({
   margin: 0;
 }
 
-/* Bar Chart */
 .chart-area {
   margin: 1.5rem 0 0 0;
 }
@@ -994,10 +1078,6 @@ useHead({
   height: 100%;
   background: var(--button-primary);
   transition: width 0.3s;
-}
-
-.star {
-  color: #fbbf24;
 }
 
 .top-drivers-list {
@@ -1204,7 +1284,6 @@ useHead({
   color: var(--text-secondary);
 }
 
-/* Maintenance List */
 .maintenance-list {
   display: flex;
   flex-direction: column;
@@ -1230,7 +1309,8 @@ useHead({
 }
 
 .vehicle-icon-small {
-  font-size: 1.5rem;
+  color: var(--text-secondary);
+  flex-shrink: 0;
 }
 
 .vehicle-info-small {
@@ -1274,7 +1354,6 @@ useHead({
   color: #1e40af;
 }
 
-/* Cost Breakdown */
 .cost-breakdown {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -1412,7 +1491,6 @@ useHead({
   margin: 0;
 }
 
-/* Peak Hours Chart */
 .peak-hours-chart {
   margin: 0;
 }
@@ -1461,7 +1539,6 @@ useHead({
   margin: 0;
 }
 
-/* Coverage Stats */
 .coverage-stats {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -1486,7 +1563,6 @@ useHead({
   text-align: right;
 }
 
-/* Zone Breakdown */
 .zone-breakdown {
   padding: 1rem;
   background: var(--bg-secondary);
@@ -1565,18 +1641,18 @@ useHead({
 }
 
 .status-badge.completed {
-  background: #d1fae5;
-  color: #065f46;
+  background: #065f46;
+  color: #d1fae5;
 }
 
 .status-badge.transit {
-  background: #fef3c7;
-  color: #92400e;
+  background: #92400e;
+  color: #fef3c7;
 }
 
 .status-badge.failed {
-  background: #fee2e2;
-  color: #991b1b;
+  background: #991b1b;
+  color: #fee2e2;
 }
 
 .percentage-bar {
