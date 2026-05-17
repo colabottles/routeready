@@ -1,25 +1,23 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   pages: true,
   typescript: {
     strict: false,
     typeCheck: false
   },
+  ssr: false,
   imports: {
     autoImport: true
   },
   app: {
     head: {
-      htmlAttrs: {
-        lang: 'en'
-      },
+      htmlAttrs: { lang: 'en' },
       title: 'RouteReady',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'RouteReady - Route management and delivery optimization platform' }
+        { name: 'description', content: 'RouteReady - Route management and maintenance optimization platform' }
       ]
     }
   },
@@ -29,21 +27,45 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@nuxt/image',
     '@nuxt/scripts',
-    '@nuxt/test-utils'
   ],
   css: [
     '~/assets/css/main.css',
     '~/assets/css/theme.css',
   ],
-  // Server runtime config (use environment variable ORS_API_KEY)
   runtimeConfig: {
-    // server only
-    orsApiKey: process.env.ORS_API_KEY || ''
+    // Server only
+    orsApiKey: process.env.ORS_API_KEY || '',
+    supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
+    databaseUrl: process.env.DATABASE_URL || '',
+    betterAuthSecret: process.env.BETTER_AUTH_SECRET || '',
+    betterAuthUrl: process.env.BETTER_AUTH_URL || 'http://localhost:8080',  // ← fallback updated
+    // Public (exposed to client)
+    public: {
+      supabaseUrl: process.env.SUPABASE_URL || '',
+      supabaseAnonKey: process.env.SUPABASE_ANON_KEY || '',
+    }
   },
-  // Make sure you have this if using Better Auth
   nitro: {
     experimental: {
       openAPI: true
+    },
+    database: {
+      default: {
+        connector: 'postgresql',
+        options: {
+          url: process.env.DATABASE_URL
+        }
+      }
     }
+  },
+  vite: {
+  optimizeDeps: {
+    include: [
+      '@vue/devtools-core',
+      '@vue/devtools-kit',
+      'better-auth/vue',
+      '@supabase/supabase-js',
+    ]
   }
+}
 })
