@@ -10,6 +10,7 @@ const router = useRouter()
 
 const email = ref('')
 const password = ref('')
+const showPassword = ref(false)
 const isLoading = ref(false)
 const errorMessage = ref('')
 
@@ -75,11 +76,35 @@ const handleLogin = async () => {
 
         <div class="form-group">
           <label for="password">Password</label>
-          <input
-            id="password"
-            v-model="password"
-            type="password"
-            required>
+          <div class="input-wrapper">
+            <input
+              id="password"
+              v-model="password"
+              :type="showPassword ? 'text' : 'password'"
+              required>
+            <button
+              type="button"
+              class="toggle-password"
+              :aria-label="showPassword ? 'Hide password' : 'Show password'"
+              @click="showPassword = !showPassword">
+              <svg
+v-if="showPassword" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path
+                  d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                <line x1="1" y1="1" x2="23" y2="23" />
+              </svg>
+              <svg
+v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </button>
+          </div>
           <small>Must be 8-16 characters</small>
         </div>
 
@@ -98,47 +123,7 @@ const handleLogin = async () => {
   </div>
 </template>
 
-<style>
-/* CSS Variables for theme colors */
-:root[data-theme="light"] {
-  --bg-gradient-start: #667eea;
-  --bg-gradient-end: #764ba2;
-  --bg-primary: #ffffff;
-  --bg-secondary: #f9fafb;
-  --text-primary: #111827;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  --input-bg: #ffffff;
-  --input-border: #d1d5db;
-  --input-focus: #667eea;
-  --error-bg: #fef2f2;
-  --error-border: #fecaca;
-  --error-text: #991b1b;
-  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
-  --link-color: #4338ca;
-  --link-hover: #3730a3;
-}
-
-/* Dark mode - WCAG AA compliant colors */
-:root[data-theme="dark"] {
-  --bg-gradient-start: #110c47;
-  --bg-gradient-end: #2d2fa0;
-  --bg-primary: #1f2937;
-  --bg-secondary: #111827;
-  --text-primary: #f9fafb;
-  --text-secondary: #d1d5db;
-  --text-muted: #9ca3af;
-  --input-bg: #374151;
-  --input-border: #4b5563;
-  --input-focus: #818cf8;
-  --error-bg: #7f1d1d;
-  --error-border: #991b1b;
-  --error-text: #fecaca;
-  --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.3);
-  --link-color: #818cf8;
-  --link-hover: #6366f1;
-}
-
+<style scoped>
 .login-container {
   display: flex;
   width: 100%;
@@ -263,6 +248,39 @@ const handleLogin = async () => {
   font-size: 0.8125rem;
   color: var(--text-secondary);
   font-weight: 500;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding-right: 3rem;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  color: var(--text-secondary);
+}
+
+.toggle-password:focus-visible {
+  outline: 3px solid #818cf8;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.toggle-password:hover {
+  color: var(--text-primary);
 }
 
 .login-button {

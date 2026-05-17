@@ -31,13 +31,22 @@
             </div>
 
             <div class="form-group">
-              <label for="property-type">Property Type <span class="required">*</span></label>
-              <select id="property-type" v-model="formData.type" class="form-select" required>
-                <option value="">Select Type</option>
-                <option value="commercial">Commercial</option>
-                <option value="residential">Residential</option>
-                <option value="industrial">Industrial</option>
-              </select>
+              <label for="property-type">
+                Property Type
+                <span class="required">*</span>
+              </label>
+              <input
+                id="property-type"
+                v-model="formData.type"
+                type="text"
+                class="form-input"
+                placeholder="e.g., Commercial, Hospital, Gas Station"
+                list="property-types-list"
+                required>
+              <datalist id="property-types-list">
+                <option v-for="type in savedTypes" :key="type" :value="type"/></datalist>
+              <small class="help-text">Type a property category or choose from existing
+                types</small>
             </div>
           </fieldset>
 
@@ -183,7 +192,7 @@
               v-model="formData.accessInstructions"
               class="form-input"
               rows="3"
-              placeholder="Enter gate codes, key locations, or special access requirements..."/>
+              placeholder="Enter gate codes, key locations, or special access requirements..." />
           </div>
 
           <div class="form-group">
@@ -193,7 +202,7 @@
               v-model="formData.specialRequirements"
               class="form-input"
               rows="3"
-              placeholder="Any special cleaning requirements, hazards, or important notes..."/>
+              placeholder="Any special cleaning requirements, hazards, or important notes..." />
           </div>
 
           <div class="form-group">
@@ -279,6 +288,14 @@ definePageMeta({
   layout: 'dashboard',
 })
 
+const savedTypes = ref([])
+
+// Load existing types from localStorage
+onMounted(() => {
+  const types = JSON.parse(localStorage.getItem('propertyTypes') ?? '["Commercial", "Residential", "Industrial"]')
+  savedTypes.value = types
+})
+
 const isSaving = ref(false)
 const successMessage = ref('')
 const errorMessage = ref('')
@@ -313,38 +330,40 @@ async function saveProperty() {
       return
     }
 
-    // In a real app, this would be an API call
-    // await $fetch('/api/properties', { method: 'POST', body: formData })
+    // Save type to localStorage for autocomplete
+    if (formData.type && !savedTypes.value.includes(formData.type)) {
+      savedTypes.value.push(formData.type)
+      localStorage.setItem('propertyTypes', JSON.stringify(savedTypes.value))
+    }
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    // Call API to save to database
+    const response = await $fetch('/api/properties', {
+      method: 'POST',
+      body: formData
+    })
 
-    successMessage.value = 'Property created successfully!'
-    isSaving.value = false
+    if (response.success) {
+      successMessage.value = 'Property created successfully!'
+      isSaving.value = false
 
-    // Reset form after successful save
-    setTimeout(() => {
-      Object.keys(formData).forEach(key => {
-        if (key === 'icon') formData[key] = '🏢'
-        else if (key === 'priority') formData[key] = 'normal'
-        else if (key === 'status') formData[key] = 'active'
-        else formData[key] = ''
-      })
-      successMessage.value = ''
-    }, 3000)
+      // Reset form
+      setTimeout(() => {
+        Object.keys(formData).forEach(key => {
+          if (key === 'icon') formData[key] = '🏢'
+          else if (key === 'priority') formData[key] = 'normal'
+          else if (key === 'status') formData[key] = 'active'
+          else formData[key] = ''
+        })
+        successMessage.value = ''
+      }, 2000)
+    }
 
-  } catch {
+  } catch (error) {
     errorMessage.value = 'Failed to create property. Please try again.'
     isSaving.value = false
+    console.error('Error saving property:', error)
   }
 }
-
-useHead({
-  title: 'Add Property - RouteReady',
-  meta: [
-    { name: 'description', content: 'Add a new property to RouteReady' }
-  ]
-})
 </script>
 
 <style scoped>
@@ -447,6 +466,13 @@ fieldset.form-row legend {
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 0.5rem;
+}
+
+.help-text {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
 }
 
 .required {
