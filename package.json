@@ -27,7 +27,7 @@
     "eslint": "^10.2.0",
     "maplibre-gl": "^5.22.0",
     "npm-check-updates": "^20.0.1",
-    "nuxt": "^4.4.2",
+    "nuxt": "^4.5.0",
     "pg": "^8.20.0",
     "postgres": "^3.4.9",
     "vue": "^3.5.32",
