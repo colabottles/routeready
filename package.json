@@ -16,7 +16,7 @@
     "@nuxt/icon": "^2.2.1",
     "@nuxt/image": "^2.0.0",
     "@nuxt/scripts": "^0.13.2",
-    "@nuxt/ui": "^4.6.1",
+    "@nuxt/ui": "^4.8.1",
     "@opentelemetry/api": "^1.9.1",
     "@supabase/supabase-js": "^2.103.0",
     "@unhead/vue": "^3.0.2",
